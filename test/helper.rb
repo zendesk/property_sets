@@ -1,18 +1,33 @@
 require 'rubygems'
-require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
 require 'test/unit'
+require 'active_support'
+require 'active_record'
+require 'active_record/fixtures'
 require 'shoulda'
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+ActiveRecord::Base.configurations = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
+ActiveRecord::Base.establish_connection('test')
+ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/test.log")
+
+load(File.dirname(__FILE__) + "/schema.rb")
+
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'property_sets'
 
-class Test::Unit::TestCase
+class ActiveSupport::TestCase
+  include ActiveRecord::TestFixtures
+
+  def create_fixtures(*table_names)
+    if block_given?
+      Fixtures.create_fixtures(Test::Unit::TestCase.fixture_path, table_names) { yield }
+    else
+      Fixtures.create_fixtures(Test::Unit::TestCase.fixture_path, table_names)
+    end
+  end
+
+  self.use_transactional_fixtures = true
+  self.use_instantiated_fixtures  = false
 end
+
+ActiveSupport::TestCase.fixture_path = File.dirname(__FILE__) + "/fixtures/"
+$LOAD_PATH.unshift(ActiveSupport::TestCase.fixture_path)

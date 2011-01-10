@@ -1,0 +1,7 @@
+test:
+  adapter: mysql
+  encoding: utf8
+  database: property_sets_test
+  username: root
+  password:
+  socket: /tmp/mysql.sock
