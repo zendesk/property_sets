@@ -91,7 +91,9 @@ class TestPropertySets < ActiveSupport::TestCase
         @account.save!
         assert_equal @account.reload.settings.size, 2
         assert_equal @account.settings.foo.value, "123"
+        assert_equal @account.settings.foo.name, "foo"
         assert_equal @account.settings.bar.value, "456"
+        assert_equal @account.settings.bar.name, "bar"
       end
     end
   end
@@ -124,25 +126,6 @@ class TestPropertySets < ActiveSupport::TestCase
 #        a.update_attributes(:settings => {:foo => '0', :ssl => '0'})
 #        assert !a.settings.foo?
 #        assert a.settings.ssl?
-#      end
-
-#      should "be able to build multiple settings in one go" do
-#        a = Account.create(:name => 'name')
-#        assert a.settings.empty?
-#        a.settings.build('foo', 'ssl')
-#        assert a.settings.size == 2
-#      end
-#
-#      should "convert symbols to strings when building multiple settings" do
-#        a = Account.create(:name => 'name')
-#        assert a.settings.empty?
-#        a.settings.build(:foo, :ssl)
-#        a.save!
-#        assert a.settings.size == 2
-#        assert a.settings.foo?
-#        assert a.settings.ssl?
-#        assert a.settings.ssl.name == 'ssl'
-#        assert a.settings.foo.name == 'foo'
 #      end
 
 end

@@ -57,7 +57,7 @@ Install the gem in your rails project by putting it in your Gemfile:
 
   gem 'property_set'
 
-Also remember to create the storage table, if for example you are going to be using this with an accounts model and have, you can should the table like:
+Also remember to create the storage table, if for example you are going to be using this with an accounts model, you can define the table like:
 
   create_table :account_settings do |t|
     t.integer  :account_id, :null => false
