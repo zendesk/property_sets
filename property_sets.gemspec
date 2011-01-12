@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Morten Primdahl"]
-  s.date = %q{2011-01-10}
+  s.date = %q{2011-01-12}
   s.description = %q{This gem is an ActiveRecord extension which provides a convenient interface for managing per row properties}
   s.email = %q{morten@zendesk.com}
   s.extra_rdoc_files = [
@@ -29,13 +29,13 @@ Gem::Specification.new do |s|
     "lib/property_sets/active_record_extension.rb",
     "lib/property_sets/property_set_helper.rb",
     "lib/property_sets/property_set_model.rb",
+    "property_sets.gemspec",
     "test/database.yml",
     "test/fixtures/account_settings.yml",
     "test/fixtures/account_texts.yml",
     "test/fixtures/accounts.yml",
     "test/helper.rb",
     "test/schema.rb",
-    "test/test.log",
     "test/test_property_sets.rb"
   ]
   s.homepage = %q{http://github.com/morten/property_sets}
