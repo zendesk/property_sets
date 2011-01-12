@@ -9,7 +9,7 @@ module PropertySets
         has_many association.to_s.pluralize.to_sym, :class_name => property_class.name, :dependent => :destroy do
 
           # Accepts a name value pair hash { :name => 'value', :pairs => true } and builds a property for each key
-          def build(property_pairs)
+          def bulk(property_pairs)
             property_pairs.keys.each do |name|
               value = property_pairs[name]
               self << proxy_reflection.klass.new(:name => name.to_s, :value => value)
@@ -38,9 +38,9 @@ module PropertySets
             end
 
             # The finder method which returns the property if present, otherwise a new instance with defaults
-            define_method "lookup" do |key|
-              instance = detect { |property| property.name.to_sym == key }
-              instance ||= property_class.new(@owner.class.name.underscore.to_sym => @owner, :name => key.to_s, :value => property_class.default(key))
+            define_method "lookup" do |arg|
+              instance = detect { |property| property.name.to_sym == arg }
+              instance ||= property_class.new(@owner.class.name.underscore.to_sym => @owner, :name => arg.to_s, :value => property_class.default(arg))
             end
           end
         end

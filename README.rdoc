@@ -27,29 +27,8 @@ The declared properties can then be accessed runtime via the defined association
 
 If the value has never been set, a nil (or default) is returned. And that's pretty much it.
 
-Stored properties can also be updated with the update_attributes and update_attributes! methods.
-
-  # Assuming params include { :account => { :settings => { :version => "v2.0", :forums => '0' }}}
-  # the below would set the respective values on the account
-  account.update_attributes(params[:account])
-
-We also created a view helper to help you generate the UI for enabling and disabling properties:
-
-  <% form_for(:account, :html => { :method => :put }) do |f| %>
-    <h3>
-      <%= f.property_set_check_box(:settings) :forums %> Enable forums on your account
-    </h3>
-  <% end %>
-
-== Security
-
-We support protection from mass updates, the syntax is as follows:
-
-  class Account < ActiveRecord::Base
-    property_set :settings do
-      property :product, :protected => true
-    end
-  end
+Stored properties can also be updated with the update_attributes and update_attributes! methods by
+enabling nested attributes. See the test cases for examples.
 
 == Installation
 
