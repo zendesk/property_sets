@@ -73,12 +73,9 @@ module PropertySets
       end
     end
 
-    def self.included(receiver)
-      receiver.extend(ClassMethods)
-    end
   end
 end
 
 ActiveRecord::Base.class_eval do
-  include PropertySets::ActiveRecordExtension
+  extend PropertySets::ActiveRecordExtension::ClassMethods
 end
