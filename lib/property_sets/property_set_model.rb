@@ -10,10 +10,6 @@ module PropertySets
         !false?
       end
 
-      def value
-        read_attribute(:value) || self.class.default(name.to_sym)
-      end
-
       def to_s
         value.to_s
       end

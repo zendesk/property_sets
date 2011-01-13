@@ -65,7 +65,7 @@ module PropertySets
             # The finder method which returns the property if present, otherwise a new instance with defaults
             define_method "lookup" do |arg|
               instance = detect { |property| property.name.to_sym == arg }
-              instance ||= property_class.new(@owner.class.name.underscore.to_sym => @owner, :name => arg.to_s)
+              instance ||= property_class.new(@owner.class.name.underscore.to_sym => @owner, :name => arg.to_s, :value => property_class.default(arg))
               PropertySetProxy.new(instance)
             end
           end
