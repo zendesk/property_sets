@@ -76,6 +76,18 @@ class TestPropertySets < ActiveSupport::TestCase
       assert @account.settings.foo?
     end
 
+    should "be creatable through association" do
+      assert @account.settings.foo.create.id
+      @account.settings.foo.destroy
+      @account.reload
+      assert @account.settings.foo.new_record?
+      assert @account.settings.foo.update_attributes(:value => 8)
+      assert @account.settings.foo.id
+      assert @account.settings.foo.value == "8"
+      assert @account.settings.hep.create
+      assert_equal @account.settings.hep.value, "skep"
+    end
+
     should "be destroyable through association" do
       assert !@account.settings.foo?
       assert @account.settings.foo = "1"

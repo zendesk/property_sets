@@ -1,6 +1,15 @@
 module PropertySets
   module PropertySetModel
     module InstanceMethods
+
+      def create
+        self.value = self.class.default(name.to_sym) if self.value.nil?
+        if new_record?
+          super
+        end
+        self
+      end
+
       def protected?
         self.class.protected?(self.name.to_sym)
       end
