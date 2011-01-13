@@ -6,7 +6,7 @@ class Account < ActiveRecord::Base
     property :bar
     property :baz
     property :hep, :default   => 'skep'
-    property :bob, :protected => true
+    property :bob
   end
 
   property_set :texts do
@@ -81,7 +81,7 @@ class TestPropertySets < ActiveSupport::TestCase
       @account.settings.foo.destroy
       @account.reload
       assert @account.settings.foo.new_record?
-      assert @account.settings.foo.update_attributes(:value => 8)
+      assert @account.settings.foo.create(:value => 8)
       assert @account.settings.foo.id
       assert @account.settings.foo.value == "8"
       assert @account.settings.hep.create

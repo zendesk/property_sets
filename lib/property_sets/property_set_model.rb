@@ -2,24 +2,16 @@ module PropertySets
   module PropertySetModel
     module InstanceMethods
 
-      def create
-        self.value = self.class.default(name.to_sym) if self.value.nil?
-        if new_record?
-          super
-        end
-        self
-      end
-
-      def protected?
-        self.class.protected?(self.name.to_sym)
-      end
-
       def false?
         [ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
       end
 
       def true?
         !false?
+      end
+
+      def value
+        read_attribute(:value) || self.class.default(name.to_sym)
       end
 
       def to_s
@@ -63,10 +55,6 @@ module PropertySets
 
       def keys
         @properties.keys
-      end
-
-      def protected?(key)
-        !!@properties[key][:protected]
       end
 
       def default(key)

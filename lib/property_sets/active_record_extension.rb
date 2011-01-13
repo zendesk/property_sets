@@ -1,5 +1,30 @@
+require 'delegate'
+
 module PropertySets
   module ActiveRecordExtension
+
+    class PropertySetProxy < Delegator
+      attr_accessor :record
+
+      def initialize(record)
+        self.record = record
+      end
+
+      def __getobj__
+        record
+      end
+
+      def id
+        record.id
+      end
+
+      def create(args = {})
+        record.attributes = args
+        record.save
+        record
+      end
+    end
+
     module ClassMethods
       def property_set(association, &block)
         raise "Invalid association name, letters only" unless association.to_s =~ /[a-z]+/
@@ -40,7 +65,8 @@ module PropertySets
             # The finder method which returns the property if present, otherwise a new instance with defaults
             define_method "lookup" do |arg|
               instance = detect { |property| property.name.to_sym == arg }
-              instance ||= property_class.new(@owner.class.name.underscore.to_sym => @owner, :name => arg.to_s, :value => property_class.default(arg))
+              instance ||= property_class.new(@owner.class.name.underscore.to_sym => @owner, :name => arg.to_s)
+              PropertySetProxy.new(instance)
             end
           end
         end
