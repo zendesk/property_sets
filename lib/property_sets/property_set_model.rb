@@ -10,6 +10,16 @@ module PropertySets
         !false?
       end
 
+      def enable
+        update_attribute(:value, "1")
+        self
+      end
+
+      def disable
+        update_attribute(:value, "0")
+        self
+      end
+
       def to_s
         value.to_s
       end
@@ -22,6 +32,10 @@ module PropertySets
         elsif !name.is_a?(String) || name !~ /^([a-z0-9]+_?)+$/
           errors.add(:name, :invalid)
         end
+      end
+
+      def coerce_value
+        self.value = value.to_s unless value.nil?
       end
 
       def owner_class_instance
@@ -42,6 +56,7 @@ module PropertySets
         base.after_create  :reset_owner_association
         base.after_destroy :reset_owner_association
         base.validate      :validate_format_of_name
+        base.before_create :coerce_value
       end
 
       def property(key, options = nil)

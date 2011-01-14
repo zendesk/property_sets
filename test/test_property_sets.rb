@@ -97,6 +97,23 @@ class TestPropertySets < ActiveSupport::TestCase
       assert !@account.settings.foo?
     end
 
+    should "support enable/disable semantics" do
+      assert !@account.settings.foo?
+      assert @account.settings.foo.id.nil?
+      @account.settings.foo.enable
+      assert @account.settings.foo.id.present?
+      assert @account.settings.foo?
+      @account.settings.foo.disable
+      assert !@account.settings.foo?
+    end
+
+    should "coerce everything but nil to string" do
+      assert @account.settings.foo.create(:value => 3)
+      assert @account.settings.foo.value == "3"
+      assert @account.settings.foo.create(:value => nil)
+      assert @account.settings.foo.value.nil?
+    end
+
     should "support bulk build multiple properties in one go" do
       @account.settings.bulk(:foo => "123", :bar => "456")
       @account.save!

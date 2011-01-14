@@ -11,6 +11,7 @@ You configure the allowed stored properties by specifying these in an initialize
   class Account < ActiveRecord::Base
     property_set :settings do
       property :version, :default => "v1.0"
+      property :featured
       property :product
     end
 
@@ -21,9 +22,24 @@ You configure the allowed stored properties by specifying these in an initialize
 
 The declared properties can then be accessed runtime via the defined association:
 
-  account.settings.ssl         # returns the value of the setting
-  account.settings.ssl=(value) # immediately changes the value of the setting
-  account.settings.ssl?        # coerces the setting to boolean AR style
+  # Return the version record for this account - or a new record if none exists
+  account.settings.version
+
+  # Create (or update) the version record with default value
+  account.settings.version.create
+
+  # Create (or update) the version record with the given value
+  account.settings.version.create(:value => "v1.1")
+
+  # Destroy the version record
+  account.settings.version.destroy
+
+On top of the basic access paths, there are some short cuts:
+
+  account.settings.featured=(1)     # immediately changes the value of the setting
+  account.settings.featured?        # coerces the setting to boolean AR style
+  account.settings.featured.enable  # sets the value of this setting to a true value
+  account.settings.featured.disable # sets the value of this setting to a false value
 
 If the value has never been set, a nil (or default) is returned. And that's pretty much it.
 
