@@ -20,6 +20,10 @@ module PropertySets
         self
       end
 
+      def protected?
+        self.class.protected?(name.to_sym)
+      end
+
       def to_s
         value.to_s
       end
@@ -43,7 +47,9 @@ module PropertySets
       end
 
       def update_owner_timestamp
-        owner_class_instance.update_attribute(:updated_at, Time.now) if owner_class_instance && !owner_class_instance.new_record?
+        if owner_class_instance && !owner_class_instance.new_record? && owner_class_instance.updated_at < 1.second.ago
+          owner_class_instance.update_attribute(:updated_at, Time.now)
+        end
       end
 
       def reset_owner_association
@@ -70,6 +76,10 @@ module PropertySets
 
       def default(key)
         @properties[key] && @properties[key].key?(:default) ? @properties[key][:default] : nil
+      end
+
+      def protected?(key)
+        @properties[key] && !!@properties[key][:protected]
       end
 
       def owner_class=(owner_class)

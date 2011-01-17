@@ -66,7 +66,7 @@ And for existing records:
 
 Install the gem in your rails project by putting it in your Gemfile:
 
-  gem "property_set"
+  gem "property_sets"
 
 Also remember to create the storage table(s), if for example you are going to be using this with an accounts model and a "settings" property set, you can define the table like:
 

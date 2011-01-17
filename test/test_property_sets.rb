@@ -7,6 +7,7 @@ class Account < ActiveRecord::Base
     property :baz
     property :hep, :default   => 'skep'
     property :bob
+    property :bla, :protected => true
   end
 
   property_set :texts do
@@ -29,6 +30,10 @@ class TestPropertySets < ActiveSupport::TestCase
     should "construct the container class" do
       assert defined?(AccountSetting)
       assert defined?(AccountText)
+    end
+
+    should "support protecting attributes" do
+      assert @account.settings.bla.protected?
     end
 
     should "be empty on a new account" do
@@ -114,40 +119,89 @@ class TestPropertySets < ActiveSupport::TestCase
       assert @account.settings.foo.value.nil?
     end
 
-    should "support bulk build multiple properties in one go" do
-      @account.settings.bulk(:foo => "123", :bar => "456")
-      @account.save!
-      assert_equal @account.reload.settings.size, 2
-      assert_equal @account.settings.foo.value, "123"
-      assert_equal @account.settings.foo.name, "foo"
-      assert_equal @account.settings.bar.value, "456"
-      assert_equal @account.settings.bar.name, "bar"
-    end
+    context "bulk updates" do
+      should "support bulk create/update of multiple properties in one go" do
+        [ @account, Account.new(:name => "Mibble") ].each do |account|
+          account.settings.bulk(:foo => "123", :bar => "456")
+          account.save!
 
-    should "be updatable as nested attributes" do
-      assert !@account.texts.foo?
-      assert !@account.texts.bar?
-      assert !@account.texts.foo.id
-      assert !@account.texts.bar.id
-      assert @account.texts.empty?
+          assert_equal account.reload.settings.size, 2
+          assert_equal account.settings.foo.value, "123"
+          assert_equal account.settings.foo.name, "foo"
+          assert_equal account.settings.bar.value, "456"
+          assert_equal account.settings.bar.name, "bar"
 
-      assert @account.texts_attributes = [{ :name => "foo", :value => "1"  }, { :name => "bar", :value => "0"  }]
-      @account.save!
+          account.settings.bulk(:bar => "789", :baz => "012")
+          account.save!
 
-      assert @account.texts.foo?
-      assert !@account.texts.bar?
-      assert @account.texts.foo.id
-      assert @account.texts.bar.id
+          assert_equal account.reload.settings.size, 3
+          assert_equal account.settings.foo.value, "123"
+          assert_equal account.settings.bar.value, "789"
+          assert_equal account.settings.baz.value, "012"
+        end
+      end
 
-      @account.update_attributes!(:texts_attributes => [
-        { :id => @account.texts.foo.id, :name => "foo", :value => "0"  },
-        { :id => @account.texts.bar.id, :name => "bar", :value => "1" }
-      ])
-      assert !@account.texts.foo?
-      assert @account.texts.bar?
+      should "be updateable as AR nested attributes" do
+        assert !@account.texts.foo?
+        assert !@account.texts.bar?
+        assert !@account.texts.foo.id
+        assert !@account.texts.bar.id
+        assert @account.texts.empty?
+
+        assert @account.texts_attributes = [{ :name => "foo", :value => "1"  }, { :name => "bar", :value => "0"  }]
+        @account.save!
+
+        assert @account.texts.foo?
+        assert !@account.texts.bar?
+        assert @account.texts.foo.id
+        assert @account.texts.bar.id
+
+        @account.update_attributes!(:texts_attributes => [
+          { :id => @account.texts.foo.id, :name => "foo", :value => "0"  },
+          { :id => @account.texts.bar.id, :name => "bar", :value => "1" }
+        ])
+        assert !@account.texts.foo?
+        assert @account.texts.bar?
+      end
+
+      should "be updateable as a nested structure" do
+        assert !@account.settings.foo?
+        assert !@account.settings.bar?
+        assert !@account.settings.foo.id
+        assert !@account.settings.bar.id
+        assert @account.settings.empty?
+
+        attribs = {
+          :name => "Kim",
+          :property_sets => {
+            :settings => { :foo => "1", :bar => "0" }
+          }
+        }
+
+        assert @account.update_attributes(attribs)
+        @account.save!
+
+        assert @account.settings.foo?
+        assert !@account.settings.bar?
+        assert @account.settings.foo.id
+        assert @account.settings.bar.id
+        assert @account.settings.foo.value == "1"
+        assert @account.settings.bar.value == "0"
+
+        attribs = {
+          :name => "Kim",
+          :property_sets => {
+            :settings => { :foo => "1", :bar => "1", :baz => "1", :bla => "1" }
+          }
+        }
+
+        assert @account.update_attributes!(attribs)
+
+        assert @account.settings.foo?
+        assert @account.settings.bar?
+        assert @account.settings.baz?
+        assert !@account.settings.bla?
+      end
     end
   end
 end
-
-
-

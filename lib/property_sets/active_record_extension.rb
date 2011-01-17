@@ -34,10 +34,15 @@ module PropertySets
         has_many association.to_s.pluralize.to_sym, :class_name => property_class.name, :dependent => :destroy do
 
           # Accepts a name value pair hash { :name => 'value', :pairs => true } and builds a property for each key
-          def bulk(property_pairs)
+          def bulk(property_pairs, with_protection = false)
             property_pairs.keys.each do |name|
-              value = property_pairs[name]
-              self << proxy_reflection.klass.new(:name => name.to_s, :value => value)
+              record = lookup(name).record
+              if with_protection && record.protected?
+                logger.warn("Someone tried to update the protected #{name} property to #{property_pairs[name]}")
+              else
+                record.value = property_pairs[name]
+                self << record
+              end
             end
           end
 
@@ -73,9 +78,32 @@ module PropertySets
       end
     end
 
+    module InstanceMethods
+      def update_attributes_with_property_sets(attributes)
+        update_property_set_attributes(attributes)
+        update_attributes_without_property_sets(attributes)
+      end
+
+      def update_attributes_with_property_sets!(attributes)
+        update_property_set_attributes(attributes)
+        update_attributes_without_property_sets!(attributes)
+      end
+
+      def update_property_set_attributes(attributes)
+        if attributes && property_sets = attributes.delete(:property_sets)
+          property_sets.each do |property_set, property_set_attributes|
+            send(property_set).bulk(property_set_attributes, true)
+          end
+        end
+      end
+    end
   end
 end
 
 ActiveRecord::Base.class_eval do
-  extend PropertySets::ActiveRecordExtension::ClassMethods
+  include PropertySets::ActiveRecordExtension::InstanceMethods
+  extend  PropertySets::ActiveRecordExtension::ClassMethods
+
+  alias_method_chain :update_attributes, :property_sets
+  alias_method_chain :update_attributes!, :property_sets
 end
