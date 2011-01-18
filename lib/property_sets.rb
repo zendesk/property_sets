@@ -1,6 +1,6 @@
+require 'property_sets/property_set_helper'
 require 'property_sets/property_set_model'
 require 'property_sets/active_record_extension'
-require 'property_sets/property_set_helper'
 
 module PropertySets
   def self.ensure_property_set_class(association, owner_class)

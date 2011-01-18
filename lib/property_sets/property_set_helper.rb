@@ -1,19 +1,28 @@
+require 'property_sets/form_builder_proxy'
+
 module ActionView
   module Helpers
-    def setting_check_box(model_name, method, options = {}, checked_value = "1", unchecked_value = "0")
+    # property_set_check_box(:account, :property_association, :property_key, options)
+    def property_set_check_box(model_name, property_set, property, options = {}, checked_value = "1", unchecked_value = "0")
       the_model = @template.instance_variable_get("@#{model_name}")
+
       throw "No @#{model_name} in scope" if the_model.nil?
-      throw "The setting_check_box only works on models with settings" unless the_model.respond_to?(:settings)
-      options[:checked] = the_model.settings.send("#{method}?")
-      options[:id]    ||= "#{model_name}_settings_#{method}"
-      options[:name]    = "#{model_name}[settings][#{method}]"
-      @template.check_box(model_name, "settings_#{method}", options, checked_value, unchecked_value)
+      throw "The property_set_check_box only works on models with property set #{property_set}" unless the_model.respond_to?(property_set)
+
+      options[:checked] = the_model.send(property).send("#{method}?")
+      options[:id]    ||= "#{model_name}_property_sets_#{property_set}_#{method}"
+      options[:name]    = "#{model_name}[property_sets][#{property_set}][#{method}]"
+      @template.check_box(model_name, "property_sets_#{property_set}_#{method}", options, checked_value, unchecked_value)
+    end
+  end
+
+  class FormBuilder
+    def property_set(identifier)
+      PropertySets::FormBuilderProxy.new(identifier, self)
     end
 
-    class FormBuilder
-      def setting_check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
-        @template.setting_check_box(@object_name, method, objectify_options(options), checked_value, unchecked_value)
-      end
+    def property_set_check_box(property_set, property, options, checked_value, unchecked_value)
+      @template.property_set_check_box(@object_name, property_set, property, objectify_options(options), checked_value, unchecked_value)
     end
   end
 end

@@ -9,8 +9,8 @@ You configure the allowed stored properties by specifying these in the model:
   class Account < ActiveRecord::Base
     property_set :settings do
       property :version, :default => "v1.0"
-      property :featured
-      property :product
+      property :featured, :protected => true
+      property :activated
     end
 
     property_set :texts do
@@ -32,6 +32,8 @@ The declared properties can then be accessed runtime via the defined association
   # Destroy the version record
   account.settings.version.destroy
 
+=== Convenience methods
+
 On top of the basic access paths, there are some short cuts, mainly convenience methods for dealing with booleans:
 
   # immediately changes the value of the setting
@@ -45,6 +47,8 @@ On top of the basic access paths, there are some short cuts, mainly convenience 
 
   # sets the value of this setting to a false value
   account.settings.featured.disable
+
+=== Bulk operations
 
 Stored properties can also be updated with the update_attributes and update_attributes! methods by
 enabling nested attributes. Like this (from the test cases):
@@ -61,6 +65,27 @@ And for existing records:
     { :id => @account.texts.bar.id, :name => "bar", :value => "1" }
   ])
 
+Using nested attributes is subject to implementing your own security measures for mass update assignments.
+Alternatively, it is possible to use a custom hash structure:
+
+  params = { :property_sets => {
+    :settings => { :version => "v4.0", :featured => "1" },
+    :texts    => { :epilogue => "Wibble wobble" }
+  }}
+  @account.update_attributes(params)
+
+The above will not update +featured+ as this has the protected flag set and is hence protected from
+mass updates.
+
+=== View helpers
+
+We support a single convenience mechanism for building forms and putting the values into the above hash structure. So far, we only support check boxes:
+
+  <% form_for(:account, :html => { :method => :put }) do |f| %>
+    <h3>
+      <%= f.property_set(:settings).check_box :activated %> Activated?
+    </h3>
+  <% end %>
 
 == Installation
 
