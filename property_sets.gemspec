@@ -5,28 +5,27 @@
 
 Gem::Specification.new do |s|
   s.name = %q{property_sets}
-  s.version = "0.0.11"
+  s.version = "0.0.12"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Morten Primdahl"]
-  s.date = %q{2011-01-13}
+  s.date = %q{2011-01-17}
   s.description = %q{This gem is an ActiveRecord extension which provides a convenient interface for managing per row properties}
   s.email = %q{morten@zendesk.com}
   s.extra_rdoc_files = [
-    "LICENSE",
     "LICENSE.txt",
     "README.rdoc"
   ]
   s.files = [
     ".document",
     "Gemfile",
-    "LICENSE",
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
     "VERSION",
     "lib/property_sets.rb",
     "lib/property_sets/active_record_extension.rb",
+    "lib/property_sets/form_builder_proxy.rb",
     "lib/property_sets/property_set_helper.rb",
     "lib/property_sets/property_set_model.rb",
     "property_sets.gemspec",
