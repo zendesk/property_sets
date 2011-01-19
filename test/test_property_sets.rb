@@ -171,8 +171,8 @@ class TestPropertySets < ActiveSupport::TestCase
 
     context "view construction" do
       should "provide a form builder proxy" do
-        proxy = ActionView::FormBuilder.new.property_set(:foo)
-        assert proxy.is_a?(ActionView::FormBuilder::PropertySetFormBuilderProxy)
+        proxy = ActionView::Helpers::FormBuilder.new("hi", "hi", "hi", nil, nil).property_set(:foo)
+        assert proxy.is_a?(ActionView::Helpers::FormBuilder::PropertySetFormBuilderProxy)
         assert_equal :foo, proxy.property_set
         proxy.builder.expects(:property_set_check_box).once.with(:foo, :bar, {}, "1", "0")
         proxy.check_box(:bar)
