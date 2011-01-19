@@ -1,4 +1,5 @@
-require 'property_sets/form_builder_proxy'
+require 'action_view'
+require 'delegate'
 
 module ActionView
   module Helpers
@@ -17,8 +18,26 @@ module ActionView
   end
 
   class FormBuilder
+    class PropertySetFormBuilderProxy < Delegator
+      attr_accessor :builder
+      attr_accessor :property_set
+
+      def initialize(property_set, builder)
+        self.property_set = property_set
+        self.builder      = builder
+      end
+
+      def __getobj__
+        builder
+      end
+
+      def check_box(property, options = {}, checked_value = "1", unchecked_value = "0")
+        builder.property_set_check_box(property_set, property, options, checked_value, unchecked_value)
+      end
+    end
+
     def property_set(identifier)
-      PropertySets::FormBuilderProxy.new(identifier, self)
+      PropertySetFormBuilderProxy.new(identifier, self)
     end
 
     def property_set_check_box(property_set, property, options, checked_value, unchecked_value)
@@ -26,3 +45,4 @@ module ActionView
     end
   end
 end
+
