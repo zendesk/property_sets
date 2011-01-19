@@ -10,10 +10,10 @@ module ActionView
       throw "No @#{model_name} in scope" if the_model.nil?
       throw "The property_set_check_box only works on models with property set #{property_set}" unless the_model.respond_to?(property_set)
 
-      options[:checked] = the_model.send(property).send("#{method}?")
-      options[:id]    ||= "#{model_name}_property_sets_#{property_set}_#{method}"
-      options[:name]    = "#{model_name}[property_sets][#{property_set}][#{method}]"
-      @template.check_box(model_name, "property_sets_#{property_set}_#{method}", options, checked_value, unchecked_value)
+      options[:checked] = the_model.send(property_set).send("#{property}?")
+      options[:id]    ||= "#{model_name}_#{property_set}_#{property}"
+      options[:name]    = "#{model_name}[#{property_set}][#{property}]"
+      @template.check_box(model_name, "#{property_set}_#{property}", options, checked_value, unchecked_value)
     end
 
     class FormBuilder

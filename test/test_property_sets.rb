@@ -31,6 +31,10 @@ class TestPropertySets < ActiveSupport::TestCase
       assert defined?(AccountText)
     end
 
+    should "register the property sets used on a class" do
+      assert_equal [ :settings, :texts ], Account.property_set_index
+    end
+
     should "support protecting attributes" do
       assert @account.settings.protected?(:pro)
       assert !@account.settings.protected?(:foo)
@@ -138,10 +142,7 @@ class TestPropertySets < ActiveSupport::TestCase
 
       should "be updateable as a nested structure" do
         attribs = {
-          :name => "Kim",
-          :property_sets => {
-            :settings => { :foo => "1", :bar => "0" }
-          }
+          :name => "Kim", :settings => { :foo => "1", :bar => "0" }
         }
 
         assert @account.update_attributes(attribs)
@@ -154,10 +155,7 @@ class TestPropertySets < ActiveSupport::TestCase
         assert !@account.settings.pro?
 
         attribs = {
-          :name => "Kim",
-          :property_sets => {
-            :settings => { :foo => "1", :bar => "1", :baz => "1", :pro => "1" }
-          }
+          :name => "Kim", :settings => { :foo => "1", :bar => "1", :baz => "1", :pro => "1" }
         }
 
         assert @account.update_attributes!(attribs)

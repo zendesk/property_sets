@@ -2,10 +2,17 @@ require 'delegate'
 
 module PropertySets
   module ActiveRecordExtension
-
     module ClassMethods
       def property_set(association, &block)
+        unless include?(PropertySets::ActiveRecordExtension::InstanceMethods)
+          self.send(:include, PropertySets::ActiveRecordExtension::InstanceMethods)
+          cattr_accessor :property_set_index
+          self.property_set_index ||= []
+        end
+
         raise "Invalid association name, letters only" unless association.to_s =~ /[a-z]+/
+        self.property_set_index << association
+
         property_class = PropertySets.ensure_property_set_class(association, self)
         property_class.instance_eval(&block)
 
@@ -59,6 +66,11 @@ module PropertySets
     end
 
     module InstanceMethods
+      def self.included(base)
+        base.alias_method_chain :update_attributes, :property_sets
+        base.alias_method_chain :update_attributes!, :property_sets
+      end
+
       def update_attributes_with_property_sets(attributes)
         update_property_set_attributes(attributes)
         update_attributes_without_property_sets(attributes)
@@ -70,20 +82,17 @@ module PropertySets
       end
 
       def update_property_set_attributes(attributes)
-        if attributes && property_sets = attributes.delete(:property_sets)
-          property_sets.each do |property_set, property_set_attributes|
-            send(property_set).set(property_set_attributes, true)
+        if attributes && self.class.property_set_index.any?
+          self.class.property_set_index.each do |property_set|
+            if property_set_hash = attributes.delete(property_set)
+              send(property_set).set(property_set_hash, true)
+            end
           end
         end
       end
     end
+
   end
 end
 
-ActiveRecord::Base.class_eval do
-  include PropertySets::ActiveRecordExtension::InstanceMethods
-  extend  PropertySets::ActiveRecordExtension::ClassMethods
-
-  alias_method_chain :update_attributes, :property_sets
-  alias_method_chain :update_attributes!, :property_sets
-end
+ActiveRecord::Base.extend PropertySets::ActiveRecordExtension::ClassMethods
