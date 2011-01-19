@@ -52,10 +52,10 @@ And for existing records:
 Using nested attributes is subject to implementing your own security measures for mass update assignments.
 Alternatively, it is possible to use a custom hash structure:
 
-  params = { :property_sets => {
+  params = {
     :settings => { :version => "v4.0", :featured => "1" },
     :texts    => { :epilogue => "Wibble wobble" }
-  }}
+  }
   @account.update_attributes(params)
 
 The above will not update +featured+ as this has the protected flag set and is hence protected from
