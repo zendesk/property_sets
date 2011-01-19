@@ -7,7 +7,7 @@ module PropertySets
         unless include?(PropertySets::ActiveRecordExtension::InstanceMethods)
           self.send(:include, PropertySets::ActiveRecordExtension::InstanceMethods)
           cattr_accessor :property_set_index
-          self.property_set_index ||= []
+          self.property_set_index = []
         end
 
         raise "Invalid association name, letters only" unless association.to_s =~ /[a-z]+/
