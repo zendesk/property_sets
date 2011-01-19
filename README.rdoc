@@ -20,33 +20,17 @@ You configure the allowed stored properties by specifying these in the model:
 
 The declared properties can then be accessed runtime via the defined association:
 
-  # Return the version record for this account - or a new record if none exists
+  # Return the value of the version record for this account, or the default value if not set
   account.settings.version
 
-  # Create (or update) the version record with default value
-  account.settings.version.create
+  # Update the version record with given value
+  account.settings.version = "v1.1"
 
-  # Create (or update) the version record with the given value
-  account.settings.version.create(:value => "v1.1")
-
-  # Destroy the version record
-  account.settings.version.destroy
-
-=== Convenience methods
-
-On top of the basic access paths, there are some short cuts, mainly convenience methods for dealing with booleans:
-
-  # immediately changes the value of the setting
-  account.settings.version=("v3.0")
-
-  # coerces the setting to boolean AR style
+  # Query the truth value of the property
   account.settings.featured?
 
-  # sets the value of this setting to a true value
-  account.settings.featured.enable
-
-  # sets the value of this setting to a false value
-  account.settings.featured.disable
+  # Short hand for setting one or more values
+  account.settings.set(:version => "v1.2", :activated => true)
 
 === Bulk operations
 

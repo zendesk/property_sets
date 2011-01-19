@@ -1,4 +1,4 @@
-require 'helper'
+require File.expand_path(File.dirname(__FILE__) + '/helper')
 
 class Account < ActiveRecord::Base
   property_set :settings do
@@ -6,8 +6,7 @@ class Account < ActiveRecord::Base
     property :bar
     property :baz
     property :hep, :default   => 'skep'
-    property :bob
-    property :bla, :protected => true
+    property :pro, :protected => true
   end
 
   property_set :texts do
@@ -33,20 +32,25 @@ class TestPropertySets < ActiveSupport::TestCase
     end
 
     should "support protecting attributes" do
-      assert @account.settings.bla.protected?
+      assert @account.settings.protected?(:pro)
+      assert !@account.settings.protected?(:foo)
     end
 
     should "be empty on a new account" do
       assert @account.settings.empty?
       assert @account.texts.empty?
+
+      assert !@account.texts.foo?
+      assert !@account.texts.bar?
+      assert @account.texts.foo.nil?
+      assert @account.texts.bar.nil?
     end
 
-    should "respond to defaults" do
+    should "respond with defaults" do
       assert_equal false, @account.settings.bar?
-      assert_equal nil, @account.settings.bar.value
+      assert_equal nil, @account.settings.bar
       assert_equal true, @account.settings.hep?
-      assert_equal 'skep', @account.settings.hep.value
-      assert @account.settings.hep.id.nil?
+      assert_equal 'skep', @account.settings.hep
     end
 
     should "reject settings with an invalid name" do
@@ -64,113 +68,75 @@ class TestPropertySets < ActiveSupport::TestCase
     end
 
     should "validate uniqueness of settings" do
-      AccountSetting.create!(:account => @account, :name => 'unique')
+      @account.settings.create!(:name => "unique")
       assert_raise ActiveRecord::RecordInvalid do
-        AccountSetting.create!(:account => @account, :name => 'unique')
+        @account.settings.create!(:name => "unique")
       end
     end
 
     should "be creatable using the = operator" do
       assert !@account.settings.foo?
-      assert @account.settings.foo = "1"
-      assert @account.settings.size == 1
-      assert @account.texts.size == 0
-      assert @account.settings.foo?
-      assert @account.settings.foo = "2"
-      assert @account.settings.size == 1
-      assert @account.settings.foo?
-    end
+      [ "1", "2" ].each do |value|
+        assert @account.settings.foo = value
+        assert @account.settings.foo?
+        assert @account.settings.size == 1
+      end
 
-    should "be creatable through association" do
-      assert @account.settings.foo.create.id
-      @account.settings.foo.destroy
-      @account.reload
-      assert @account.settings.foo.new_record?
-      assert @account.settings.foo.create(:value => 8)
-      assert @account.settings.foo.id
-      assert @account.settings.foo.value == "8"
-      assert @account.settings.hep.create
-      assert_equal @account.settings.hep.value, "skep"
-    end
-
-    should "be destroyable through association" do
-      assert !@account.settings.foo?
-      assert @account.settings.foo = "1"
-      assert @account.settings.foo?
-      assert @account.settings.foo.destroy
-      @account.settings.reload
-      assert !@account.settings.foo?
-    end
-
-    should "support enable/disable semantics" do
-      assert !@account.settings.foo?
-      assert @account.settings.foo.id.nil?
-      @account.settings.foo.enable
-      assert @account.settings.foo.id.present?
-      assert @account.settings.foo?
-      @account.settings.foo.disable
-      assert !@account.settings.foo?
+      assert @account.texts.empty?
     end
 
     should "coerce everything but nil to string" do
-      assert @account.settings.foo.create(:value => 3)
-      assert @account.settings.foo.value == "3"
-      assert @account.settings.foo.create(:value => nil)
-      assert @account.settings.foo.value.nil?
+      @account.settings.foo = 3
+      assert @account.settings.foo == "3"
+      @account.settings.foo = nil
+      assert @account.settings.foo.nil?
     end
 
-    context "bulk updates" do
-      should "support bulk create/update of multiple properties in one go" do
+    context "#set" do
+      should "support writing multiple values to the association" do
+        assert !@account.settings.foo?
+        assert !@account.settings.bar?
+
+        @account.settings.set(:foo => "123", :bar => "456")
+
+        assert @account.settings.foo?
+        assert @account.settings.bar?
+      end
+
+      should "work identically for new and existing owner objects" do
         [ @account, Account.new(:name => "Mibble") ].each do |account|
-          account.settings.bulk(:foo => "123", :bar => "456")
-          account.save!
+          account.settings.set(:foo => "123", :bar => "456")
 
-          assert_equal account.reload.settings.size, 2
-          assert_equal account.settings.foo.value, "123"
-          assert_equal account.settings.foo.name, "foo"
-          assert_equal account.settings.bar.value, "456"
-          assert_equal account.settings.bar.name, "bar"
+          assert_equal account.settings.size, 2
+          assert_equal account.settings.foo, "123"
+          assert_equal account.settings.bar, "456"
 
-          account.settings.bulk(:bar => "789", :baz => "012")
-          account.save!
+          account.settings.set(:bar => "789", :baz => "012")
 
-          assert_equal account.reload.settings.size, 3
-          assert_equal account.settings.foo.value, "123"
-          assert_equal account.settings.bar.value, "789"
-          assert_equal account.settings.baz.value, "012"
+          assert_equal account.settings.size, 3
+          assert_equal account.settings.foo, "123"
+          assert_equal account.settings.bar, "789"
+          assert_equal account.settings.baz, "012"
         end
       end
 
       should "be updateable as AR nested attributes" do
-        assert !@account.texts.foo?
-        assert !@account.texts.bar?
-        assert !@account.texts.foo.id
-        assert !@account.texts.bar.id
-        assert @account.texts.empty?
-
         assert @account.texts_attributes = [{ :name => "foo", :value => "1"  }, { :name => "bar", :value => "0"  }]
         @account.save!
 
-        assert @account.texts.foo?
-        assert !@account.texts.bar?
-        assert @account.texts.foo.id
-        assert @account.texts.bar.id
+        assert @account.texts.foo == "1"
+        assert @account.texts.bar == "0"
 
         @account.update_attributes!(:texts_attributes => [
-          { :id => @account.texts.foo.id, :name => "foo", :value => "0"  },
-          { :id => @account.texts.bar.id, :name => "bar", :value => "1" }
+          { :id => @account.texts.lookup(:foo).id, :name => "foo", :value => "0"  },
+          { :id => @account.texts.lookup(:bar).id, :name => "bar", :value => "1" }
         ])
-        assert !@account.texts.foo?
-        assert @account.texts.bar?
+
+        assert @account.texts.foo == "0"
+        assert @account.texts.bar == "1"
       end
 
       should "be updateable as a nested structure" do
-        assert !@account.settings.foo?
-        assert !@account.settings.bar?
-        assert !@account.settings.foo.id
-        assert !@account.settings.bar.id
-        assert @account.settings.empty?
-
         attribs = {
           :name => "Kim",
           :property_sets => {
@@ -183,15 +149,14 @@ class TestPropertySets < ActiveSupport::TestCase
 
         assert @account.settings.foo?
         assert !@account.settings.bar?
-        assert @account.settings.foo.id
-        assert @account.settings.bar.id
-        assert @account.settings.foo.value == "1"
-        assert @account.settings.bar.value == "0"
+        assert @account.settings.foo == "1"
+        assert @account.settings.bar == "0"
+        assert !@account.settings.pro?
 
         attribs = {
           :name => "Kim",
           :property_sets => {
-            :settings => { :foo => "1", :bar => "1", :baz => "1", :bla => "1" }
+            :settings => { :foo => "1", :bar => "1", :baz => "1", :pro => "1" }
           }
         }
 
@@ -200,7 +165,7 @@ class TestPropertySets < ActiveSupport::TestCase
         assert @account.settings.foo?
         assert @account.settings.bar?
         assert @account.settings.baz?
-        assert !@account.settings.bla?
+        assert !@account.settings.pro?
       end
     end
 
