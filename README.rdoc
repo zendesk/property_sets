@@ -63,12 +63,12 @@ mass updates.
 
 === View helpers
 
-We support a single convenience mechanism for building forms and putting the values into the above hash structure. So far, we only support check boxes:
+We support a couple of convenience mechanisms for building forms and putting the values into the above hash structure. So far, only support check boxes and radio buttons:
 
   <% form_for(:account, :html => { :method => :put }) do |f| %>
-    <h3>
-      <%= f.property_set(:settings).check_box :activated %> Activated?
-    </h3>
+    <h3><%= f.property_set(:settings).check_box :activated %> Activated?</h3>
+    <h3><%= f.property_set(:settings).radio_button :hot, "yes" %> Hot</h3>
+    <h3><%= f.property_set(:settings).radio_button :not, "no" %> Not</h3>
   <% end %>
 
 == Installation
