@@ -13,7 +13,7 @@ ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/test.log")
 load(File.dirname(__FILE__) + "/schema.rb")
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'property_sets'
+require File.dirname(__FILE__)+'/../lib/property_sets'
 
 class ActiveSupport::TestCase
   include ActiveRecord::TestFixtures
@@ -32,3 +32,20 @@ end
 
 ActiveSupport::TestCase.fixture_path = File.dirname(__FILE__) + "/fixtures/"
 $LOAD_PATH.unshift(ActiveSupport::TestCase.fixture_path)
+
+class Account < ActiveRecord::Base
+  property_set :settings do
+    property :foo
+    property :bar
+    property :baz
+    property :hep, :default   => 'skep'
+    property :pro, :protected => true
+  end
+
+  property_set :texts do
+    property :foo
+    property :bar
+  end
+
+  accepts_nested_attributes_for :texts
+end

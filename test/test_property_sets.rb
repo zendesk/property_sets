@@ -1,22 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/helper')
 
-class Account < ActiveRecord::Base
-  property_set :settings do
-    property :foo
-    property :bar
-    property :baz
-    property :hep, :default   => 'skep'
-    property :pro, :protected => true
-  end
-
-  property_set :texts do
-    property :foo
-    property :bar
-  end
-
-  accepts_nested_attributes_for :texts
-end
-
 class TestPropertySets < ActiveSupport::TestCase
 
   context "property sets" do
@@ -164,16 +147,6 @@ class TestPropertySets < ActiveSupport::TestCase
         assert @account.settings.bar?
         assert @account.settings.baz?
         assert !@account.settings.pro?
-      end
-    end
-
-    context "view construction" do
-      should "provide a form builder proxy" do
-        proxy = ActionView::Helpers::FormBuilder.new("hi", "hi", "hi", nil, nil).property_set(:foo)
-        assert proxy.is_a?(ActionView::Helpers::FormBuilder::PropertySetFormBuilderProxy)
-        assert_equal :foo, proxy.property_set
-        proxy.builder.expects(:property_set_check_box).once.with(:foo, :bar, {}, "1", "0")
-        proxy.check_box(:bar)
       end
     end
   end

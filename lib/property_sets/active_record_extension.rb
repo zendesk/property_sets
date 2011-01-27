@@ -1,5 +1,3 @@
-require 'delegate'
-
 module PropertySets
   module ActiveRecordExtension
     module ClassMethods
