@@ -23,6 +23,14 @@ class TestPropertySets < ActiveSupport::TestCase
       assert !@account.settings.protected?(:foo)
     end
 
+    should "allow enabling/disabling a property" do
+      assert @account.settings.hep?
+      @account.settings.disable(:hep)
+      assert !@account.settings.hep?
+      @account.settings.enable(:hep)
+      assert @account.settings.hep?
+    end
+
     should "be empty on a new account" do
       assert @account.settings.empty?
       assert @account.texts.empty?

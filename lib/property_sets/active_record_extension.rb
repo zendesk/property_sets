@@ -45,6 +45,14 @@ module PropertySets
               lookup(arg).protected?
             end
 
+            define_method "enable" do |arg|
+              send("#{arg}=", "1")
+            end
+
+            define_method "disable" do |arg|
+              send("#{arg}=", "0")
+            end
+
             # Assigns a new value to the property
             define_method "#{key}=" do |value|
               instance = lookup(key)
