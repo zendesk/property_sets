@@ -87,6 +87,12 @@ class TestPropertySets < ActiveSupport::TestCase
       assert @account.settings.foo.nil?
     end
 
+    should "reference the owner instance when constructing a new record" do
+      record = @account.settings.lookup(:baz)
+      assert record.new_record?
+      assert record.account.id == @account.id
+    end
+
     context "#set" do
       should "support writing multiple values to the association" do
         assert !@account.settings.foo?
