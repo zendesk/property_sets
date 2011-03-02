@@ -93,6 +93,7 @@ class TestPropertySets < ActiveSupport::TestCase
       assert record.account.id == @account.id
     end
 
+
     context "#set" do
       should "support writing multiple values to the association" do
         assert !@account.settings.foo?
@@ -119,6 +120,12 @@ class TestPropertySets < ActiveSupport::TestCase
           assert_equal account.settings.bar, "789"
           assert_equal account.settings.baz, "012"
         end
+      end
+
+      should "touch the owner instance" do #Ding!
+        @account.expects(:touch)
+        record = @account.settings.lookup(:baz)
+        record.update_attributes!(:value => "foo")
       end
 
       should "be updateable as AR nested attributes" do
