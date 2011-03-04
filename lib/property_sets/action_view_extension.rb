@@ -28,16 +28,28 @@ module ActionView
           template.radio_button(object_name, property, checked_value, options)
         end
 
-        def prepare_options(property, options, &block)
+        def hidden_field(property, options = {})
+          template.hidden_field(object_name, property, prepare_id_name(property, options))
+        end
+
+        def prepare_id_name(property, options)
+          throw "Invalid options type #{options.inspect}" unless options.is_a?(Hash)
+
           instance = template.instance_variable_get("@#{object_name}")
+
           throw "No @#{object_name} in scope" if instance.nil?
           throw "The property_set_check_box only works on models with property set #{property_set}" unless instance.respond_to?(property_set)
 
           options[:id]     ||= "#{object_name}_#{property_set}_#{property}"
           options[:name]     = "#{object_name}[#{property_set}][#{property}]"
           options[:object]   = instance
-          options[:checked]  = yield(instance.send(property_set))
 
+          options
+        end
+
+        def prepare_options(property, options, &block)
+          options = prepare_id_name(property, options)
+          options[:checked] = yield(options[:object].send(property_set))
           options
         end
       end
