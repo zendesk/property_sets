@@ -29,6 +29,11 @@ class TestPropertySets < ActiveSupport::TestCase
       assert !@account.settings.hep?
       @account.settings.enable(:hep)
       assert @account.settings.hep?
+
+      account = Account.new
+      assert !account.settings.foo?
+      account.settings.enable(:foo)
+      assert account.settings.foo?
     end
 
     should "be empty on a new account" do
@@ -102,6 +107,12 @@ class TestPropertySets < ActiveSupport::TestCase
 
         assert @account.settings.foo?
         assert @account.settings.bar?
+      end
+
+      should "convert string keys to symbols to ensure consistent lookup" do
+        @account.settings.set(:foo => "123")
+        @account.settings.set("foo" => "456")
+        assert @account.save!
       end
 
       should "work identically for new and existing owner objects" do
