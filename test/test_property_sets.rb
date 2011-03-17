@@ -15,7 +15,7 @@ class TestPropertySets < ActiveSupport::TestCase
     end
 
     should "register the property sets used on a class" do
-      assert_equal [ :settings, :texts ], Account.property_set_index
+      assert_equal [ :settings, :texts, :validations ], Account.property_set_index
     end
 
     should "support protecting attributes" do
@@ -96,6 +96,15 @@ class TestPropertySets < ActiveSupport::TestCase
       record = @account.settings.lookup(:baz)
       assert record.new_record?
       assert record.account.id == @account.id
+    end
+
+    context "validations" do
+      should "add an error when violated" do
+        @account.validations.validated = "hello"
+        assert_equal "Value BEEP", @account.validations.first.errors.full_messages.first
+        assert_equal false, @account.save
+        assert_equal "Validations is invalid", @account.errors.full_messages.first
+      end
     end
 
     context "#set" do

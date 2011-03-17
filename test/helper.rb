@@ -46,6 +46,12 @@ class Account < ActiveRecord::Base
     property :foo
     property :bar
   end
-
   accepts_nested_attributes_for :texts
+
+  property_set :validations do
+    property :validated
+    property :regular
+
+    validates_format_of :value, :with => /\d+/, :message => "BEEP", :if => lambda { |r| r.name.to_sym == :validated }
+  end
 end

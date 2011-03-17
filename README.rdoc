@@ -32,6 +32,21 @@ The declared properties can then be accessed runtime via the defined association
   # Short hand for setting one or more values
   account.settings.set(:version => "v1.2", :activated => true)
 
+=== Validations
+
+Property sets supports standard AR validations, although in a somewhat manual fashion.
+
+  class Account < ActiveRecord::Base
+    property_set :settings do
+      property :version, :default => "v1.0"
+      property :featured, :protected => true
+
+      validates_format_of :value, :with => /v\d+\.\d+/, :message => "of version is invalid",
+                          :if => Proc.new { |r| r.name.to_sym == :version }
+    end
+  end
+
+
 === Bulk operations
 
 Stored properties can also be updated with the update_attributes and update_attributes! methods by
