@@ -41,6 +41,10 @@ module PropertySets
               lookup(key).value
             end
 
+            define_method "#{key}_record" do
+              lookup(key)
+            end
+
             define_method "protected?" do |arg|
               lookup(arg).protected?
             end
