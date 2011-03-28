@@ -33,7 +33,7 @@ module PropertySets
 
             # Reports the coerced truth value of the property
             define_method "#{key}?" do
-              lookup(key).true?
+              lookup_or_default(key).true?
             end
 
             # Returns the value of the property
@@ -70,6 +70,15 @@ module PropertySets
               instance   = detect { |property| property.name.to_sym == arg.to_sym }
               instance ||= @owner.send(association).build(:name => arg.to_s, :value => property_class.default(arg))
             end
+
+            # This finder method returns the property if present,
+            #   otherwise a new instance with the default value.
+            # It does not have the side effect of adding a new setting object.
+            define_method 'lookup_or_default' do |arg|
+              instance = detect { |property| property.name.to_sym == arg.to_sym }
+              instance ||= property_class.new(:value => property_class.default(arg))
+            end
+
           end
         end
       end

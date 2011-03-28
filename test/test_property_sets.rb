@@ -53,6 +53,21 @@ class TestPropertySets < ActiveSupport::TestCase
       assert_equal 'skep', @account.settings.hep
     end
 
+    context 'querying for a setting that does not exist' do
+      setup do
+        assert_equal([], @account.settings)
+        assert_equal(true, @account.settings.hep?)
+      end
+
+      should 'not add a new setting' do
+        assert_equal([], @account.settings)
+      end
+
+      should 'give back the default value' do
+        assert_equal('skep', @account.settings.hep)
+      end
+    end
+
     should "reject settings with an invalid name" do
       s = AccountSetting.new(:account => @account)
 
