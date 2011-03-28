@@ -14,3 +14,8 @@ group :development do
   gem "jeweler", "~> 1.5.1"
   gem "ruby-debug"
 end
+
+group :test do
+  gem "sqlite3"
+  gem "mocha"
+end
