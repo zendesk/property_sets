@@ -1,4 +1,5 @@
 test/*.log
+.rvmrc
 
 # rcov generated
 coverage
