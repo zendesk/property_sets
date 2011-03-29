@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{property_sets}
-  s.version = "0.4.2"
+  s.version = "0.4.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Morten Primdahl"]
-  s.date = %q{2011-03-28}
+  s.date = %q{2011-03-29}
   s.description = %q{This gem is an ActiveRecord extension which provides a convenient interface for managing per row properties}
   s.email = %q{morten@zendesk.com}
   s.extra_rdoc_files = [
