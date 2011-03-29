@@ -55,7 +55,6 @@ module PropertySets
 
     module ClassMethods
       def self.extended(base)
-        base.after_destroy :reset_owner_association
         base.validate      :validate_format_of_name
         base.before_create :coerce_value
       end
