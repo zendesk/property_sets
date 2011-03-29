@@ -51,15 +51,10 @@ module PropertySets
           owner_class_instance.update_attribute(:updated_at, Time.now)
         end
       end
-
-      def reset_owner_association
-        owner_class_instance.send(self.class.owner_assoc).reload
-      end
     end
 
     module ClassMethods
       def self.extended(base)
-        base.after_create  :reset_owner_association
         base.after_destroy :reset_owner_association
         base.validate      :validate_format_of_name
         base.before_create :coerce_value
