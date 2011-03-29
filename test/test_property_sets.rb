@@ -113,6 +113,14 @@ class TestPropertySets < ActiveSupport::TestCase
       assert record.account.id == @account.id
     end
 
+    should "reference the owner instance when constructing a new record ...on a new record" do
+      account = Account.new(:name => "New")
+      record  = account.settings.lookup(:baz)
+
+      assert record.new_record?
+      assert record.account == account
+    end
+
     context "validations" do
       should "add an error when violated" do
         @account.validations.validated = "hello"
