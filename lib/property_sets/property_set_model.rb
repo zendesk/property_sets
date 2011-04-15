@@ -45,12 +45,6 @@ module PropertySets
       def owner_class_instance
         send(self.class.owner_class_sym)
       end
-
-      def update_owner_timestamp
-        if owner_class_instance && !owner_class_instance.new_record? && owner_class_instance.updated_at < 1.second.ago
-          owner_class_instance.update_attribute(:updated_at, Time.now)
-        end
-      end
     end
 
     module ClassMethods
@@ -81,11 +75,6 @@ module PropertySets
         belongs_to              owner_class_sym
         validates_presence_of   owner_class_sym
         validates_uniqueness_of :name, :scope => owner_class_key_sym
-
-        if owner_class.table_exists? && owner_class.column_names.include?("updated_at")
-          after_create   :update_owner_timestamp
-          after_destroy  :update_owner_timestamp
-        end
       end
 
       def owner_assoc=(association)

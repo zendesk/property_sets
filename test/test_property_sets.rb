@@ -102,8 +102,11 @@ class TestPropertySets < ActiveSupport::TestCase
 
     should "coerce everything but nil to string" do
       @account.settings.foo = 3
+      assert @account.settings.foo == 3
+      @account.save
       assert @account.settings.foo == "3"
       @account.settings.foo = nil
+      @account.save
       assert @account.settings.foo.nil?
     end
 
@@ -124,10 +127,8 @@ class TestPropertySets < ActiveSupport::TestCase
     context "validations" do
       should "add an error when violated" do
         @account.validations.validated = "hello"
-        assert_equal "Value BEEP", @account.validations.first.errors.full_messages.first
-        assert_equal "Value BEEP", @account.validations.validated_record.errors.full_messages.first
-        assert_equal false, @account.save
-        assert_equal "Validations is invalid", @account.errors.full_messages.first
+        assert !@account.valid?
+        assert_equal "Value BEEP", @account.errors.full_messages.first
       end
     end
 

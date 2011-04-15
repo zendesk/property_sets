@@ -14,7 +14,7 @@ module PropertySets
         property_class = PropertySets.ensure_property_set_class(association, self)
         property_class.instance_eval(&block)
 
-        has_many association, :class_name => property_class.name, :dependent => :destroy do
+        has_many association, :class_name => property_class.name, :autosave => true, :dependent => :destroy do
 
           # Accepts a name value pair hash { :name => 'value', :pairs => true } and builds a property for each key
           def set(property_pairs, with_protection = false)
@@ -61,7 +61,6 @@ module PropertySets
             define_method "#{key}=" do |value|
               instance = lookup(key)
               instance.value = value
-              instance.save
               value
             end
 
