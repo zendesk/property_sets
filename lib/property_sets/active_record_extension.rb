@@ -61,7 +61,7 @@ module PropertySets
             define_method "#{key}=" do |value|
               instance = lookup(key)
               instance.value = value
-              @owner.send(association) << instance
+              instance.save
               value
             end
 

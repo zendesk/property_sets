@@ -83,8 +83,8 @@ module PropertySets
         validates_uniqueness_of :name, :scope => owner_class_key_sym
 
         if owner_class.table_exists? && owner_class.column_names.include?("updated_at")
-          before_create   :update_owner_timestamp
-          before_destroy  :update_owner_timestamp
+          after_create   :update_owner_timestamp
+          after_destroy  :update_owner_timestamp
         end
       end
 
