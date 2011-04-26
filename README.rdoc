@@ -86,6 +86,7 @@ We support a couple of convenience mechanisms for building forms and putting the
     <h3><%= f.property_set(:settings).check_box :activated %> Activated?</h3>
     <h3><%= f.property_set(:settings).radio_button :hot, "yes" %> Hot</h3>
     <h3><%= f.property_set(:settings).radio_button :not, "no" %> Not</h3>
+    <h3><%= f.property_set(:settings).select :level, [["One", 1], ["Two", 2]] %></h3>
   <% end %>
 
 == Installation

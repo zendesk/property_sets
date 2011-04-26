@@ -32,6 +32,12 @@ module ActionView
           template.hidden_field(object_name, property, prepare_id_name(property, options))
         end
 
+        def select(property, choices, options = {})
+          options = prepare_id_name(property, options)
+          current_value = options[:object].send(property_set).send(property)
+          template.select("#{object_name}[#{property_set}]", property, choices, :selected => current_value)
+        end
+
         def prepare_id_name(property, options)
           throw "Invalid options type #{options.inspect}" unless options.is_a?(Hash)
 
