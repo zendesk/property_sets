@@ -71,6 +71,25 @@ class TestViewExtensions < ActiveSupport::TestCase
       end
     end
 
+    context "text_field" do
+      should "call with :value set" do
+        settings = stub(@property => "hello")
+        object   = stub()
+        object.stubs(@association).returns(settings)
+
+        options  = {
+          :value => "im text", :name => "object_name[#{@association}][#{@property}]",
+          :id => "object_name_#{@association}_#{@property}", :object => object
+        }
+        template = stub()
+        template.expects(:instance_variable_get).with("@object_name").returns(object)
+        template.expects(:text_field).with("object_name", @property, options)
+
+        @proxy.stubs(:template).returns(template)
+        @proxy.text_field(@property, options)
+      end
+    end
+
     context "radio_button" do
       should "call with checked true for a truth value" do
         settings = stub(@property => "hello")

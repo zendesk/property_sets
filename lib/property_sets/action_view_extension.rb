@@ -28,6 +28,10 @@ module ActionView
           template.radio_button(object_name, property, checked_value, options)
         end
 
+        def text_field(property, options = {})
+          template.text_field(object_name, property, prepare_id_name(property, options))
+        end
+
         def hidden_field(property, options = {})
           template.hidden_field(object_name, property, prepare_id_name(property, options))
         end
