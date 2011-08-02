@@ -42,6 +42,7 @@ module PropertySets
         self.value = value.to_s unless value.nil?
       end
 
+
       def owner_class_instance
         send(self.class.owner_class_sym)
       end
@@ -64,6 +65,10 @@ module PropertySets
 
       def default(key)
         @properties[key] && @properties[key].key?(:default) ? @properties[key][:default] : nil
+      end
+
+      def type(key)
+        @properties[key] && @properties[key].key?(:type) ? @properties[key][:type] : :string
       end
 
       def protected?(key)
