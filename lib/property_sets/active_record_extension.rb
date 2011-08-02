@@ -28,6 +28,35 @@ module PropertySets
             end
           end
 
+          def read_value_cast_for_property_set(type, value)
+            return nil if value.nil?
+
+            case type
+              when :string
+                value
+              when :datetime
+                Time.parse(value).in_time_zone
+              when :float
+                value.to_f
+              when :integer
+                value.to_i
+            end
+          end
+
+          def write_value_cast_for_property_set(type, value)
+            return nil if value.nil?
+            case type
+              when :datetime
+                if value.is_a?(String)
+                  value
+                else
+                  value.in_time_zone("UTC").to_s
+                end
+              else
+                value.to_s
+            end
+          end
+
           property_class.keys.each do |key|
             raise "Invalid property key #{key}" if self.respond_to?(key)
 
@@ -38,7 +67,13 @@ module PropertySets
 
             # Returns the value of the property
             define_method "#{key}" do
-              lookup(key).value
+              read_value_cast_for_property_set(property_class.type(key), lookup(key).value)
+            end
+
+            # Assigns a new value to the property
+            define_method "#{key}=" do |value|
+              instance = lookup(key)
+              instance.value = write_value_cast_for_property_set(property_class.type(key), value)
             end
 
             define_method "#{key}_record" do
@@ -55,13 +90,6 @@ module PropertySets
 
             define_method "disable" do |arg|
               send("#{arg}=", "0")
-            end
-
-            # Assigns a new value to the property
-            define_method "#{key}=" do |value|
-              instance = lookup(key)
-              instance.value = value
-              value
             end
 
             # The finder method which returns the property if present, otherwise a new instance with defaults
@@ -81,7 +109,6 @@ module PropertySets
               instance = detect { |property| property.name.to_sym == arg.to_sym }
               instance ||= property_class.new(:value => property_class.default(arg))
             end
-
           end
         end
       end
