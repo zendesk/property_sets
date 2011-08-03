@@ -15,7 +15,7 @@ class TestPropertySets < ActiveSupport::TestCase
     end
 
     should "register the property sets used on a class" do
-      assert_equal [ :settings, :texts, :validations ], Account.property_set_index
+      assert_equal [ :settings, :texts, :validations, :typed_data ], Account.property_set_index
     end
 
     should "support protecting attributes" do
@@ -102,7 +102,6 @@ class TestPropertySets < ActiveSupport::TestCase
 
     should "coerce everything but nil to string" do
       @account.settings.foo = 3
-      assert @account.settings.foo == 3
       @account.save
       assert @account.settings.foo == "3"
       @account.settings.foo = nil
@@ -206,6 +205,53 @@ class TestPropertySets < ActiveSupport::TestCase
         assert @account.settings.bar?
         assert @account.settings.baz?
         assert !@account.settings.pro?
+      end
+    end
+
+    context "typed columns" do
+      context "string data" do
+        should "be writable and readable" do
+          @account.typed_data.string_prop = "foo"
+          assert_equal "foo", @account.typed_data.string_prop
+        end
+      end
+
+      context "floating point data" do
+        should "be writable and readable" do
+          @account.typed_data.float_prop = 1.97898
+          assert_equal 1.97898,  @account.typed_data.float_prop
+          @account.save!
+          assert_equal 1.97898,  @account.typed_data.float_prop
+        end
+      end
+
+      context "integer data" do
+        should "be writable and readable" do
+          @account.typed_data.int_prop = 25
+          assert_equal 25,  @account.typed_data.int_prop
+          @account.save!
+          assert_equal 25,  @account.typed_data.int_prop
+
+          assert_equal "25", @account.typed_data.lookup("int_prop").value
+        end
+      end
+
+      context "datetime data" do
+        should "be writable and readable" do
+          ts = Time.at(Time.now.to_i)
+          @account.typed_data.datetime_prop = ts
+          assert_equal ts,  @account.typed_data.datetime_prop
+          @account.save!
+          assert_equal ts,  @account.typed_data.datetime_prop
+        end
+
+        should "store data in UTC" do
+          ts = Time.at(Time.now.to_i)
+          string_rep = ts.in_time_zone("UTC").to_s
+          @account.typed_data.datetime_prop = ts
+          @account.save!
+          assert_equal string_rep, @account.typed_data.lookup("datetime_prop").value
+        end
       end
     end
   end
