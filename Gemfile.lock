@@ -15,7 +15,7 @@ GEM
       rake
     linecache (0.43)
     mocha (0.9.12)
-    rack (1.1.0)
+    rack (1.1.2)
     rake (0.8.7)
     ruby-debug (0.10.4)
       columnize (>= 0.1)
@@ -29,9 +29,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  actionpack (= 2.3.10)
-  activerecord (= 2.3.10)
-  activesupport (= 2.3.10)
+  actionpack (~> 2.3.10)
+  activerecord (~> 2.3.10)
+  activesupport (~> 2.3.10)
   bundler (~> 1.0.0)
   jeweler (~> 1.5.1)
   mocha
