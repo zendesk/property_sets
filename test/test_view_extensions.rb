@@ -110,21 +110,33 @@ class TestViewExtensions < ActiveSupport::TestCase
     end
 
     context "select" do
-      should "render a <select> with <option>s" do
+      setup do
         settings = stub(:count => "2")
         object   = stub()
-        object.expects(@association).returns(settings)
+        object.stubs(@association).returns(settings)
 
-        template = stub()
-        template.expects(:instance_variable_get).with("@object_name").returns(object)
+        @template = stub()
+        @template.expects(:instance_variable_get).with("@object_name").returns(object)
+      end
+
+      should "render a <select> with <option>s" do
 
         select_options = { :selected => "2" }
         select_choices = [["One", 1], ["Two", 2], ["Three", 3]]
-        html_options   = { :id => "foo", :name => "bar" }
-        template.expects(:select).with("object_name[settings]", :count, select_choices, select_options)
 
-        @proxy.stubs(:template).returns(template)
+        @template.expects(:select).with("object_name[settings]", :count, select_choices, select_options, {})
+        @proxy.stubs(:template).returns(@template)
         @proxy.select(:count, select_choices)
+      end
+
+      should "merge :html_options" do
+        select_options = { :selected => "2" }
+        select_choices = [["One", 1], ["Two", 2], ["Three", 3]]
+        html_options   = { :id => "foo", :name => "bar", :disabled => true }
+
+        @template.expects(:select).with("object_name[settings]", :count, select_choices, select_options, html_options)
+        @proxy.stubs(:template).returns(@template)
+        @proxy.select(:count, select_choices, select_options, html_options)
       end
     end
   end
