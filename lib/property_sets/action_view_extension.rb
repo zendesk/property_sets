@@ -36,25 +36,25 @@ module ActionView
           template.hidden_field(object_name, property, prepare_id_name(property, options))
         end
 
-        def select(property, choices, options = {})
+        def select(property, choices, options = {}, html_options = {})
           options = prepare_id_name(property, options)
           current_value = options[:object].send(property_set).send(property)
-          template.select("#{object_name}[#{property_set}]", property, choices, :selected => current_value)
+          template.select("#{object_name}[#{property_set}]", property, choices, { :selected => current_value }, html_options )
         end
 
         def prepare_id_name(property, options)
           throw "Invalid options type #{options.inspect}" unless options.is_a?(Hash)
 
-          instance = template.instance_variable_get("@#{object_name}")
+          options.clone.tap do |prepared_options|
+            instance = template.instance_variable_get("@#{object_name}")
 
-          throw "No @#{object_name} in scope" if instance.nil?
-          throw "The property_set_check_box only works on models with property set #{property_set}" unless instance.respond_to?(property_set)
+            throw "No @#{object_name} in scope" if instance.nil?
+            throw "The property_set_check_box only works on models with property set #{property_set}" unless instance.respond_to?(property_set)
 
-          options[:id]     ||= "#{object_name}_#{property_set}_#{property}"
-          options[:name]     = "#{object_name}[#{property_set}][#{property}]"
-          options[:object]   = instance
-
-          options
+            prepared_options[:id]     ||= "#{object_name}_#{property_set}_#{property}"
+            prepared_options[:name]     = "#{object_name}[#{property_set}][#{property}]"
+            prepared_options[:object]   = instance
+          end
         end
 
         def prepare_options(property, options, &block)
