@@ -54,4 +54,11 @@ class Account < ActiveRecord::Base
 
     validates_format_of :value, :with => /\d+/, :message => "BEEP", :if => lambda { |r| r.name.to_sym == :validated }
   end
+
+  property_set :typed_data do
+    property :string_prop, :type => :string
+    property :datetime_prop, :type => :datetime
+    property :float_prop, :type => :float
+    property :int_prop, :type => :integer
+  end
 end
