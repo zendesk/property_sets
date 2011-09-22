@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{property_sets}
-  s.version = "0.5.3"
+  s.version = "0.5.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Morten Primdahl"]
-  s.date = %q{2011-08-16}
+  s.date = %q{2011-09-22}
   s.description = %q{This gem is an ActiveRecord extension which provides a convenient interface for managing per row properties}
   s.email = %q{morten@zendesk.com}
   s.extra_rdoc_files = [
@@ -43,6 +43,12 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.6.2}
   s.summary = %q{Property sets for ActiveRecord}
+  s.test_files = [
+    "test/helper.rb",
+    "test/schema.rb",
+    "test/test_property_sets.rb",
+    "test/test_view_extensions.rb"
+  ]
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
