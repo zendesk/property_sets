@@ -40,6 +40,8 @@ module PropertySets
                 value.to_f
               when :integer
                 value.to_i
+              when :boolean
+                ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
             end
           end
 
