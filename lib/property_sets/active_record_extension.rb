@@ -81,36 +81,44 @@ module PropertySets
             define_method "#{key}_record" do
               lookup(key)
             end
+          end
 
-            define_method "protected?" do |arg|
-              lookup(arg).protected?
-            end
+          def protected?(arg)
+            lookup(arg).protected?
+          end
 
-            define_method "enable" do |arg|
-              send("#{arg}=", "1")
-            end
+          def enable(arg)
+            send("#{arg}=", "1")
+          end
 
-            define_method "disable" do |arg|
-              send("#{arg}=", "0")
-            end
+          def disable(arg)
+            send("#{arg}=", "0")
+          end
 
-            # The finder method which returns the property if present, otherwise a new instance with defaults
-            define_method "lookup" do |arg|
-              instance   = detect { |property| property.name.to_sym == arg.to_sym }
-              instance ||= build(:name => arg.to_s, :value => property_class.default(arg))
+          def build_default(arg)
+            build(:name => arg.to_s, :value => default(arg))
+          end
 
-              instance.send("#{owner_class_sym}=", @owner) if @owner.new_record?
+          def lookup_without_default(arg)
+            detect { |property| property.name.to_sym == arg.to_sym }
+          end
 
-              instance
-            end
+          # The finder method which returns the property if present, otherwise a new instance with defaults
+          def lookup(arg)
+            instance   = lookup_without_default(arg)
+            instance ||= build_default(arg)
 
-            # This finder method returns the property if present,
-            #   otherwise a new instance with the default value.
-            # It does not have the side effect of adding a new setting object.
-            define_method 'lookup_or_default' do |arg|
-              instance = detect { |property| property.name.to_sym == arg.to_sym }
-              instance ||= property_class.new(:value => property_class.default(arg))
-            end
+            instance.send("#{owner_class_sym}=", @owner) if @owner.new_record?
+
+            instance
+          end
+
+          # This finder method returns the property if present,
+          #   otherwise a new instance with the default value.
+          # It does not have the side effect of adding a new setting object.
+          def lookup_or_default(arg)
+            instance = detect { |property| property.name.to_sym == arg.to_sym }
+            instance ||= new(:value => default(arg))
           end
         end
       end

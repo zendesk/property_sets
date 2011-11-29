@@ -208,6 +208,34 @@ class TestPropertySets < ActiveSupport::TestCase
       end
     end
 
+    context "lookup" do
+      context "with data" do
+        setup { @account.texts.foo = "1" }
+
+        should "return the data" do
+          assert_equal "1", @account.texts.lookup(:foo).value
+        end
+      end
+
+      context "without data" do
+        should "create a new record, returning the default" do
+          assert_equal nil, @account.texts.lookup(:foo).value
+          assert @account.texts.detect { |p| p.name == "foo" }
+        end
+      end
+    end
+
+    context "lookup_without_default" do
+      should "return the row if it exists" do
+        @account.texts.foo = "1"
+        assert_equal "1", @account.texts.lookup_without_default(:foo).value
+      end
+
+      should "return nil otherwise" do
+        assert_equal nil,  @account.texts.lookup_without_default(:foo)
+      end
+    end
+
     context "typed columns" do
       context "string data" do
         should "be writable and readable" do
