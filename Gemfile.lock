@@ -1,12 +1,12 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    actionpack (2.3.10)
-      activesupport (= 2.3.10)
+    actionpack (2.3.14)
+      activesupport (= 2.3.14)
       rack (~> 1.1.0)
-    activerecord (2.3.10)
-      activesupport (= 2.3.10)
-    activesupport (2.3.10)
+    activerecord (2.3.14)
+      activesupport (= 2.3.14)
+    activesupport (2.3.14)
     columnize (0.3.2)
     git (1.2.5)
     jeweler (1.5.2)
@@ -29,9 +29,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  actionpack (~> 2.3.10)
-  activerecord (~> 2.3.10)
-  activesupport (~> 2.3.10)
+  actionpack (~> 2.3.14)
+  activerecord (~> 2.3.14)
+  activesupport (~> 2.3.14)
   bundler (~> 1.0.0)
   jeweler (~> 1.5.1)
   mocha
