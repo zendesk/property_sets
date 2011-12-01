@@ -5,8 +5,7 @@ require 'active_record'
 require 'active_record/fixtures'
 require 'shoulda'
 
-ActiveRecord::Base.configurations = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
-ActiveRecord::Base.establish_connection('test')
+ActiveRecord::Base.establish_connection :adapter => 'sqlite3', :database => ':memory:'
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/test.log")
 
 load(File.dirname(__FILE__) + "/schema.rb")

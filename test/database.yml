@@ -1,6 +1,0 @@
-test:
-  adapter: sqlite3
-  encoding: utf8
-  database: db/property_sets_test.sqlite
-  username: root
-  password:
