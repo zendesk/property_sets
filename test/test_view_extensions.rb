@@ -6,7 +6,7 @@ class TestViewExtensions < ActiveSupport::TestCase
     setup do
       @association = :settings
       @property    = :active
-      @builder     = ActionView::Helpers::FormBuilder.new("object_name", "object", "template", "options", "proc")
+      @builder     = ActionView::Helpers::FormBuilder.new("object_name", "object", "template", {}, "proc")
       @proxy       = @builder.property_set(@association)
     end
 
