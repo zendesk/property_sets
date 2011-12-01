@@ -3,3 +3,4 @@ rvm:
   - 1.9.3
   - jruby
   - ree
+env: JRUBY_OPTS='--server'
