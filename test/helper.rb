@@ -6,7 +6,10 @@ require 'active_record/fixtures'
 require 'shoulda'
 
 ActiveRecord::Base.establish_connection :adapter => 'sqlite3', :database => ':memory:'
-ActiveRecord::Base.logger = Logger.new($stdout)
+ActiveRecord::Base.logger = Logger.new(STDOUT)
+ActiveRecord::Base.logger.level = Logger::ERROR
+
+ActiveRecord::Migration.verbose = false
 
 load(File.dirname(__FILE__) + "/schema.rb")
 
