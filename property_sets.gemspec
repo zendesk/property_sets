@@ -7,7 +7,7 @@
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.rubygems_version = '1.3.5'
+  s.rubygems_version = '1.8.15'
 
   ## Leave these as is they will be modified for you by the rake gemspec task.
   ## If your rubyforge_project name is different, then edit it and comment out
@@ -47,9 +47,9 @@ Gem::Specification.new do |s|
 
   ## List your runtime dependencies here. Runtime dependencies are those
   ## that are needed for an end user to actually USE your code.
-  s.add_runtime_dependency("activesupport", ["~> 2.3.14"])
-  s.add_runtime_dependency("activerecord", ["~> 2.3.14"])
-  s.add_runtime_dependency("actionpack", ["~> 2.3.14"])
+  s.add_runtime_dependency("activesupport", ["~> 3.2.0"])
+  s.add_runtime_dependency("activerecord", ["~> 3.2.0"])
+  s.add_runtime_dependency("actionpack", ["~> 3.2.0"])
 
   ## List your development dependencies here. Development dependencies are
   ## those that are only needed during development

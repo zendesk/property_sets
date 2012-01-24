@@ -1,6 +1,9 @@
+require 'property_sets/casting'
+
 module PropertySets
   module ActiveRecordExtension
     module ClassMethods
+
       def property_set(association, &block)
         unless include?(PropertySets::ActiveRecordExtension::InstanceMethods)
           self.send(:include, PropertySets::ActiveRecordExtension::InstanceMethods)
@@ -28,37 +31,6 @@ module PropertySets
             end
           end
 
-          def read_value_cast_for_property_set(type, value)
-            return nil if value.nil?
-
-            case type
-              when :string
-                value
-              when :datetime
-                Time.parse(value).in_time_zone
-              when :float
-                value.to_f
-              when :integer
-                value.to_i
-              when :boolean
-                ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
-            end
-          end
-
-          def write_value_cast_for_property_set(type, value)
-            return nil if value.nil?
-            case type
-              when :datetime
-                if value.is_a?(String)
-                  value
-                else
-                  value.in_time_zone("UTC").to_s
-                end
-              else
-                value.to_s
-            end
-          end
-
           property_class.keys.each do |key|
             raise "Invalid property key #{key}" if self.respond_to?(key)
 
@@ -69,13 +41,13 @@ module PropertySets
 
             # Returns the value of the property
             define_method "#{key}" do
-              read_value_cast_for_property_set(property_class.type(key), lookup(key).value)
+              PropertySets::Casting.read(property_class.type(key), lookup(key).value)
             end
 
             # Assigns a new value to the property
             define_method "#{key}=" do |value|
               instance = lookup(key)
-              instance.value = write_value_cast_for_property_set(property_class.type(key), value)
+              instance.value = PropertySets::Casting.write(property_class.type(key), value)
             end
 
             define_method "#{key}_record" do
@@ -108,17 +80,28 @@ module PropertySets
             instance   = lookup_without_default(arg)
             instance ||= build_default(arg)
 
-            instance.send("#{owner_class_sym}=", @owner) if @owner.new_record?
+            if ActiveRecord::VERSION::MAJOR == 3
+              owner = proxy_association.owner
+            else
+              owner = @owner
+            end
 
+            instance.send("#{owner_class_sym}=", owner) if owner.new_record?
             instance
           end
 
-          # This finder method returns the property if present,
-          #   otherwise a new instance with the default value.
+          # This finder method returns the property if present, otherwise a new instance with the default value.
           # It does not have the side effect of adding a new setting object.
           def lookup_or_default(arg)
-            instance = detect { |property| property.name.to_sym == arg.to_sym }
-            instance ||= new(:value => default(arg))
+            instance   = detect { |property| property.name.to_sym == arg.to_sym }
+            instance ||= begin
+              if ActiveRecord::VERSION::MAJOR == 3
+                association_class = proxy_association.klass
+              else
+                association_class = @association.klass
+              end
+              association_class.new(:value => default(arg))
+            end
           end
         end
       end

@@ -127,7 +127,7 @@ class TestPropertySets < ActiveSupport::TestCase
       should "add an error when violated" do
         @account.validations.validated = "hello"
         assert !@account.valid?
-        assert_equal "Value BEEP", @account.errors.full_messages.first
+        assert_match /BEEP$/, @account.errors.full_messages.first
       end
     end
 

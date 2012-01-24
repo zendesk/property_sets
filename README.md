@@ -1,6 +1,6 @@
 # Property sets [![Build Status](https://secure.travis-ci.org/morten/property_sets.png)](http://travis-ci.org/morten/property_sets)
 
-This gem is a way for you to use a basic "key/value" store for storing attributes for a given model in a relational fashion where there's a row per attribute. Alternatively you'd need to add a new column per attribute to your main table, or serialize the attributes and their values.
+This gem is a way for you to use a basic "key/value" store for storing attributes for a given model in a relational fashion where there's a row per attribute. Alternatively you'd need to add a new column per attribute to your main table, or serialize the attributes and their values using the [ActiveRecord 3.2 store](https://github.com/rails/rails/commit/85b64f98d100d37b3a232c315daa10fad37dccdc).
 
 ## Description
 
