@@ -47,16 +47,18 @@ Gem::Specification.new do |s|
 
   ## List your runtime dependencies here. Runtime dependencies are those
   ## that are needed for an end user to actually USE your code.
-  s.add_runtime_dependency("activesupport", ["~> 3.2.0"])
-  s.add_runtime_dependency("activerecord", ["~> 3.2.0"])
-  s.add_runtime_dependency("actionpack", ["~> 3.2.0"])
+  s.add_runtime_dependency("activesupport", ">= 2.3.14", "< 3.3")
+  s.add_runtime_dependency("activerecord", ">= 2.3.14", "< 3.3")
+  s.add_runtime_dependency("actionpack", ">= 2.3.14", "< 3.3")
 
   ## List your development dependencies here. Development dependencies are
   ## those that are only needed during development
   s.add_development_dependency('rake')
   s.add_development_dependency('bundler')
+  s.add_development_dependency('mysql2')
   s.add_development_dependency('shoulda')
   s.add_development_dependency('mocha')
+  s.add_development_dependency("appraisal")
 
   ## Leave this section as-is. It will be automatically generated from the
   ## contents of your Git repository via the gemspec task. DO NOT REMOVE

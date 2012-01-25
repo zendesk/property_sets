@@ -5,7 +5,15 @@ require 'active_record'
 require 'active_record/fixtures'
 require 'shoulda'
 
-ActiveRecord::Base.establish_connection :adapter => 'sqlite3', :database => ':memory:'
+ActiveRecord::Base.establish_connection(
+  :adapter  => 'mysql2',
+  :database => 'property_sets_test',
+  :username => 'root',
+  :password => nil,
+  :host     => '0.0.0.0',
+  :port     => 3306
+)
+
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 ActiveRecord::Base.logger.level = Logger::ERROR
 

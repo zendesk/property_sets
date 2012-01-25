@@ -1,4 +1,6 @@
 require 'rubygems'
+require 'appraisal'
+require 'bundler'
 require 'rake'
 require 'date'
 

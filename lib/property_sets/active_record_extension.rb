@@ -98,7 +98,7 @@ module PropertySets
               if ActiveRecord::VERSION::MAJOR == 3
                 association_class = proxy_association.klass
               else
-                association_class = @association.klass
+                association_class = @reflection.klass
               end
               association_class.new(:value => default(arg))
             end
