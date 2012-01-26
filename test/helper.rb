@@ -6,11 +6,11 @@ require 'active_record/fixtures'
 require 'shoulda'
 
 ActiveRecord::Base.establish_connection(
-  :adapter  => 'mysql2',
+  :adapter  => 'mysql',
   :database => 'property_sets_test',
   :username => 'root',
   :password => nil,
-  :host     => '0.0.0.0',
+  :host     => '127.0.0.1',
   :port     => 3306
 )
 

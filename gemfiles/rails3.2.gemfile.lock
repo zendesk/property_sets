@@ -27,6 +27,10 @@ GEM
       activesupport (= 3.2.0)
       arel (~> 3.0.0)
       tzinfo (~> 0.3.29)
+    activerecord-jdbc-adapter (1.2.1)
+    activerecord-jdbcmysql-adapter (1.2.1)
+      activerecord-jdbc-adapter (~> 1.2.1)
+      jdbc-mysql (~> 5.1.0)
     activesupport (3.2.0)
       i18n (~> 0.6)
       multi_json (~> 1.0)
@@ -38,12 +42,13 @@ GEM
     erubis (2.7.0)
     hike (1.2.1)
     i18n (0.6.0)
+    jdbc-mysql (5.1.13)
     journey (1.0.0)
     metaclass (0.0.1)
     mocha (0.10.3)
       metaclass (~> 0.0.1)
     multi_json (1.0.4)
-    mysql2 (0.3.11)
+    mysql (2.8.1)
     rack (1.4.1)
     rack-cache (1.1)
       rack (>= 0.4)
@@ -59,16 +64,18 @@ GEM
     tzinfo (0.3.31)
 
 PLATFORMS
+  java
   ruby
 
 DEPENDENCIES
   actionpack (= 3.2.0)
   activerecord (= 3.2.0)
+  activerecord-jdbcmysql-adapter
   activesupport (= 3.2.0)
   appraisal
   bundler
   mocha
-  mysql2
+  mysql
   property_sets!
   rake
   shoulda

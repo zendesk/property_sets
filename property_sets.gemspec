@@ -55,7 +55,6 @@ Gem::Specification.new do |s|
   ## those that are only needed during development
   s.add_development_dependency('rake')
   s.add_development_dependency('bundler')
-  s.add_development_dependency('mysql2')
   s.add_development_dependency('shoulda')
   s.add_development_dependency('mocha')
   s.add_development_dependency("appraisal")

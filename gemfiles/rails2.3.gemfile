@@ -2,7 +2,8 @@
 
 source "http://rubygems.org"
 
-gem "mysql2", "0.2.7"
+gem "activerecord-jdbcmysql-adapter", :platforms=>:jruby
+gem "mysql", :platforms=>:ruby
 gem "activerecord", "2.3.14"
 gem "activesupport", "2.3.14"
 gem "actionpack", "2.3.14"

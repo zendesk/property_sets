@@ -1,5 +1,4 @@
 appraise "rails2.3" do
-  gem "mysql2", "0.2.7"
   gem "activerecord", "2.3.14"
   gem "activesupport", "2.3.14"
   gem "actionpack", "2.3.14"
