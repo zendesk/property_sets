@@ -55,12 +55,12 @@ module PropertySets
             end
           end
 
-          def save(validations=true)
-            each { |p| p.save(validations) }
+          def save(*args)
+            each { |p| p.save(*args) }
           end
 
-          def save!(validations=true)
-            each { |p| p.save!(validations) }
+          def save!(*args)
+            each { |p| p.save!(*args) }
           end
 
           def protected?(arg)
