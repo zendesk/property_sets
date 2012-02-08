@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   ## If your rubyforge_project name is different, then edit it and comment out
   ## the sub! line in the Rakefile
   s.name              = 'property_sets'
-  s.version           = '0.5.6'
-  s.date              = '2011-11-30'
+  s.version           = '0.5.7'
+  s.date              = '2012-02-08'
   s.rubyforge_project = 'property_sets'
 
   ## Make sure your summary is short. The description may be as long
@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
   ## Specify any RDoc options here. You'll want to add your README and
   ## LICENSE files to the extra_rdoc_files list.
   s.rdoc_options = ["--charset=UTF-8"]
-  s.extra_rdoc_files = %w[README.rdoc LICENSE.txt]
+  s.extra_rdoc_files = %w[README.md LICENSE.txt]
 
   ## List your runtime dependencies here. Runtime dependencies are those
   ## that are needed for an end user to actually USE your code.
@@ -64,23 +64,27 @@ Gem::Specification.new do |s|
   ## THE MANIFEST COMMENTS, they are used as delimiters by the task.
   # = MANIFEST =
   s.files = %w[
+    Appraisals
     Gemfile
-    Gemfile.lock
     LICENSE.txt
-    README.rdoc
+    README.md
     Rakefile
-    db/.gitignore
+    gemfiles/rails2.3.gemfile
+    gemfiles/rails2.3.gemfile.lock
+    gemfiles/rails3.2.gemfile
+    gemfiles/rails3.2.gemfile.lock
     lib/property_sets.rb
     lib/property_sets/action_view_extension.rb
     lib/property_sets/active_record_extension.rb
+    lib/property_sets/casting.rb
     lib/property_sets/property_set_model.rb
     property_sets.gemspec
-    test/database.yml
     test/fixtures/account_settings.yml
     test/fixtures/account_texts.yml
     test/fixtures/accounts.yml
     test/helper.rb
     test/schema.rb
+    test/test_casting.rb
     test/test_property_sets.rb
     test/test_view_extensions.rb
   ]
