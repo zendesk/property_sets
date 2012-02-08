@@ -236,6 +236,18 @@ class TestPropertySets < ActiveSupport::TestCase
       end
     end
 
+    context "save" do
+      should "call save on all dem records" do
+        @account.settings.foo = "1"
+        @account.settings.bar = "2"
+        @account.settings.save
+
+        @account.reload
+        assert_equal "1", @account.settings.foo
+        assert_equal "2", @account.settings.bar
+      end
+    end
+
     context "typed columns" do
       context "string data" do
         should "be writable and readable" do
