@@ -49,11 +49,16 @@ module PropertySets
             define_method "#{key}=" do |value|
               instance = lookup(key)
               instance.value = PropertySets::Casting.write(property_class.type(key), value)
+              instance.value
             end
 
             define_method "#{key}_record" do
               lookup(key)
             end
+          end
+
+          define_method :property_serialized? do |key|
+            property_class.type(key) == :serialized
           end
 
           def save(*args)
@@ -88,6 +93,7 @@ module PropertySets
           def lookup(arg)
             instance   = lookup_without_default(arg)
             instance ||= build_default(arg)
+            instance.validate_serialization = property_serialized?(arg)
 
             if ActiveRecord::VERSION::MAJOR == 3
               owner = proxy_association.owner
@@ -111,6 +117,8 @@ module PropertySets
               end
               association_class.new(:value => default(arg))
             end
+            instance.validate_serialization = property_serialized?(arg)
+            instance
           end
         end
       end
