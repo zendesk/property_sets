@@ -50,6 +50,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("activesupport", ">= 2.3.14", "< 3.3")
   s.add_runtime_dependency("activerecord", ">= 2.3.14", "< 3.3")
   s.add_runtime_dependency("actionpack", ">= 2.3.14", "< 3.3")
+  s.add_runtime_dependency("json")
 
   ## List your development dependencies here. Development dependencies are
   ## those that are only needed during development
