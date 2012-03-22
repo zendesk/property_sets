@@ -8,6 +8,10 @@ class TestCasting < ActiveSupport::TestCase
       assert_equal nil, PropertySets::Casting.read(:string, nil)
       assert_equal nil, PropertySets::Casting.read(:hello, nil)
     end
+
+    should "deserialize properly" do
+      assert_equal [1,2,3], PropertySets::Casting.read(:serialized, "[1, 2, 3]")
+    end
   end
 
   context "Casting#write" do
@@ -23,6 +27,10 @@ class TestCasting < ActiveSupport::TestCase
 
     should "convert integers to strings" do
       assert_equal "123", PropertySets::Casting.write(:integer, 123)
+    end
+
+    should "serialize data marked as :serialize to json" do
+      assert_equal "[123]", PropertySets::Casting.write(:serialized, [123])
     end
   end
 
