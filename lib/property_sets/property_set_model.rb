@@ -28,8 +28,6 @@ module PropertySets
         value.to_s
       end
 
-      attr_accessor :validate_serialization
-
       private
 
       def validate_format_of_name
@@ -37,12 +35,6 @@ module PropertySets
           errors.add(:name, :blank)
         elsif !name.is_a?(String) || name !~ /^([a-z0-9]+_?)+$/
           errors.add(:name, :invalid)
-        end
-      end
-
-      def validate_length_of_serialized_data
-        if validate_serialization && self.class.columns_hash["value"].limit < self.value.size
-          errors.add(:value, :invalid)
         end
       end
 
@@ -59,7 +51,6 @@ module PropertySets
     module ClassMethods
       def self.extended(base)
         base.validate      :validate_format_of_name
-        base.validate      :validate_length_of_serialized_data
         base.before_create :coerce_value
       end
 

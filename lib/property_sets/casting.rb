@@ -1,5 +1,3 @@
-require 'json'
-
 module PropertySets
   module Casting
 
@@ -17,8 +15,6 @@ module PropertySets
           value.to_i
         when :boolean
           ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
-        when :serialized
-          JSON.parse(value)
       end
     end
 
@@ -32,8 +28,6 @@ module PropertySets
           else
             value.in_time_zone("UTC").to_s
           end
-        when :serialized
-          value.to_json
         else
           value.to_s
       end
