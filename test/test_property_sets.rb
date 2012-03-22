@@ -15,7 +15,16 @@ class TestPropertySets < ActiveSupport::TestCase
     end
 
     should "register the property sets used on a class" do
-      assert_equal [ :settings, :texts, :validations, :typed_data ], Account.property_set_index
+      [ :settings, :texts, :validations, :typed_data ].each do |name|
+        assert Account.property_set_index.include?(name)
+      end
+    end
+
+    should "pass-through any options from the second parameter" do
+      Account.expects(:has_many).with { |association, h|
+        association == :foo && h[:conditions] == "bar"
+      }
+      Account.property_set(:foo, :conditions => "bar") {}
     end
 
     should "support protecting attributes" do
