@@ -18,7 +18,8 @@ module PropertySets
         when :boolean
           ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
         when :serialized
-          JSON.parse(value)
+          # deserialization happens in the model
+          value
       end
     end
 
@@ -33,7 +34,8 @@ module PropertySets
             value.in_time_zone("UTC").to_s
           end
         when :serialized
-          value.to_json
+          # write the object directly.
+          value
         else
           value.to_s
       end

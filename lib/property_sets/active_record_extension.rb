@@ -93,7 +93,7 @@ module PropertySets
           def lookup(arg)
             instance   = lookup_without_default(arg)
             instance ||= build_default(arg)
-            instance.validate_serialization = property_serialized?(arg)
+            instance.value_serialized = property_serialized?(arg)
 
             if ActiveRecord::VERSION::MAJOR == 3
               owner = proxy_association.owner
@@ -108,7 +108,7 @@ module PropertySets
           # This finder method returns the property if present, otherwise a new instance with the default value.
           # It does not have the side effect of adding a new setting object.
           def lookup_or_default(arg)
-            instance   = detect { |property| property.name.to_sym == arg.to_sym }
+            instance   = lookup_without_default(arg)
             instance ||= begin
               if ActiveRecord::VERSION::MAJOR == 3
                 association_class = proxy_association.klass
@@ -117,7 +117,7 @@ module PropertySets
               end
               association_class.new(:value => default(arg))
             end
-            instance.validate_serialization = property_serialized?(arg)
+            instance.value_serialized = property_serialized?(arg)
             instance
           end
         end

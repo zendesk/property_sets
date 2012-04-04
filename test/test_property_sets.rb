@@ -317,6 +317,18 @@ class TestPropertySets < ActiveSupport::TestCase
           assert !@account.typed_data.lookup(:serialized_prop).valid?
           assert !@account.save
         end
+
+        should "allow for destructive operators" do
+          value = {:a => 1, :b => 2}
+          @account.typed_data.serialized_prop = value
+          @account.typed_data.serialized_prop[:c] = 3
+          assert_equal 3, @account.typed_data.serialized_prop[:c]
+        end
+
+        should "deal with nil values properly" do
+          @account.typed_data.serialized_prop = nil
+          @account.save!
+        end
       end
     end
   end

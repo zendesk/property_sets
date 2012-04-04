@@ -9,8 +9,8 @@ class TestCasting < ActiveSupport::TestCase
       assert_equal nil, PropertySets::Casting.read(:hello, nil)
     end
 
-    should "deserialize properly" do
-      assert_equal [1,2,3], PropertySets::Casting.read(:serialized, "[1, 2, 3]")
+    should "leave serialized data alone" do
+      assert_equal [1,2,3], PropertySets::Casting.read(:serialized, [1, 2, 3])
     end
   end
 
@@ -29,8 +29,9 @@ class TestCasting < ActiveSupport::TestCase
       assert_equal "123", PropertySets::Casting.write(:integer, 123)
     end
 
-    should "serialize data marked as :serialize to json" do
-      assert_equal "[123]", PropertySets::Casting.write(:serialized, [123])
+    should "leave serialized data alone for the record to deal with" do
+      a = [123]
+      assert_equal a, PropertySets::Casting.write(:serialized, a)
     end
   end
 
