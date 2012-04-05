@@ -302,6 +302,34 @@ class TestPropertySets < ActiveSupport::TestCase
           assert_equal string_rep, @account.typed_data.lookup("datetime_prop").value
         end
       end
+
+      context "serialized data" do
+        should "store data in json" do
+          value = {:a => 1, :b => 2}
+          @account.typed_data.serialized_prop = value
+          @account.save!
+          @account.reload
+          assert_equal({'a' => 1, 'b' => 2},  @account.typed_data.serialized_prop)
+        end
+
+        should "not overflow the column" do
+          @account.typed_data.serialized_prop = (1..100_000).to_a
+          assert !@account.typed_data.lookup(:serialized_prop).valid?
+          assert !@account.save
+        end
+
+        should "allow for destructive operators" do
+          value = {:a => 1, :b => 2}
+          @account.typed_data.serialized_prop = value
+          @account.typed_data.serialized_prop[:c] = 3
+          assert_equal 3, @account.typed_data.serialized_prop[:c]
+        end
+
+        should "deal with nil values properly" do
+          @account.typed_data.serialized_prop = nil
+          @account.save!
+        end
+      end
     end
   end
 end

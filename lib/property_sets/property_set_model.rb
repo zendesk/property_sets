@@ -24,9 +24,35 @@ module PropertySets
         self.class.protected?(name.to_sym)
       end
 
+      def value
+        if value_serialized
+          v = read_attribute(:value)
+          return nil if v == "null"
+          @deserialized_value ||= JSON.parse(v)
+        else
+          super
+        end
+      end
+
+      def value=(v)
+        if value_serialized
+          @deserialized_value = v
+          write_attribute(:value, v.to_json)
+        else
+          super(v)
+        end
+      end
+
+      def reload(*args, &block)
+        @deserialized_value = nil
+        super
+      end
+
       def to_s
         value.to_s
       end
+
+      attr_accessor :value_serialized
 
       private
 
@@ -38,10 +64,17 @@ module PropertySets
         end
       end
 
-      def coerce_value
-        self.value = value.to_s unless value.nil?
+      def validate_length_of_serialized_data
+        if value_serialized && self.read_attribute(:value).to_s.size > self.class.columns_hash["value"].limit
+          errors.add(:value, :invalid)
+        end
       end
 
+      def coerce_value
+        if value && !value_serialized
+          self.value = value.to_s
+        end
+      end
 
       def owner_class_instance
         send(self.class.owner_class_sym)
@@ -51,6 +84,7 @@ module PropertySets
     module ClassMethods
       def self.extended(base)
         base.validate      :validate_format_of_name
+        base.validate      :validate_length_of_serialized_data
         base.before_create :coerce_value
       end
 

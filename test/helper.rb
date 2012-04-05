@@ -1,4 +1,6 @@
 require 'rubygems'
+require 'bundler'
+Bundler.setup
 require 'active_support'
 require 'test/unit'
 require 'active_record'
@@ -69,5 +71,6 @@ class Account < ActiveRecord::Base
     property :datetime_prop, :type => :datetime
     property :float_prop, :type => :float
     property :int_prop, :type => :integer
+    property :serialized_prop, :type => :serialized
   end
 end

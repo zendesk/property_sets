@@ -1,3 +1,5 @@
+require 'json'
+
 module PropertySets
   module Casting
 
@@ -15,6 +17,9 @@ module PropertySets
           value.to_i
         when :boolean
           ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
+        when :serialized
+          # deserialization happens in the model
+          value
       end
     end
 
@@ -28,6 +33,9 @@ module PropertySets
           else
             value.in_time_zone("UTC").to_s
           end
+        when :serialized
+          # write the object directly.
+          value
         else
           value.to_s
       end
