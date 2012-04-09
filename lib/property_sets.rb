@@ -3,7 +3,7 @@ require 'property_sets/active_record_extension'
 require 'property_sets/action_view_extension'
 
 module PropertySets
-  VERSION = "0.6.2"
+  VERSION = "0.7.0"
 
   def self.ensure_property_set_class(association, owner_class)
     const_name = "#{owner_class.name}#{association.to_s.singularize.capitalize}".to_sym
