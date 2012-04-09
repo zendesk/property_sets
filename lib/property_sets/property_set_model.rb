@@ -27,7 +27,7 @@ module PropertySets
       def value
         if value_serialized
           v = read_attribute(:value)
-          return nil if v == "null"
+          return nil if v.nil? || v == "null"
           @deserialized_value ||= JSON.parse(v)
         else
           super

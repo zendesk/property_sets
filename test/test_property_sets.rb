@@ -325,9 +325,13 @@ class TestPropertySets < ActiveSupport::TestCase
           assert_equal 3, @account.typed_data.serialized_prop[:c]
         end
 
-        should "deal with nil values properly" do
+        should "deal with nil values properly going in" do
           @account.typed_data.serialized_prop = nil
           @account.save!
+        end
+
+        should "deal with nil values properly coming out" do
+          assert_equal nil, @account.typed_data.serialized_prop
         end
       end
     end
