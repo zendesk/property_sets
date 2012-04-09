@@ -8,6 +8,10 @@ class TestCasting < ActiveSupport::TestCase
       assert_equal nil, PropertySets::Casting.read(:string, nil)
       assert_equal nil, PropertySets::Casting.read(:hello, nil)
     end
+
+    should "leave serialized data alone" do
+      assert_equal [1,2,3], PropertySets::Casting.read(:serialized, [1, 2, 3])
+    end
   end
 
   context "Casting#write" do
@@ -23,6 +27,11 @@ class TestCasting < ActiveSupport::TestCase
 
     should "convert integers to strings" do
       assert_equal "123", PropertySets::Casting.write(:integer, 123)
+    end
+
+    should "leave serialized data alone for the record to deal with" do
+      a = [123]
+      assert_equal a, PropertySets::Casting.write(:serialized, a)
     end
   end
 
