@@ -7,24 +7,10 @@ require 'active_record'
 require 'active_record/fixtures'
 require 'shoulda'
 
-ActiveRecord::Base.establish_connection(
-  :adapter  => 'mysql',
-  :database => 'property_sets_test',
-  :username => 'root',
-  :password => nil,
-  :host     => '127.0.0.1',
-  :port     => 3306
-)
-
-ActiveRecord::Base.logger = Logger.new(STDOUT)
-ActiveRecord::Base.logger.level = Logger::ERROR
-
-ActiveRecord::Migration.verbose = false
-
-load(File.dirname(__FILE__) + "/schema.rb")
+require File.expand_path "../database", __FILE__
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require File.dirname(__FILE__)+'/../lib/property_sets'
+require 'property_sets'
 
 class ActiveSupport::TestCase
   include ActiveRecord::TestFixtures
