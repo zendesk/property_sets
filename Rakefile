@@ -8,4 +8,6 @@ Rake::TestTask.new do |test|
   test.verbose = true
 end
 
-task :default => :test
+task :default do
+  sh "bundle exec rake appraisal:install && bundle exec rake appraisal test"
+end
