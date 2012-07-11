@@ -95,7 +95,7 @@ module PropertySets
             instance ||= build_default(arg)
             instance.value_serialized = property_serialized?(arg)
 
-            if ActiveRecord::VERSION::MAJOR == 3
+            if ActiveRecord::VERSION::STRING >= "3.1.0"
               owner = proxy_association.owner
             else
               owner = @owner
@@ -110,7 +110,7 @@ module PropertySets
           def lookup_or_default(arg)
             instance   = lookup_without_default(arg)
             instance ||= begin
-              if ActiveRecord::VERSION::MAJOR == 3
+              if ActiveRecord::VERSION::STRING >= "3.1.0"
                 association_class = proxy_association.klass
               else
                 association_class = @reflection.klass

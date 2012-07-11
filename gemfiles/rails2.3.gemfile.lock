@@ -1,10 +1,11 @@
 PATH
-  remote: /Users/primdahl/Git/property_sets
+  remote: /Users/mgrosser/code/tools/property_sets
   specs:
-    property_sets (0.6.1)
+    property_sets (0.7.2)
       actionpack (>= 2.3.14, < 3.3)
       activerecord (>= 2.3.14, < 3.3)
       activesupport (>= 2.3.14, < 3.3)
+      json
 
 GEM
   remote: http://rubygems.org/
@@ -23,6 +24,7 @@ GEM
       bundler
       rake
     jdbc-mysql (5.1.13)
+    json (1.7.3)
     metaclass (0.0.1)
     mocha (0.10.3)
       metaclass (~> 0.0.1)
