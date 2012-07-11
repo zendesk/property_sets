@@ -1,3 +1,29 @@
+# setup database
+require 'active_record'
+ActiveRecord::Base.logger = Logger.new(STDOUT)
+ActiveRecord::Base.logger.level = Logger::ERROR
+
+config = {
+  :adapter  => 'mysql',
+  :database => 'property_sets_test',
+  :username => 'root',
+  :password => nil,
+  :host     => '127.0.0.1',
+  :port     => 3306
+}
+
+ActiveRecord::Base.establish_connection(config.merge(:database => nil))
+
+# clear out everything
+ActiveRecord::Base.connection.drop_database config[:database]
+ActiveRecord::Base.connection.create_database config[:database], :charset => 'utf8', :collation => 'utf8_unicode_ci'
+
+# connect and check
+ActiveRecord::Base.establish_connection(config)
+ActiveRecord::Base.connection.execute('select 1')
+
+ActiveRecord::Migration.verbose = false
+
 ActiveRecord::Schema.define(:version => 1) do
   create_table "account_settings", :force => true do |t|
     t.integer  "account_id"
