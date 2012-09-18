@@ -191,29 +191,36 @@ class TestPropertySets < ActiveSupport::TestCase
       end
 
       should "be updateable as a nested structure" do
-        attribs = {
-          :name => "Kim", :settings => { :foo => "1", :bar => "0" }
-        }
-
-        assert @account.update_attributes(attribs)
+        @account.settings.baz = "1"
         @account.save!
 
-        assert @account.settings.foo?
+        assert !@account.settings.foo?
         assert !@account.settings.bar?
-        assert @account.settings.foo == "1"
-        assert @account.settings.bar == "0"
-        assert !@account.settings.pro?
-
-        attribs = {
-          :name => "Kim", :settings => { :foo => "1", :bar => "1", :baz => "1", :pro => "1" }
-        }
-
-        assert @account.update_attributes!(attribs)
-
-        assert @account.settings.foo?
-        assert @account.settings.bar?
         assert @account.settings.baz?
         assert !@account.settings.pro?
+
+        @account.update_attributes!(
+          :name => "Kim",
+          :settings => { :foo => "1", :baz => "0", :pro => "1" }
+        )
+
+        @account.reload
+
+        # set
+        assert @account.settings.foo?
+        assert_equal "1", @account.settings.foo
+
+        # kept
+        assert !@account.settings.bar?
+        assert_equal nil, @account.settings.bar
+
+        # unset
+        assert !@account.settings.baz?
+        assert_equal "0", @account.settings.baz
+
+        # protected -> not set
+        assert !@account.settings.pro?
+        assert_equal nil, @account.settings.pro
       end
     end
 
