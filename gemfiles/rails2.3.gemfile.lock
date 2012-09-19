@@ -1,7 +1,7 @@
 PATH
-  remote: /Users/mgrosser/code/tools/property_sets
+  remote: /Users/primdahl/Git/property_sets
   specs:
-    property_sets (0.8.0)
+    property_sets (0.8.1)
       actionpack (>= 2.3.14, < 3.3)
       activerecord (>= 2.3.14, < 3.3)
       activesupport (>= 2.3.14, < 3.3)
