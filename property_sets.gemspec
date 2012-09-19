@@ -15,6 +15,7 @@ Gem::Specification.new "property_sets", "0.8.0" do |s|
   s.add_development_dependency('shoulda')
   s.add_development_dependency('mocha')
   s.add_development_dependency('appraisal')
+  s.add_development_dependency('test-unit', '>= 2.5.2')
 
   s.files = `git ls-files`.split("\n")
   s.license = "MIT"
