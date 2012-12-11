@@ -1,3 +1,4 @@
+require 'active_record'
 require 'property_sets/casting'
 
 module PropertySets
