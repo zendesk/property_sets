@@ -13,7 +13,7 @@ Gem::Specification.new "property_sets", "0.8.1" do |s|
   s.add_development_dependency('rake')
   s.add_development_dependency('bundler')
   s.add_development_dependency('shoulda')
-  s.add_development_dependency('mocha')
+  s.add_development_dependency('mocha', '~> 0.10.3')
   s.add_development_dependency('appraisal')
   s.add_development_dependency('test-unit', '>= 2.5.2')
 
