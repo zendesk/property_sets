@@ -1,6 +1,10 @@
 require 'property_sets/property_set_model'
 require 'property_sets/active_record_extension'
-require 'property_sets/action_view_extension'
+
+begin
+  require 'property_sets/action_view_extension'
+rescue LoadError
+end
 
 module PropertySets
   VERSION = "0.7.2"

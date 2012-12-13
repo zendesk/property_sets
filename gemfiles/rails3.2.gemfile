@@ -6,6 +6,5 @@ gem "activerecord-jdbcmysql-adapter", "1.2.2", :platforms=>:jruby
 gem "mysql", "~> 2.8.1", :platforms=>:ruby
 gem "activerecord", "3.2.6"
 gem "activesupport", "3.2.6"
-gem "actionpack", "3.2.6"
 
 gemspec :path=>"../"
