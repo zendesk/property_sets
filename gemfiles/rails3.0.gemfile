@@ -3,9 +3,8 @@
 source :rubygems
 
 gem "activerecord-jdbcmysql-adapter", "1.2.2", :platforms=>:jruby
-gem "mysql", :platforms=>:ruby
+gem "mysql", "~> 2.8.1", :platforms=>:ruby
 gem "activerecord", "3.0.15"
 gem "activesupport", "3.0.15"
-gem "actionpack", "3.0.15"
 
 gemspec :path=>"../"

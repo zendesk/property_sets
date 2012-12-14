@@ -1,7 +1,7 @@
 source :rubygems
 
 gem 'activerecord-jdbcmysql-adapter', '1.2.2', :platforms => :jruby
-gem 'mysql', :platforms => :ruby
+gem 'mysql', '~> 2.8.1', :platforms => :ruby
 
 gemspec
 
