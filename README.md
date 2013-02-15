@@ -40,7 +40,7 @@ Property sets supports standard AR validations, although in a somewhat manual fa
       property_set :settings do
         property :version, :default => "v1.0"
         property :featured, :protected => true
-    
+
         validates_format_of :value, :with => /v\d+\.\d+/, :message => "of version is invalid",
                             :if => Proc.new { |r| r.name.to_sym == :version }
       end
@@ -103,7 +103,7 @@ Also remember to create the storage table(s), if for example you are going to be
       t.string   :value
       t.timestamps
     end
-    
+
     add_index :account_settings, [ :account_id, :name ], :unique => true
 
 ## Requirements
@@ -111,3 +111,6 @@ Also remember to create the storage table(s), if for example you are going to be
 * ActiveRecord
 * ActiveSupport
 
+## License
+
+Released under the Apache License Version 2.0 http://www.apache.org/licenses/LICENSE-2.0.html

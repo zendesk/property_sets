@@ -1,7 +1,7 @@
 PATH
-  remote: /Users/staugaard/code/property_sets
+  remote: /Users/primdahl/Git/property_sets
   specs:
-    property_sets (0.8.1)
+    property_sets (1.0.0)
       activerecord (>= 2.3.14, < 3.3)
       activesupport (>= 2.3.14, < 3.3)
       json
@@ -23,8 +23,8 @@ GEM
       bundler
       rake
     jdbc-mysql (5.1.13)
-    json (1.7.5)
-    json (1.7.5-java)
+    json (1.7.7)
+    json (1.7.7-java)
     metaclass (0.0.1)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
