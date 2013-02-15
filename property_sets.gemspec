@@ -3,7 +3,7 @@ Gem::Specification.new "property_sets", "1.0.0" do |s|
   s.description = "This gem is an ActiveRecord extension which provides a convenient interface for managing per row properties."
   s.authors  = ["Morten Primdahl"]
   s.email    = 'primdahl@me.com'
-  s.homepage = 'http://github.com/morten/property_sets'
+  s.homepage = 'http://github.com/zendesk/property_sets'
   s.license  = 'Apache License Version 2.0'
 
   s.add_runtime_dependency("activesupport", ">= 2.3.14", "< 3.3")
