@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/primdahl/Git/property_sets
+  remote: /Users/clittle/code/work/property_sets
   specs:
     property_sets (1.0.0)
       activerecord (>= 2.3.14, < 3.3)
@@ -7,7 +7,7 @@ PATH
       json
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     actionpack (3.2.6)
       activemodel (= 3.2.6)
@@ -47,6 +47,7 @@ GEM
     jdbc-mysql (5.1.13)
     journey (1.0.4)
     json (1.7.7)
+    json (1.7.7-java)
     metaclass (0.0.1)
     mocha (0.10.5)
       metaclass (~> 0.0.1)

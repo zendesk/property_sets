@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/primdahl/Git/property_sets
+  remote: /Users/clittle/code/work/property_sets
   specs:
     property_sets (1.0.0)
       activerecord (>= 2.3.14, < 3.3)
@@ -7,7 +7,7 @@ PATH
       json
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     actionpack (2.3.14)
       activesupport (= 2.3.14)
