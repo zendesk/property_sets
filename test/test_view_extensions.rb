@@ -4,128 +4,106 @@ class TestViewExtensions < ActiveSupport::TestCase
 
   context "property set view extensions" do
     setup do
-      @association = :settings
-      @property    = :active
-      @builder     = ActionView::Helpers::FormBuilder.new("object_name", "object", "template", {}, "proc")
-      @proxy       = @builder.property_set(@association)
+      @property_set = :settings
+      @property     = :active
+      @object_name  = 'object_name'
+      @object       = stub
+      @template     = stub
+      @builder      = ActionView::Helpers::FormBuilder.new(@object_name, @object, @template, {}, 'proc')
+      @proxy        = @builder.property_set(@property_set)
+
+      @template.stubs(:instance_variable_get).with("@#{@object_name}").returns(@object)
     end
 
     should "provide a form builder proxy" do
       assert @proxy.is_a?(ActionView::Helpers::FormBuilder::PropertySetFormBuilderProxy)
-      assert_equal @association, @proxy.property_set
+      assert_equal @property_set, @proxy.property_set
     end
 
-    context "check_box" do
-      should "call with checked true for a truth value" do
-        settings = stub(@property => "1", "#{@property}?".to_sym => true)
-        object   = stub()
-        object.expects(@association).returns(settings)
-        options  = {
-          :checked => true, :name => "object_name[#{@association}][#{@property}]",
-          :id => "object_name_#{@association}_#{@property}", :object => object
-        }
-        template = stub()
-        template.expects(:instance_variable_get).with("@object_name").returns(object)
-        # def check_box(object_name, method, options = {}, checked_value = "1", unchecked_value = "0")
-        template.expects(:check_box).with("object_name", @property, options, "1", "0")
+    context "#check_box" do
+      context "when called with checked true for a truth value" do
+        setup do
+          settings = stub(@property => '1', "#{@property}?".to_sym => true)
+          @object.stubs(@property_set).returns(settings)
+        end
 
-        @proxy.stubs(:template).returns(template)
-        @proxy.check_box(@property)
+        should "build a checkbox with the proper parameters" do
+          expected_options = base_options.merge(:checked => true)
+          @template.expects(:check_box).with(@object_name, @property, expected_options, '1', '0')
+          @proxy.check_box(@property)
+        end
       end
 
-      should "call with checked false for a truth value" do
-        settings = stub(@property => "0", "#{@property}?".to_sym => false)
-        object   = stub()
-        object.expects(@association).returns(settings)
-        options  = {
-          :checked => false, :name => "object_name[#{@association}][#{@property}]",
-          :id => "object_name_#{@association}_#{@property}", :object => object
-        }
-        template = stub()
-        template.expects(:instance_variable_get).with("@object_name").returns(object)
-        # def check_box(object_name, method, options = {}, checked_value = "1", unchecked_value = "0")
-        template.expects(:check_box).with("object_name", @property, options, "1", "0")
+      context "when called with checked false for a truth value" do
+        setup do
+          settings = stub(@property => '0', "#{@property}?".to_sym => false)
+          @object.stubs(@property_set).returns(settings)
+        end
 
-        @proxy.stubs(:template).returns(template)
-        @proxy.check_box(@property)
+        should "build a checkbox with the proper parameters" do
+          expected_options = base_options.merge(:checked => false)
+          @template.expects(:check_box).with(@object_name, @property, expected_options, '1', '0')
+          @proxy.check_box(@property)
+        end
       end
     end
 
-    context "hidden_field" do
-      should "call with :value set" do
-        settings = stub(@property => "hello")
-        object   = stub()
-        object.stubs(@association).returns(settings)
+    context "#hidden_field" do
+      context "when called with a provided value" do
+        setup do
+          settings = stub(@property => 'persisted value')
+          @object.stubs(@property_set).returns(settings)
+        end
 
-        options  = {
-          :value => "im hidden", :name => "object_name[#{@association}][#{@property}]",
-          :id => "object_name_#{@association}_#{@property}", :object => object
-        }
-        template = stub()
-        template.expects(:instance_variable_get).with("@object_name").returns(object)
-        # def hidden_field(object_name, method, options = {})
-        template.expects(:hidden_field).with("object_name", @property, options)
-
-        @proxy.stubs(:template).returns(template)
-        @proxy.hidden_field(@property, options)
+        should "build a hidden field with the provided value" do
+          expected_options = base_options.merge(:value => 'provided value')
+          @template.expects(:hidden_field).with(@object_name, @property, expected_options)
+          @proxy.hidden_field(@property, {:value => 'provided value'})
+        end
       end
     end
 
-    context "text_field" do
-      should "call with :value set" do
-        settings = stub(@property => "hello")
-        object   = stub()
-        object.stubs(@association).returns(settings)
+    context "#text_field" do
+      context "when called with a provided value" do
+        setup do
+          settings = stub(@property => 'persisted value')
+          @object.stubs(@property_set).returns(settings)
+        end
 
-        options  = {
-          :value => "im text", :name => "object_name[#{@association}][#{@property}]",
-          :id => "object_name_#{@association}_#{@property}", :object => object
-        }
-        template = stub()
-        template.expects(:instance_variable_get).with("@object_name").returns(object)
-        template.expects(:text_field).with("object_name", @property, options)
-
-        @proxy.stubs(:template).returns(template)
-        @proxy.text_field(@property, options)
+        should "build a text field with the provided value" do
+          expected_options = base_options.merge(:value => 'provided value')
+          @template.expects(:text_field).with(@object_name, @property, expected_options)
+          @proxy.text_field(@property, {:value => 'provided value'})
+        end
       end
     end
 
     context "radio_button" do
-      should "call with checked true for a truth value" do
-        settings = stub(@property => "hello")
-        object   = stub()
-        object.expects(@association).returns(settings)
-        options  = {
-          :checked => true, :name => "object_name[#{@association}][#{@property}]",
-          :id => "object_name_#{@association}_#{@property}", :object => object
-        }
-        template = stub()
-        template.expects(:instance_variable_get).with("@object_name").returns(object)
-        # def radio_button(object_name, method, tag_value, options = {})
-        template.expects(:radio_button).with("object_name", @property, "hello", options)
+      context "when called with checked true for a truth value" do
+        setup do
+          settings = stub(@property => 'hello')
+          @object.stubs(@property_set).returns(settings)
+        end
 
-        @proxy.stubs(:template).returns(template)
-        @proxy.radio_button(@property, "hello")
+        should "call with checked true for a truth value" do
+          expected_options = base_options.merge(:checked => true)
+          @template.expects(:radio_button).with(@object_name, @property, 'hello', expected_options)
+          @proxy.radio_button(@property, 'hello')
+        end
       end
     end
 
     context "select" do
       setup do
-        settings = stub(:count => "2")
-        object   = stub()
-        object.stubs(@association).returns(settings)
-
-        @template = stub()
-        @template.expects(:instance_variable_get).with("@object_name").returns(object)
+        settings = stub(:count => '2')
+        @object.stubs(@property_set).returns(settings)
       end
 
       should "render a <select> with <option>s" do
-
         select_options = { :selected => "2" }
         select_choices = [["One", 1], ["Two", 2], ["Three", 3]]
 
         @template.expects(:select).with("object_name[settings]", :count, select_choices, select_options, {})
-        @proxy.stubs(:template).returns(@template)
         @proxy.select(:count, select_choices)
       end
 
@@ -135,10 +113,20 @@ class TestViewExtensions < ActiveSupport::TestCase
         html_options   = { :id => "foo", :name => "bar", :disabled => true }
 
         @template.expects(:select).with("object_name[settings]", :count, select_choices, select_options, html_options)
-        @proxy.stubs(:template).returns(@template)
         @proxy.select(:count, select_choices, select_options, html_options)
       end
     end
   end
+
+  private
+
+  def base_options
+    {
+      :name   => "#{@object_name}[#{@property_set}][#{@property}]",
+      :id     => "#{@object_name}_#{@property_set}_#{@property}",
+      :object => @object
+    }
+  end
+
 end
 
