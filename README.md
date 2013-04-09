@@ -130,7 +130,7 @@ add_index :account_settings, [ :account_id, :name ], :unique => true
 * ActiveRecord
 * ActiveSupport
 
-## License anc copyright
+## License and copyright
 
 Copyright 2013 Zendesk
 
