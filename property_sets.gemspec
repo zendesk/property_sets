@@ -1,4 +1,4 @@
-Gem::Specification.new "property_sets", "1.0.3" do |s|
+Gem::Specification.new "property_sets", "1.0.4" do |s|
   s.summary     = "Property sets for ActiveRecord."
   s.description = "This gem is an ActiveRecord extension which provides a convenient interface for managing per row properties."
   s.authors  = ["Morten Primdahl"]
