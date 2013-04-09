@@ -49,16 +49,44 @@ class TestViewExtensions < ActiveSupport::TestCase
     end
 
     context "#hidden_field" do
-      context "when called with a provided value" do
+      context "when the persisted value is not a boolean" do
         setup do
           settings = stub(@property => 'persisted value')
           @object.stubs(@property_set).returns(settings)
         end
 
-        should "build a hidden field with the provided value" do
-          expected_options = base_options.merge(:value => 'provided value')
+        should "build a hidden field with the persisted value" do
+          expected_options = base_options.merge(:value => 'persisted value')
           @template.expects(:hidden_field).with(@object_name, @property, expected_options)
-          @proxy.hidden_field(@property, {:value => 'provided value'})
+          @proxy.hidden_field(@property)
+        end
+
+        context "and a value is provided" do
+          should "build a hidden field with the provided value" do
+            expected_options = base_options.merge(:value => 'provided value')
+            @template.expects(:hidden_field).with(@object_name, @property, expected_options)
+            @proxy.hidden_field(@property, {:value => 'provided value'})
+          end
+        end
+      end
+
+      context "when the persisted value is a boolean" do
+        should "build a hidden field with cast boolean value if it is a boolean true" do
+          settings = stub(@property => true)
+          @object.stubs(@property_set).returns(settings)
+
+          expected_options = base_options.merge(:value => '1')
+          @template.expects(:hidden_field).with(@object_name, @property, expected_options)
+          @proxy.hidden_field(@property)
+        end
+
+        should "build a hidden field with cast boolean value if it is a boolean false" do
+          settings = stub(@property => false)
+          @object.stubs(@property_set).returns(settings)
+
+          expected_options = base_options.merge(:value => '0')
+          @template.expects(:hidden_field).with(@object_name, @property, expected_options)
+          @proxy.hidden_field(@property)
         end
       end
     end
@@ -78,7 +106,7 @@ class TestViewExtensions < ActiveSupport::TestCase
       end
     end
 
-    context "radio_button" do
+    context "#radio_button" do
       context "when called with checked true for a truth value" do
         setup do
           settings = stub(@property => 'hello')
@@ -93,7 +121,7 @@ class TestViewExtensions < ActiveSupport::TestCase
       end
     end
 
-    context "select" do
+    context "#select" do
       setup do
         settings = stub(:count => '2')
         @object.stubs(@property_set).returns(settings)

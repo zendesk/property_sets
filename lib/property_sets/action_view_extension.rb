@@ -33,7 +33,11 @@ module ActionView
         end
 
         def hidden_field(property, options = {})
-          template.hidden_field(object_name, property, prepare_id_name(property, options))
+          options = prepare_id_name(property, options)
+          unless options.keys.include?(:value)
+            options[:value] = cast_boolean(options[:object].send(property_set).send(property)) 
+          end
+          template.hidden_field(object_name, property, options)
         end
 
         def select(property, choices, options = {}, html_options = {})
@@ -62,6 +66,17 @@ module ActionView
           options[:checked] = yield(options[:object].send(property_set))
           options
         end
+
+        private
+
+        def cast_boolean(value)
+          case value
+          when TrueClass  then '1'
+          when FalseClass then '0'
+          else value
+          end
+        end
+
       end
 
       def property_set(identifier)
