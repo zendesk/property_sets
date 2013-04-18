@@ -11,13 +11,22 @@ class TestViewExtensions < ActiveSupport::TestCase
       @template     = stub
       @builder      = ActionView::Helpers::FormBuilder.new(@object_name, @object, @template, {}, 'proc')
       @proxy        = @builder.property_set(@property_set)
-
-      @template.stubs(:instance_variable_get).with("@#{@object_name}").returns(@object)
     end
 
     should "provide a form builder proxy" do
       assert @proxy.is_a?(ActionView::Helpers::FormBuilder::PropertySetFormBuilderProxy)
       assert_equal @property_set, @proxy.property_set
+    end
+
+    should "fetch the target object when not available" do
+      @builder = ActionView::Helpers::FormBuilder.new(@object_name, nil, @template, {}, 'proc')
+      @proxy   = @builder.property_set(@property_set)
+
+      @object.stubs(@property_set).returns(stub(@property => 'value'))
+      @template.stubs(:hidden_field)
+
+      @template.expects(:instance_variable_get).with("@#{@object_name}").returns(@object)
+      @proxy.hidden_field(@property)
     end
 
     context "#check_box" do
