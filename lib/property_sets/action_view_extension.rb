@@ -4,14 +4,13 @@ module ActionView
   module Helpers
     class FormBuilder
       class PropertySetFormBuilderProxy
-        attr_accessor :property_set
-        attr_accessor :template
-        attr_accessor :object_name
+        attr_reader :property_set, :template, :object_name, :object
 
-        def initialize(property_set, template, object_name)
-          self.property_set = property_set
-          self.template     = template
-          self.object_name  = object_name
+        def initialize(property_set, template, object_name, object)
+          @property_set = property_set
+          @template     = template
+          @object_name  = object_name
+          @object       = object
         end
 
         def check_box(property, options = {}, checked_value = "1", unchecked_value = "0")
@@ -46,19 +45,25 @@ module ActionView
           template.select("#{object_name}[#{property_set}]", property, choices, { :selected => current_value }, html_options )
         end
 
+        private
+
         def prepare_id_name(property, options)
           throw "Invalid options type #{options.inspect}" unless options.is_a?(Hash)
 
           options.clone.tap do |prepared_options|
-            instance = template.instance_variable_get("@#{object_name}")
-
-            throw "No @#{object_name} in scope" if instance.nil?
-            throw "The property_set_check_box only works on models with property set #{property_set}" unless instance.respond_to?(property_set)
-
+            prepared_options[:object]   = object || fetch_target_object
             prepared_options[:id]     ||= "#{object_name}_#{property_set}_#{property}"
             prepared_options[:name]     = "#{object_name}[#{property_set}][#{property}]"
-            prepared_options[:object]   = instance
           end
+        end
+
+        def fetch_target_object
+          instance = template.instance_variable_get("@#{object_name}")
+
+          throw "No @#{object_name} in scope" if instance.nil?
+          throw "The property_set_check_box only works on models with property set #{property_set}" unless instance.respond_to?(property_set)
+
+          instance
         end
 
         def prepare_options(property, options, &block)
@@ -66,8 +71,6 @@ module ActionView
           options[:checked] = yield(options[:object].send(property_set))
           options
         end
-
-        private
 
         def cast_boolean(value)
           case value
@@ -80,7 +83,7 @@ module ActionView
       end
 
       def property_set(identifier)
-        PropertySetFormBuilderProxy.new(identifier, @template, @object_name)
+        PropertySetFormBuilderProxy.new(identifier, @template, object_name, object)
       end
 
     end
