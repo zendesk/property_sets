@@ -35,7 +35,7 @@ module ActionView
         def hidden_field(property, options = {})
           options = prepare_id_name(property, options)
           unless options.keys.include?(:value)
-            options[:value] = cast_boolean(options[:object].send(property_set).send(property)) 
+            options[:value] = cast_boolean(options[:object].send(property_set).send(property))
           end
           template.hidden_field(object_name, property, options)
         end
