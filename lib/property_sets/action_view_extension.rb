@@ -21,6 +21,7 @@ module ActionView
         end
 
         def radio_button(property, checked_value = "1", options = {})
+          options[:id] ||= "#{object_name}_#{property_set}_#{property}_#{checked_value}"
           options = prepare_options(property, options) do |properties|
             properties.send("#{property}") == checked_value.to_s
           end

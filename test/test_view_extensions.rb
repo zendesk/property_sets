@@ -116,15 +116,29 @@ class TestViewExtensions < ActiveSupport::TestCase
     end
 
     context "#radio_button" do
+      setup do
+        settings = stub(@property => 'hello')
+        @object.stubs(@property_set).returns(settings)
+
+        @expected_options = base_options.merge(
+          :id      => "#{@object_name}_#{@property_set}_#{@property}_hello",
+          :checked => false
+        )
+      end
+
+      should "generate a unique id when one is not provided" do
+          @expected_options.merge!(
+            :id => "#{@object_name}_#{@property_set}_#{@property}_pancake"
+          )
+          @template.expects(:radio_button).with(@object_name, @property, 'pancake', @expected_options)
+          @proxy.radio_button(@property, 'pancake')
+      end
+
       context "when called with checked true for a truth value" do
-        setup do
-          settings = stub(@property => 'hello')
-          @object.stubs(@property_set).returns(settings)
-        end
 
         should "call with checked true for a truth value" do
-          expected_options = base_options.merge(:checked => true)
-          @template.expects(:radio_button).with(@object_name, @property, 'hello', expected_options)
+          @expected_options.merge!(:checked => true)
+          @template.expects(:radio_button).with(@object_name, @property, 'hello', @expected_options)
           @proxy.radio_button(@property, 'hello')
         end
       end
