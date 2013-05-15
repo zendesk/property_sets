@@ -62,6 +62,11 @@ class TestPropertySets < ActiveSupport::TestCase
       assert_equal 'skep', @account.settings.hep
     end
 
+    should "be flexible when fetching property data" do
+      assert_equal 'skep', @account.settings.default(:hep)
+      assert_equal 'skep', @account.settings.default('hep')
+    end
+
     context 'querying for a setting that does not exist' do
       setup do
         assert_equal([], @account.settings)
