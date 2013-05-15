@@ -150,8 +150,10 @@ class TestViewExtensions < ActiveSupport::TestCase
         end
 
         should "call with checked false" do
-          expected_options = base_options.merge(:checked => false)
-          @template.expects(:radio_button).with(@object_name, @property, 1, expected_options)
+          @expected_options.merge!(
+            :id => "#{@object_name}_#{@property_set}_#{@property}_1"
+          )
+          @template.expects(:radio_button).with(@object_name, @property, 1, @expected_options)
           @proxy.radio_button(@property, 1)
         end
       end
