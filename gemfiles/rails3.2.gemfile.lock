@@ -1,7 +1,7 @@
 PATH
-  remote: /Users/nathan/src/property_sets
+  remote: /Users/primdahl/Git/property_sets
   specs:
-    property_sets (1.0.5)
+    property_sets (2.0.0)
       activerecord (>= 2.3.14, < 3.3)
       activesupport (>= 2.3.14, < 3.3)
       json
