@@ -142,6 +142,19 @@ class TestViewExtensions < ActiveSupport::TestCase
           @proxy.radio_button(@property, 'hello')
         end
       end
+
+      context "when called with a value of a different type" do
+        setup do
+          settings = stub(@property => '1')
+          @object.stubs(@property_set).returns(settings)
+        end
+
+        should "call with checked false" do
+          expected_options = base_options.merge(:checked => false)
+          @template.expects(:radio_button).with(@object_name, @property, 1, expected_options)
+          @proxy.radio_button(@property, 1)
+        end
+      end
     end
 
     context "#select" do
