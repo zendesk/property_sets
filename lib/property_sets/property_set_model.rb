@@ -1,3 +1,5 @@
+require 'active_support'
+
 module PropertySets
   module PropertySetModel
     module InstanceMethods
@@ -89,7 +91,7 @@ module PropertySets
       end
 
       def property(key, options = nil)
-        @properties ||= {}
+        @properties ||= HashWithIndifferentAccess.new
         @properties[key] = options
       end
 
