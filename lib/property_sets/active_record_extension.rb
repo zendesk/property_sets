@@ -52,11 +52,7 @@ module PropertySets
             # Assigns a new value to the property
             define_method "#{key}=" do |value|
               instance = lookup(key)
-              write_value = PropertySets::Casting.write(property_class.type(key), value)
-              if respond_to?(:property_cache, true)
-                property_cache[key.to_s] = write_value
-              end
-              instance.value = write_value
+              instance.value = PropertySets::Casting.write(property_class.type(key), value)
               instance.value
             end
 
