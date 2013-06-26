@@ -301,6 +301,7 @@ class TestPropertySets < ActiveSupport::TestCase
         should "be writable and readable" do
           ts = Time.at(Time.now.to_i)
           @account.typed_data.datetime_prop = ts
+
           assert_equal ts,  @account.typed_data.datetime_prop
           @account.save!
           assert_equal ts,  @account.typed_data.datetime_prop

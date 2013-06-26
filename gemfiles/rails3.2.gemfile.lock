@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/primdahl/Git/property_sets
+  remote: /Users/eric/projects/zendesk/property_sets
   specs:
     property_sets (2.0.0)
       activerecord (>= 2.3.14, < 3.3)
@@ -41,13 +41,19 @@ GEM
     bourne (1.1.2)
       mocha (= 0.10.5)
     builder (3.0.4)
+    columnize (0.3.6)
+    debugger (1.6.0)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.1)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.2)
     erubis (2.7.0)
     hike (1.2.1)
     i18n (0.6.1)
     jdbc-mysql (5.1.13)
     journey (1.0.4)
     json (1.8.0)
-    json (1.8.0-java)
     metaclass (0.0.1)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
@@ -85,6 +91,7 @@ DEPENDENCIES
   activesupport (= 3.2.6)
   appraisal
   bundler
+  debugger
   mocha (~> 0.10.3)
   mysql (~> 2.8.1)
   property_sets!
