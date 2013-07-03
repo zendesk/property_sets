@@ -30,6 +30,12 @@ end
 ActiveSupport::TestCase.fixture_path = File.dirname(__FILE__) + "/fixtures/"
 $LOAD_PATH.unshift(ActiveSupport::TestCase.fixture_path)
 
+class ActsLikeAnInteger
+  def to_i
+    123
+  end
+end
+
 class Account < ActiveRecord::Base
   property_set :settings do
     property :foo
@@ -58,5 +64,6 @@ class Account < ActiveRecord::Base
     property :float_prop, :type => :float
     property :int_prop, :type => :integer
     property :serialized_prop, :type => :serialized
+    property :default_prop, :type => :integer, :default => ActsLikeAnInteger.new
   end
 end

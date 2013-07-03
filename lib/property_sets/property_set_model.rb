@@ -100,6 +100,12 @@ module PropertySets
       end
 
       def default(key)
+        if @properties[key] && @properties[key].key?(:default)
+          PropertySets::Casting.read(type(key), @properties[key][:default])
+        end
+      end
+
+      def raw_default(key)
         @properties[key] && @properties[key].key?(:default) ? @properties[key][:default] : nil
       end
 
