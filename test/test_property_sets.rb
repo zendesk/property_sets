@@ -270,6 +270,11 @@ class TestPropertySets < ActiveSupport::TestCase
     end
 
     context "typed columns" do
+
+      should "typecast the default value" do
+        assert_equal 123, @account.typed_data.default(:default_prop)
+      end
+
       context "string data" do
         should "be writable and readable" do
           @account.typed_data.string_prop = "foo"

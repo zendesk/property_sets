@@ -83,7 +83,7 @@ module PropertySets
           end
 
           def build_default(arg)
-            build(:name => arg.to_s, :value => default(arg))
+            build(:name => arg.to_s, :value => raw_default(arg))
           end
 
           def lookup_without_default(arg)
@@ -116,7 +116,7 @@ module PropertySets
               else
                 association_class = @reflection.klass
               end
-              association_class.new(:value => default(arg))
+              association_class.new(:value => raw_default(arg))
             end
             instance.value_serialized = property_serialized?(arg)
             instance
