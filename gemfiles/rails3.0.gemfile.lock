@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/primdahl/Git/property_sets
+  remote: /Users/eric/projects/zendesk/property_sets
   specs:
     property_sets (2.0.0)
       activerecord (>= 2.3.14, < 3.3)

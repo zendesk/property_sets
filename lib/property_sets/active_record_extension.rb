@@ -38,12 +38,15 @@ module PropertySets
 
             # Reports the coerced truth value of the property
             define_method "#{key}?" do
-              lookup_or_default(key).true?
+              type  = property_class.type(key)
+              value = lookup_value(type, key)
+              ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
             end
 
             # Returns the value of the property
             define_method "#{key}" do
-              PropertySets::Casting.read(property_class.type(key), lookup(key).value)
+              type = property_class.type(key)
+              lookup_value(type, key)
             end
 
             # Assigns a new value to the property
@@ -88,6 +91,30 @@ module PropertySets
 
           def lookup_without_default(arg)
             detect { |property| property.name.to_sym == arg.to_sym }
+          end
+
+          if ActiveRecord::VERSION::STRING < "3.2.0"
+            def lookup_value(type, key)
+              if instance = lookup_without_default(key)
+                instance.value_serialized = property_serialized?(key)
+                value = instance.value
+              else
+                value = default(key)
+              end
+
+              PropertySets::Casting.read(type, value)
+            end
+          else
+            def lookup_value(type, key)
+              if instance = lookup_without_default(key)
+                instance.value_serialized = property_serialized?(key)
+                value = instance.value
+              else
+                value = proxy_association.klass.default(key)
+              end
+
+              PropertySets::Casting.read(type, value)
+            end
           end
 
           # The finder method which returns the property if present, otherwise a new instance with defaults
