@@ -41,5 +41,10 @@ module PropertySets
       end
     end
 
+    def self.deserialize(value)
+      return nil if value.nil? || value == "null"
+      JSON.parse(value)
+    end
+
   end
 end

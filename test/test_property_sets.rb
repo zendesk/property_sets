@@ -325,6 +325,10 @@ class TestPropertySets < ActiveSupport::TestCase
           assert_equal({'a' => 1, 'b' => 2},  @account.typed_data.serialized_prop)
         end
 
+        should "retrieve default values from JSON" do
+          assert_equal([],  @account.typed_data.serialized_prop_with_default)
+        end
+
         should "not overflow the column" do
           @account.typed_data.serialized_prop = (1..100_000).to_a
           assert !@account.typed_data.lookup(:serialized_prop).valid?

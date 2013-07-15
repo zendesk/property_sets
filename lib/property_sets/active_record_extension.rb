@@ -95,25 +95,35 @@ module PropertySets
 
           if ActiveRecord::VERSION::STRING < "3.2.0"
             def lookup_value(type, key)
+              serialized = property_serialized?(key)
+
               if instance = lookup_without_default(key)
-                instance.value_serialized = property_serialized?(key)
-                value = instance.value
+                instance.value_serialized = serialized
+                PropertySets::Casting.read(type, instance.value)
               else
                 value = default(key)
+                if serialized
+                  PropertySets::Casting.deserialize(value)
+                else
+                  PropertySets::Casting.read(type, value)
+                end
               end
-
-              PropertySets::Casting.read(type, value)
             end
           else
             def lookup_value(type, key)
+              serialized = property_serialized?(key)
+
               if instance = lookup_without_default(key)
-                instance.value_serialized = property_serialized?(key)
-                value = instance.value
+                instance.value_serialized = serialized
+                PropertySets::Casting.read(type, instance.value)
               else
                 value = proxy_association.klass.default(key)
+                if serialized
+                  PropertySets::Casting.deserialize(value)
+                else
+                  PropertySets::Casting.read(type, value)
+                end
               end
-
-              PropertySets::Casting.read(type, value)
             end
           end
 

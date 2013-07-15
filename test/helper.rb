@@ -58,5 +58,6 @@ class Account < ActiveRecord::Base
     property :float_prop, :type => :float
     property :int_prop, :type => :integer
     property :serialized_prop, :type => :serialized
+    property :serialized_prop_with_default, :type => :serialized, :default => "[]"
   end
 end
