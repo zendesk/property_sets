@@ -306,6 +306,7 @@ class TestPropertySets < ActiveSupport::TestCase
         should "be writable and readable" do
           ts = Time.at(Time.now.to_i)
           @account.typed_data.datetime_prop = ts
+
           assert_equal ts,  @account.typed_data.datetime_prop
           @account.save!
           assert_equal ts,  @account.typed_data.datetime_prop
@@ -327,6 +328,10 @@ class TestPropertySets < ActiveSupport::TestCase
           @account.save!
           @account.reload
           assert_equal({'a' => 1, 'b' => 2},  @account.typed_data.serialized_prop)
+        end
+
+        should "retrieve default values from JSON" do
+          assert_equal([],  @account.typed_data.serialized_prop_with_default)
         end
 
         should "not overflow the column" do

@@ -65,5 +65,6 @@ class Account < ActiveRecord::Base
     property :int_prop, :type => :integer
     property :serialized_prop, :type => :serialized
     property :default_prop, :type => :integer, :default => ActsLikeAnInteger.new
+    property :serialized_prop_with_default, :type => :serialized, :default => "[]"
   end
 end
