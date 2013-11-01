@@ -87,12 +87,12 @@ class TestPropertySets < ActiveSupport::TestCase
 
       [ 'hello', 'hel_lo', 'hell0' ].each do |valid|
         s.name = valid
-        assert s.valid?
+        assert s.valid?, "#{valid} is invalid: #{s.errors.inspect}"
       end
 
       [ '_hello', :hello ].each do |invalid|
         s.name = invalid
-        assert !s.valid?
+        assert !s.valid?, "#{invalid} is valid"
       end
     end
 

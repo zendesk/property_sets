@@ -7,6 +7,14 @@ require 'active_record'
 require 'active_record/fixtures'
 require 'shoulda'
 
+if ActiveRecord::VERSION::MAJOR > 2
+  if ActiveRecord::VERSION::MINOR > 1
+    ActiveRecord::Base.mass_assignment_sanitizer = :strict
+  end
+
+  ActiveRecord::Base.attr_accessible
+end
+
 require File.expand_path "../database", __FILE__
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
@@ -37,6 +45,8 @@ class ActsLikeAnInteger
 end
 
 class Account < ActiveRecord::Base
+  attr_accessible :name
+
   property_set :settings do
     property :foo
     property :bar
@@ -49,7 +59,9 @@ class Account < ActiveRecord::Base
     property :foo
     property :bar
   end
+
   accepts_nested_attributes_for :texts
+  attr_accessible :texts_attributes
 
   property_set :validations do
     property :validated

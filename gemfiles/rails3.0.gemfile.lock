@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/primdahl/Git/property_sets
+  remote: /Users/stevendavidovitz/src/property_sets
   specs:
     property_sets (2.0.1)
       activerecord (>= 2.3.14, < 3.3)
@@ -34,37 +34,28 @@ GEM
       activerecord-jdbc-adapter (~> 1.2.2)
       jdbc-mysql (~> 5.1.0)
     activesupport (3.0.15)
-    appraisal (0.5.1)
+    appraisal (0.5.2)
       bundler
       rake
     arel (2.0.10)
-    bourne (1.1.2)
-      mocha (= 0.10.5)
     builder (2.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     i18n (0.5.0)
     jdbc-mysql (5.1.13)
-    json (1.8.0)
-    json (1.8.0-java)
+    json (1.8.1)
     metaclass (0.0.1)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
     mysql (2.8.1)
-    rack (1.2.5)
+    rack (1.2.8)
     rack-mount (0.6.14)
       rack (>= 1.0.0)
     rack-test (0.5.7)
       rack (>= 1.0)
-    rake (10.0.3)
-    shoulda (3.3.2)
-      shoulda-context (~> 1.0.1)
-      shoulda-matchers (~> 1.4.1)
-    shoulda-context (1.0.1)
-    shoulda-matchers (1.4.2)
-      activesupport (>= 3.0.0)
-      bourne (~> 1.1.2)
-    test-unit (2.5.3)
+    rake (10.1.0)
+    shoulda (2.11.3)
+    test-unit (2.5.5)
     tzinfo (0.3.35)
 
 PLATFORMS
@@ -82,5 +73,5 @@ DEPENDENCIES
   mysql (~> 2.8.1)
   property_sets!
   rake
-  shoulda
+  shoulda (~> 2.11)
   test-unit (>= 2.5.2)

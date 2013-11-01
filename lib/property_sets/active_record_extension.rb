@@ -20,7 +20,6 @@ module PropertySets
 
         hash_opts = {:class_name => property_class.name, :autosave => true, :dependent => :destroy}.merge(options)
         has_many association, hash_opts do
-
           # Accepts a name value pair hash { :name => 'value', :pairs => true } and builds a property for each key
           def set(property_pairs, with_protection = false)
             property_pairs.keys.each do |name|
