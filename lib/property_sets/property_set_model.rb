@@ -84,9 +84,13 @@ module PropertySets
 
     module ClassMethods
       def self.extended(base)
-        base.validate      :validate_format_of_name
-        base.validate      :validate_length_of_serialized_data
-        base.before_create :coerce_value
+        base.validate        :validate_format_of_name
+        base.validate        :validate_length_of_serialized_data
+        base.before_create   :coerce_value
+
+        if ActiveRecord::VERSION::MAJOR < 4
+          base.attr_accessible :name, :value
+        end
       end
 
       def property(key, options = nil)
@@ -121,6 +125,10 @@ module PropertySets
         belongs_to              owner_class_sym
         validates_presence_of   owner_class_sym
         validates_uniqueness_of :name, :scope => owner_class_key_sym
+
+        if ActiveRecord::VERSION::MAJOR < 4
+          attr_accessible         owner_class_key_sym, owner_class_sym
+        end
       end
 
       def owner_assoc=(association)

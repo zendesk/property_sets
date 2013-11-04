@@ -1,11 +1,28 @@
 require 'rubygems'
 require 'bundler'
 Bundler.setup
-require 'active_support'
+
 require 'test/unit'
+
+begin
+  require 'mocha/setup'
+rescue LoadError
+  require 'mocha'
+end
+
+require 'active_support'
+require 'active_support/core_ext'
 require 'active_record'
 require 'active_record/fixtures'
 require 'shoulda'
+
+if ActiveRecord::VERSION::MAJOR > 2 && ActiveRecord::VERSION::MAJOR < 4
+  if ActiveRecord::VERSION::MINOR > 1
+    ActiveRecord::Base.mass_assignment_sanitizer = :strict
+  end
+
+  ActiveRecord::Base.attr_accessible
+end
 
 require File.expand_path "../database", __FILE__
 
@@ -37,6 +54,11 @@ class ActsLikeAnInteger
 end
 
 class Account < ActiveRecord::Base
+  if ActiveRecord::VERSION::MAJOR < 4
+    attr_accessible :name
+    attr_accessible :texts_attributes
+  end
+
   property_set :settings do
     property :foo
     property :bar
@@ -49,6 +71,7 @@ class Account < ActiveRecord::Base
     property :foo
     property :bar
   end
+
   accepts_nested_attributes_for :texts
 
   property_set :validations do
