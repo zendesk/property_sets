@@ -11,8 +11,8 @@ gem "iconv", :platforms=>:ruby_20
 gem "activerecord", "~> 2.3.14"
 gem "activesupport", "~> 2.3.14"
 gem "shoulda", "~> 2.11"
-gem "mysql2", "~> 0.2.0"
-gem "activerecord-mysql2-adapter"
+gem "mysql2", "~> 0.2.0", :platforms=>:ruby
+gem "activerecord-mysql2-adapter", :platforms=>:ruby
 gem "mocha", "~> 0.12.0"
 gem "test-unit", "< 2.5.5"
 

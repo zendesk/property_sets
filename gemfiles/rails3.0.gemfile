@@ -13,7 +13,7 @@ gem "iconv", :platforms=>:ruby_20
 gem "activerecord", "~> 3.0.15"
 gem "activesupport", "~> 3.0.15"
 gem "shoulda", "~> 2.11"
-gem "mysql2", "~> 0.2.0"
-gem "activerecord-mysql2-adapter"
+gem "mysql2", "~> 0.2.0", :platforms=>:ruby
+gem "activerecord-mysql2-adapter", :platforms=>:ruby
 
 gemspec :path=>"../"

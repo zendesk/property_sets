@@ -1,11 +1,10 @@
 # setup database
 require 'active_record'
-require 'mysql2'
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 ActiveRecord::Base.logger.level = Logger::ERROR
 
 config = {
-  :adapter  => 'mysql2',
+  :adapter  => RUBY_PLATFORM == "java" ? 'mysql' : 'mysql2',
   :database => 'property_sets_test',
   :username => 'root',
   :password => nil,
