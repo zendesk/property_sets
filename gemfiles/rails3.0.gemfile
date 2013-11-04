@@ -8,7 +8,7 @@ gem "bundler"
 gem "mocha"
 gem "appraisal"
 gem "test-unit", ">= 2.5.2"
-gem "actionpack", ">= 2.3.14", "< 4.1"
+gem "actionpack", ">= 2.3.14", "< 3.3"
 gem "iconv", :platforms=>:ruby_20
 gem "activerecord", "~> 3.0.15"
 gem "activesupport", "~> 3.0.15"
