@@ -22,8 +22,6 @@ module PropertySets
         has_many association, hash_opts do
           # Accepts an array of names as strings or symbols and returns a hash.
           def get(keys = [])
-            association_class = proxy_association.klass
-
             property_keys = if keys.empty?
               association_class.keys
             else
@@ -162,17 +160,20 @@ module PropertySets
           # This finder method returns the property if present, otherwise a new instance with the default value.
           # It does not have the side effect of adding a new setting object.
           def lookup_or_default(arg)
-            instance   = lookup_without_default(arg)
-            instance ||= begin
-              if ActiveRecord::VERSION::STRING >= "3.1.0"
-                association_class = proxy_association.klass
-              else
-                association_class = @reflection.klass
-              end
-              association_class.new(:value => raw_default(arg))
-            end
+            instance = lookup_without_default(arg)
+            instance ||= association_class.new(:value => raw_default(arg))
             instance.value_serialized = property_serialized?(arg)
             instance
+          end
+
+          def association_class
+            @association_class ||= begin
+              if ActiveRecord::VERSION::STRING >= "3.1.0"
+                proxy_association.klass
+              else
+                @reflection.klass
+              end
+            end
           end
         end
       end
