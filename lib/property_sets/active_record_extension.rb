@@ -20,6 +20,23 @@ module PropertySets
 
         hash_opts = {:class_name => property_class.name, :autosave => true, :dependent => :destroy}.merge(options)
         has_many association, hash_opts do
+          # Accepts an array of names as strings or symbols and returns a hash.
+          def get(keys = [])
+            association_class = proxy_association.klass
+
+            property_keys = if keys.empty?
+              association_class.keys
+            else
+              association_class.keys & keys.map(&:to_s)
+            end
+
+            property_pairs = property_keys.map do |name|
+              value = lookup_value(association_class.type(name), name)
+              [name.to_s, value]
+            end.flatten
+            HashWithIndifferentAccess[*property_pairs]
+          end
+
           # Accepts a name value pair hash { :name => 'value', :pairs => true } and builds a property for each key
           def set(property_pairs, with_protection = false)
             property_pairs.keys.each do |name|

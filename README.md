@@ -34,6 +34,9 @@ account.settings.featured?
 
 # Short hand for setting one or more values
 account.settings.set(:version => "v1.2", :activated => true)
+
+# Short hand for getting a hash with pairs for each key argument
+account.settings.get([:version, :activated])
 ```
 
 ### Validations
