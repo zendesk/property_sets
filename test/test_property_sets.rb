@@ -145,6 +145,39 @@ class TestPropertySets < ActiveSupport::TestCase
       end
     end
 
+    context "#get" do
+      setup { @account.settings.set(:baz => "456") }
+
+      should "fetch property pairs with string arguments" do
+        assert @account.settings.lookup_without_default(:baz)
+        assert_equal({"baz" => "456"}, @account.settings.get(["baz"]))
+      end
+
+      should "fetch property pairs with symbol arguments" do
+        assert_equal({"baz" => "456"}, @account.settings.get([:baz]))
+      end
+
+      should "return all property pairs if no arguments are provided" do
+        assert_same_elements(
+          ["foo", "bar", "baz", "hep", "pro"],
+          @account.settings.get.keys
+        )
+      end
+
+      should "ignore non-existent keys" do
+        assert_equal({"baz" => "456"}, @account.settings.get([:baz, :red]))
+      end
+
+      should "include default property pairs" do
+        assert_nil @account.settings.lookup_without_default(:hep)
+        assert_equal({"hep" => "skep"}, @account.settings.get(["hep"]))
+      end
+
+      should "return a hash with values that can be fetched by string or symbol" do
+        assert_equal "456", @account.settings.get(["baz"]).fetch(:baz)
+      end
+    end
+
     context "#set" do
       should "support writing multiple values to the association" do
         assert !@account.settings.foo?
