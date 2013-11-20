@@ -176,6 +176,12 @@ class TestPropertySets < ActiveSupport::TestCase
       should "return a hash with values that can be fetched by string or symbol" do
         assert_equal "456", @account.settings.get(["baz"]).fetch(:baz)
       end
+
+      should "return serialized values" do
+        @account.typed_data.set(:serialized_prop => [1, 2])
+        assert @account.typed_data.lookup_without_default(:serialized_prop)
+        assert_equal({"serialized_prop" => [1, 2]}, @account.typed_data.get([:serialized_prop]))
+      end
     end
 
     context "#set" do
