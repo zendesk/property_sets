@@ -30,8 +30,8 @@ module PropertySets
 
             property_pairs = property_keys.map do |name|
               value = lookup_value(association_class.type(name), name)
-              [name.to_s, value]
-            end.flatten
+              [name, value]
+            end.flatten(1)
             HashWithIndifferentAccess[*property_pairs]
           end
 
