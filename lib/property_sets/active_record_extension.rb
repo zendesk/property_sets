@@ -15,7 +15,10 @@ module PropertySets
         raise "Invalid association name, letters only" unless association.to_s =~ /[a-z]+/
         self.property_set_index << association
 
-        property_class = PropertySets.ensure_property_set_class(association, self)
+        property_class = PropertySets.ensure_property_set_class(
+          association,
+          options.delete(:owner_class_name) || self.name
+        )
         property_class.instance_eval(&block)
 
         hash_opts = {:class_name => property_class.name, :autosave => true, :dependent => :destroy}.merge(options)
