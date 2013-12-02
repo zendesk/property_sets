@@ -120,8 +120,8 @@ module PropertySets
         @properties[key] && !!@properties[key][:protected]
       end
 
-      def owner_class=(owner_class)
-        @owner_class_sym = owner_class.name.underscore.to_sym
+      def owner_class=(owner_class_name)
+        @owner_class_sym = owner_class_name.underscore.to_sym
         belongs_to              owner_class_sym
         validates_presence_of   owner_class_sym
         validates_uniqueness_of :name, :scope => owner_class_key_sym

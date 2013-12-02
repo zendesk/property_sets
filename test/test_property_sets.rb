@@ -20,6 +20,14 @@ class TestPropertySets < ActiveSupport::TestCase
       end
     end
 
+    should "allow the owner class to be customized" do
+      (Flux = Class.new(ActiveRecord::Base)).property_set(:blot, {
+        :owner_class_name => 'Foobar'
+      }) { property :test }
+
+      assert defined?(FoobarBlot)
+    end
+
     should "pass-through any options from the second parameter" do
       Account.expects(:has_many).with { |association, h|
         association == :foo && h[:conditions] == "bar"
