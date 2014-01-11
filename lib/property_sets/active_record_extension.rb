@@ -110,36 +110,18 @@ module PropertySets
             detect { |property| property.name.to_sym == arg.to_sym }
           end
 
-          if ActiveRecord::VERSION::STRING < "3.2.0"
-            def lookup_value(type, key)
-              serialized = property_serialized?(key)
+          def lookup_value(type, key)
+            serialized = property_serialized?(key)
 
-              if instance = lookup_without_default(key)
-                instance.value_serialized = serialized
-                PropertySets::Casting.read(type, instance.value)
+            if instance = lookup_without_default(key)
+              instance.value_serialized = serialized
+              PropertySets::Casting.read(type, instance.value)
+            else
+              value = default(key)
+              if serialized
+                PropertySets::Casting.deserialize(value)
               else
-                value = default(key)
-                if serialized
-                  PropertySets::Casting.deserialize(value)
-                else
-                  PropertySets::Casting.read(type, value)
-                end
-              end
-            end
-          else
-            def lookup_value(type, key)
-              serialized = property_serialized?(key)
-
-              if instance = lookup_without_default(key)
-                instance.value_serialized = serialized
-                PropertySets::Casting.read(type, instance.value)
-              else
-                value = proxy_association.klass.default(key)
-                if serialized
-                  PropertySets::Casting.deserialize(value)
-                else
-                  PropertySets::Casting.read(type, value)
-                end
+                PropertySets::Casting.read(type, value)
               end
             end
           end
@@ -150,11 +132,7 @@ module PropertySets
             instance ||= build_default(arg)
             instance.value_serialized = property_serialized?(arg)
 
-            if ActiveRecord::VERSION::STRING >= "3.1.0"
-              owner = proxy_association.owner
-            else
-              owner = @owner
-            end
+            owner = proxy_association.owner
 
             instance.send("#{owner_class_sym}=", owner) if owner.new_record?
             instance
