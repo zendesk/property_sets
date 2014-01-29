@@ -5,7 +5,7 @@ Bundler.setup
 require 'test/unit'
 
 begin
-  require 'mocha/setup'
+  require 'mocha/setup' # Rails 2
 rescue LoadError
   require 'mocha'
 end
@@ -23,6 +23,8 @@ if ActiveRecord::VERSION::MAJOR > 2 && ActiveRecord::VERSION::MAJOR < 4
 
   ActiveRecord::Base.attr_accessible
 end
+
+I18n.enforce_available_locales = false if ActiveRecord::VERSION::MAJOR > 2
 
 require File.expand_path "../database", __FILE__
 
