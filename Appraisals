@@ -8,14 +8,6 @@ appraise "rails2.3" do
   gem "test-unit", "< 2.5.5"
 end
 
-appraise "rails3.0" do
-  gem "activerecord", "~> 3.0.15"
-  gem "activesupport", "~> 3.0.15"
-  gem "shoulda", "~> 2.11"
-  gem "mysql2", "~> 0.2.0", :platforms => :ruby
-  gem "activerecord-mysql2-adapter", :platforms => :ruby
-end
-
 appraise "rails3.2" do
   gem "activerecord", "~> 3.2.6"
   gem "activesupport", "~> 3.2.6"
