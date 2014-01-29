@@ -30,6 +30,7 @@ require File.expand_path "../database", __FILE__
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'property_sets'
+require 'property_sets/delegator'
 
 class ActiveSupport::TestCase
   include ActiveRecord::TestFixtures
@@ -56,6 +57,9 @@ class ActsLikeAnInteger
 end
 
 class Account < ActiveRecord::Base
+  include PropertySets::Delegator
+  delegate_to_property_set :settings, :old => :hep
+
   if ActiveRecord::VERSION::MAJOR < 4
     attr_accessible :name
     attr_accessible :texts_attributes
