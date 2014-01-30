@@ -16,4 +16,5 @@ end
 appraise "rails40" do
  gem "activerecord", "~> 4.0.2"
  gem "activesupport", "~> 4.0.2"
+ gem "protected_attributes"
 end

@@ -15,4 +15,6 @@ gem "actionpack", ">= 2.3.14", "<= 4.0.2"
 gem "iconv", :platforms=>:ruby_20
 gem "activerecord", "~> 4.0.2"
 gem "activesupport", "~> 4.0.2"
+gem "protected_attributes"
 
+gemspec :path=>"../"

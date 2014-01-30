@@ -20,7 +20,9 @@ if ActiveRecord::VERSION::MAJOR > 2 && ActiveRecord::VERSION::MAJOR <= 4
   if ActiveRecord::VERSION::MINOR > 1
     ActiveRecord::Base.mass_assignment_sanitizer = :strict
   end
-
+  if ActiveRecord::VERSION::MAJOR == 4
+    require 'protected_attributes'
+  end
   ActiveRecord::Base.attr_accessible
 end
 
