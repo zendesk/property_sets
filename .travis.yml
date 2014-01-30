@@ -14,5 +14,5 @@ matrix:
       gemfile: gemfiles/rails2.3.gemfile
     - rvm: 2.1.0
       gemfile: gemfiles/rails2.3.gemfile
-    - rvm: ree
-      gemfile: gemfiles/rails3.2.gemfile
+    - rvm: 2.1.0
+      gemfile: gemfiles/rails40.gemfile
