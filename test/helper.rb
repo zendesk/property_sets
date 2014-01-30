@@ -16,7 +16,7 @@ require 'active_record'
 require 'active_record/fixtures'
 require 'shoulda'
 
-if ActiveRecord::VERSION::MAJOR > 2 && ActiveRecord::VERSION::MAJOR < 4
+if ActiveRecord::VERSION::MAJOR > 2 && ActiveRecord::VERSION::MAJOR <= 4
   if ActiveRecord::VERSION::MINOR > 1
     ActiveRecord::Base.mass_assignment_sanitizer = :strict
   end
@@ -60,7 +60,7 @@ class Account < ActiveRecord::Base
   include PropertySets::Delegator
   delegate_to_property_set :settings, :old => :hep
 
-  if ActiveRecord::VERSION::MAJOR < 4
+  if ActiveRecord::VERSION::MAJOR <= 4
     attr_accessible :name
     attr_accessible :texts_attributes
   end
