@@ -62,10 +62,8 @@ class Account < ActiveRecord::Base
   include PropertySets::Delegator
   delegate_to_property_set :settings, :old => :hep
 
-  if ActiveRecord::VERSION::MAJOR <= 4
-    attr_accessible :name
-    attr_accessible :texts_attributes
-  end
+  attr_accessible :name
+  attr_accessible :texts_attributes
 
   property_set :settings do
     property :foo
