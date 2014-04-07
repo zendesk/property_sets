@@ -16,7 +16,7 @@ require 'active_record'
 require 'active_record/fixtures'
 require 'shoulda'
 
-if ActiveRecord::VERSION::MAJOR > 2 && ActiveRecord::VERSION::MAJOR <= 4
+if ActiveRecord::VERSION::MAJOR > 2
   if ActiveRecord::VERSION::MINOR > 1
     ActiveRecord::Base.mass_assignment_sanitizer = :strict
   end
