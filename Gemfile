@@ -6,11 +6,12 @@ gem 'mysql2', :platforms => :ruby
 gem 'bump'
 gem 'rake'
 gem 'bundler'
-gem 'shoulda'
 gem 'mocha'
 gem 'appraisal', '< 1.0.0'
-gem 'test-unit', '>= 2.5.2'
 gem 'actionpack'
+gem "activerecord", "~> 3.2.18"
+gem 'minitest', '~> 4.7.5'
+gem 'minitest-rg'
 gem 'iconv', :platforms => [:ruby_20, :ruby_21]
 
 gemspec

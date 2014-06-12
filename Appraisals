@@ -1,5 +1,5 @@
 appraise "rails3.2" do
-  gem "activerecord", "~> 3.2.6"
+  gem "activerecord", "~> 3.2.18"
 end
 
 appraise "rails4.0" do
