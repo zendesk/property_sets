@@ -8,9 +8,9 @@ gem 'rake'
 gem 'bundler'
 gem 'shoulda'
 gem 'mocha'
-gem 'appraisal'
+gem 'appraisal', '< 1.0.0'
 gem 'test-unit', '>= 2.5.2'
-gem 'actionpack', '>= 2.3.14', '< 4.1'
+gem 'actionpack'
 gem 'iconv', :platforms => [:ruby_20, :ruby_21]
 
 gemspec
