@@ -8,7 +8,7 @@ gem "rake"
 gem "bundler"
 gem "appraisal"
 gem "actionpack", ">= 2.3.14", "< 4.1"
-gem "iconv", :platforms=>:ruby_20
+gem "iconv", :platforms=>[:ruby_20, :ruby_21]
 gem "activerecord", "~> 2.3.14"
 gem "activesupport", "~> 2.3.14"
 gem "shoulda", "~> 2.11"
