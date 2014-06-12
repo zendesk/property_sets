@@ -16,15 +16,14 @@ require 'active_record'
 require 'active_record/fixtures'
 require 'shoulda'
 
-if ActiveRecord::VERSION::MAJOR > 2
-  if ActiveRecord::VERSION::MINOR > 1
-    ActiveRecord::Base.mass_assignment_sanitizer = :strict
-  end
-  if ActiveRecord::VERSION::MAJOR == 4
-    require 'protected_attributes'
-  end
-  ActiveRecord::Base.attr_accessible
+if ActiveRecord::VERSION::MAJOR < 4
+  ActiveRecord::Base.mass_assignment_sanitizer = :strict
 end
+
+if ActiveRecord::VERSION::MAJOR == 4
+  require 'protected_attributes'
+end
+ActiveRecord::Base.attr_accessible
 
 I18n.enforce_available_locales = false if ActiveRecord::VERSION::MAJOR > 2
 
