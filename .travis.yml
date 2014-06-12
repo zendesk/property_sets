@@ -1,5 +1,4 @@
 rvm:
-  - ree
   - 1.9.3
   - 2.0.0
   - 2.1.1
@@ -8,7 +7,3 @@ script: "bundle exec rake test"
 gemfile:
   - gemfiles/rails3.2.gemfile
   - gemfiles/rails4.0.gemfile
-matrix:
-  exclude:
-    - rvm: ree
-      gemfile: gemfiles/rails4.0.gemfile
