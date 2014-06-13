@@ -4,7 +4,6 @@ require 'minitest/rg'
 require 'mocha/setup'
 
 require 'active_support'
-require 'active_support/core_ext'
 require 'active_record'
 require 'active_record/fixtures'
 
