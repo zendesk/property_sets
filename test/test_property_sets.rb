@@ -284,9 +284,16 @@ describe PropertySets do
     end
 
     describe "without data" do
-      it "create a new record, returning the default" do
+      it "create a new record, returning nil without default" do
+        refute @account.texts.detect { |p| p.name == "foo" }
         assert_equal nil, @account.texts.lookup(:foo).value
         assert @account.texts.detect { |p| p.name == "foo" }
+      end
+
+      it "create a new record, returning nil with default" do
+        refute @account.texts.detect { |p| p.name == "hep" }
+        assert_equal nil, @account.texts.lookup(:hep).value
+        assert @account.texts.detect { |p| p.name == "hep" }
       end
     end
   end
