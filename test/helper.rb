@@ -1,20 +1,12 @@
-require 'rubygems'
-require 'bundler'
-Bundler.setup
-
-require 'test/unit'
-
-begin
-  require 'mocha/setup' # Rails 2
-rescue LoadError
-  require 'mocha'
-end
+require 'bundler/setup'
+require 'minitest/autorun'
+require 'minitest/rg'
+require 'mocha/setup'
 
 require 'active_support'
 require 'active_support/core_ext'
 require 'active_record'
 require 'active_record/fixtures'
-require 'shoulda'
 
 if ActiveRecord::VERSION::MAJOR < 4
   ActiveRecord::Base.mass_assignment_sanitizer = :strict
@@ -25,15 +17,25 @@ if ActiveRecord::VERSION::MAJOR == 4
 end
 ActiveRecord::Base.attr_accessible
 
-I18n.enforce_available_locales = false if ActiveRecord::VERSION::MAJOR > 2
+I18n.enforce_available_locales = false
 
 require File.expand_path "../database", __FILE__
 
-$LOAD_PATH.unshift(File.dirname(__FILE__))
+#$LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'property_sets'
 require 'property_sets/delegator'
 
-class ActiveSupport::TestCase
+MiniTest::Unit::TestCase.class_eval do
+  if ActiveRecord::VERSION::MAJOR == 3
+    def self.setup(method)
+      include Module.new { define_method(:setup) { super(); send(method) } }
+    end
+
+    def self.teardown(method)
+      include Module.new { define_method(:teardown) { send(method); super() } }
+    end
+  end
+
   include ActiveRecord::TestFixtures
 
   def create_fixtures(*table_names)
