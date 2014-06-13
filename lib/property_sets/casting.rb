@@ -2,11 +2,13 @@ require 'json'
 
 module PropertySets
   module Casting
+    FALSE = [ "false", "0", "", "off", "n" ]
 
-    def self.read(type, value)
-      return nil if value.nil?
+    class << self
+      def read(type, value)
+        return nil if nilly?(type, value)
 
-      case type
+        case type
         when :string
           value
         when :datetime
@@ -16,17 +18,17 @@ module PropertySets
         when :integer
           value.to_i
         when :boolean
-          ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
+          !false?(value)
         when :serialized
           # deserialization happens in the model
           value
+        end
       end
-    end
 
-    def self.write(type, value)
-      return nil if value.nil?
+      def write(type, value)
+        return nil if nilly?(type, value)
 
-      case type
+        case type
         when :datetime
           if value.is_a?(String)
             value
@@ -36,15 +38,27 @@ module PropertySets
         when :serialized
           # write the object directly.
           value
+        when :boolean
+          false?(value) ? "0" : "1"
         else
           value.to_s
+        end
+      end
+
+      def deserialize(value)
+        return nil if value.nil? || value == "null"
+        JSON.parse(value)
+      end
+
+      private
+
+      def nilly?(type, value)
+        value.nil? && type != :boolean
+      end
+
+      def false?(value)
+        FALSE.include?(value.to_s.downcase)
       end
     end
-
-    def self.deserialize(value)
-      return nil if value.nil? || value == "null"
-      JSON.parse(value)
-    end
-
   end
 end

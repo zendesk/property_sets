@@ -71,6 +71,9 @@ class Account < ActiveRecord::Base
     property :baz
     property :hep, :default   => 'skep'
     property :pro, :protected => true
+    property :bool_true, :type => :boolean, :default => true
+    property :bool_false, :type => :boolean, :default => false
+    property :bool_nil, :type => :boolean
   end
 
   property_set :texts do
