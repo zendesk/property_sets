@@ -104,15 +104,15 @@ module PropertySets
       end
 
       def raw_default(key)
-        @properties[key] && @properties[key].key?(:default) ? @properties[key][:default] : nil
+        @properties[key].try(:[], :default)
       end
 
       def type(key)
-        @properties[key] && @properties[key].key?(:type) ? @properties[key][:type] : :string
+        @properties[key].try(:[], :type) || :string
       end
 
       def protected?(key)
-        @properties[key] && !!@properties[key][:protected]
+        @properties[key].try(:[], :protected) || false
       end
 
       def owner_class=(owner_class_name)
