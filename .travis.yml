@@ -7,5 +7,5 @@ rvm:
   - jruby
 script: "bundle exec rake test"
 gemfile:
-  - gemfiles/rails3.2.gemfile
+  - Gemfile
   - gemfiles/rails4.0.gemfile
