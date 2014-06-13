@@ -9,13 +9,15 @@ describe "property set view extensions" do
     }
   end
 
+  let(:builder_args) { ActiveRecord::VERSION::MAJOR == 3 ? ['proc'] : [] }
+
   before do
     @property_set = :settings
     @property     = :active
     @object_name  = 'object_name'
     @object       = stub
     @template     = stub
-    @builder      = ActionView::Helpers::FormBuilder.new(@object_name, @object, @template, {}, 'proc')
+    @builder      = ActionView::Helpers::FormBuilder.new(@object_name, @object, @template, {}, *builder_args)
     @proxy        = @builder.property_set(@property_set)
   end
 
@@ -25,7 +27,7 @@ describe "property set view extensions" do
   end
 
   it "fetch the target object when not available" do
-    @builder = ActionView::Helpers::FormBuilder.new(@object_name, nil, @template, {}, 'proc')
+    @builder = ActionView::Helpers::FormBuilder.new(@object_name, nil, @template, {}, *builder_args)
     @proxy   = @builder.property_set(@property_set)
 
     @object.stubs(@property_set).returns(stub(@property => 'value'))
