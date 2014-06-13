@@ -66,6 +66,9 @@ describe PropertySets do
     assert_equal nil, @account.settings.bar
     assert_equal true, @account.settings.hep?
     assert_equal 'skep', @account.settings.hep
+    assert_equal false, @account.settings.bool_nil
+    assert_equal false, @account.settings.bool_false
+    assert_equal true, @account.settings.bool_true
   end
 
   it "be flexible when fetching property data" do
@@ -165,7 +168,7 @@ describe PropertySets do
 
     it "return all property pairs if no arguments are provided" do
       assert_equal(
-        ["foo", "bar", "baz", "hep", "pro"].sort,
+        ["bar", "baz", "bool_false", "bool_nil", "bool_true", "foo", "hep", "pro"].sort,
         @account.settings.get.keys.sort
       )
     end
@@ -276,24 +279,34 @@ describe PropertySets do
 
   describe "lookup" do
     describe "with data" do
-      before { @account.texts.foo = "1" }
-
       it "return the data" do
+        @account.texts.foo = "1"
         assert_equal "1", @account.texts.lookup(:foo).value
+      end
+
+      it "returns false" do
+        @account.settings.bool_nil = false
+        assert_equal "0", @account.settings.lookup(:bool_nil).value
       end
     end
 
     describe "without data" do
-      it "create a new record, returning nil without default" do
-        refute @account.texts.detect { |p| p.name == "foo" }
+      it "returns nil without default" do
         assert_equal nil, @account.texts.lookup(:foo).value
+      end
+
+      it "create a new record" do
+        refute @account.texts.detect { |p| p.name == "foo" }
+        @account.texts.lookup(:foo).value
         assert @account.texts.detect { |p| p.name == "foo" }
       end
 
-      it "create a new record, returning nil with default" do
-        refute @account.texts.detect { |p| p.name == "hep" }
+      it "returns nil with default" do
         assert_equal nil, @account.texts.lookup(:hep).value
-        assert @account.texts.detect { |p| p.name == "hep" }
+      end
+
+      it "returns nil with default for booleans" do
+        assert_equal nil, @account.texts.lookup(:bool_false).value
       end
     end
   end
