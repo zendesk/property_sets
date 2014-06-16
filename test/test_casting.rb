@@ -43,7 +43,7 @@ describe PropertySets::Casting do
       assert_equal "1", PropertySets::Casting.write(:boolean, "dfsdff")
 
       assert_equal "0", PropertySets::Casting.write(:boolean, "")
-      assert_equal "0", PropertySets::Casting.write(:boolean, nil)
+      assert_equal nil, PropertySets::Casting.write(:boolean, nil)
       assert_equal "0", PropertySets::Casting.write(:boolean, false)
       assert_equal "0", PropertySets::Casting.write(:boolean, 0)
       assert_equal "0", PropertySets::Casting.write(:boolean, "off")

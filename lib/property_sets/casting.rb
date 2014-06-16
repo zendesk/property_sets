@@ -6,7 +6,7 @@ module PropertySets
 
     class << self
       def read(type, value)
-        return nil if nilly?(type, value)
+        return nil if value.nil?
 
         case type
         when :string
@@ -26,7 +26,7 @@ module PropertySets
       end
 
       def write(type, value)
-        return nil if nilly?(type, value)
+        return nil if value.nil?
 
         case type
         when :datetime
@@ -51,10 +51,6 @@ module PropertySets
       end
 
       private
-
-      def nilly?(type, value)
-        value.nil? && type != :boolean
-      end
 
       def false?(value)
         FALSE.include?(value.to_s.downcase)
