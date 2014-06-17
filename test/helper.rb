@@ -73,7 +73,8 @@ class Account < ActiveRecord::Base
     property :pro, :protected => true
     property :bool_true, :type => :boolean, :default => true
     property :bool_false, :type => :boolean, :default => false
-    property :bool_nil, :type => :boolean
+    property :bool_nil, :type => :boolean, :default => nil
+    property :bool_nil2, :type => :boolean
   end
 
   property_set :texts do

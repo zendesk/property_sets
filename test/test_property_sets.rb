@@ -66,7 +66,8 @@ describe PropertySets do
     assert_equal nil, @account.settings.bar
     assert_equal true, @account.settings.hep?
     assert_equal 'skep', @account.settings.hep
-    assert_equal false, @account.settings.bool_nil
+    assert_equal nil, @account.settings.bool_nil
+    assert_equal nil, @account.settings.bool_nil2
     assert_equal false, @account.settings.bool_false
     assert_equal true, @account.settings.bool_true
   end
@@ -168,7 +169,7 @@ describe PropertySets do
 
     it "return all property pairs if no arguments are provided" do
       assert_equal(
-        ["bar", "baz", "bool_false", "bool_nil", "bool_true", "foo", "hep", "pro"].sort,
+        ["bar", "baz", "bool_false", "bool_nil", "bool_nil2", "bool_true", "foo", "hep", "pro"].sort,
         @account.settings.get.keys.sort
       )
     end
