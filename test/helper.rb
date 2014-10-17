@@ -24,7 +24,7 @@ require File.expand_path "../database", __FILE__
 require 'property_sets'
 require 'property_sets/delegator'
 
-MiniTest::Unit::TestCase.class_eval do
+Minitest::Unit::TestCase.class_eval do
   if ActiveRecord::VERSION::MAJOR == 3
     def self.setup(method)
       include Module.new { define_method(:setup) { super(); send(method) } }
@@ -39,9 +39,9 @@ MiniTest::Unit::TestCase.class_eval do
 
   def create_fixtures(*table_names)
     if block_given?
-      Fixtures.create_fixtures(Test::Unit::TestCase.fixture_path, table_names) { yield }
+      Fixtures.create_fixtures(Minitest::Unit::TestCase.fixture_path, table_names) { yield }
     else
-      Fixtures.create_fixtures(Test::Unit::TestCase.fixture_path, table_names)
+      Fixtures.create_fixtures(Minitest::Unit::TestCase.fixture_path, table_names)
     end
   end
 
@@ -49,8 +49,8 @@ MiniTest::Unit::TestCase.class_eval do
   self.use_instantiated_fixtures  = false
 end
 
-ActiveSupport::TestCase.fixture_path = File.dirname(__FILE__) + "/fixtures/"
-$LOAD_PATH.unshift(ActiveSupport::TestCase.fixture_path)
+Minitest::Unit::TestCase.fixture_path = File.dirname(__FILE__) + "/fixtures/"
+$LOAD_PATH.unshift(Minitest::Unit::TestCase.fixture_path)
 
 class ActsLikeAnInteger
   def to_i
