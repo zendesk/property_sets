@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 gemspec :path=>"../"
 
-gem "activerecord", "~> 3.2.18"
-gem "minitest", "~> 4.7.5", group: :test
+gem "activerecord", "~> 3.2.19"
+gem "minitest", "~> 4.7.5"
 
 eval(File.read('gemfiles/common.rb'))

@@ -4,6 +4,7 @@ require 'minitest/rg'
 require 'mocha/setup'
 
 require 'active_support'
+require 'active_support/testing/setup_and_teardown'
 require 'active_record'
 require 'active_record/fixtures'
 
@@ -24,33 +25,34 @@ require File.expand_path "../database", __FILE__
 require 'property_sets'
 require 'property_sets/delegator'
 
-Minitest::Unit::TestCase.class_eval do
-  if ActiveRecord::VERSION::MAJOR == 3
-    def self.setup(method)
-      include Module.new { define_method(:setup) { super(); send(method) } }
-    end
-
-    def self.teardown(method)
-      include Module.new { define_method(:teardown) { send(method); super() } }
-    end
-  end
-
+class Minitest::Spec
+  include ActiveSupport::Testing::SetupAndTeardown
   include ActiveRecord::TestFixtures
 
-  def create_fixtures(*table_names)
-    if block_given?
-      Fixtures.create_fixtures(Minitest::Unit::TestCase.fixture_path, table_names) { yield }
-    else
-      Fixtures.create_fixtures(Minitest::Unit::TestCase.fixture_path, table_names)
-    end
+  case
+  when ActiveRecord::VERSION::MAJOR == 3
+    alias :method_name :__name__ if defined? :__name__
+  when ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR < 1
+    alias :method_name :__name__ if defined? :__name__
+  when ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR >= 1
+    alias :method_name :name if defined? :name
   end
 
-  self.use_transactional_fixtures = true
-  self.use_instantiated_fixtures  = false
+  self.fixture_path = File.dirname(__FILE__) + "/fixtures/"
+  $LOAD_PATH.unshift(self.fixture_path)
+
+    def create_fixtures(*table_names)
+      if block_given?
+        Fixtures.create_fixtures(self.fixture_path, table_names) { yield }
+      else
+        Fixtures.create_fixtures(self.fixture_path, table_names)
+      end
+    end
+
+    self.use_transactional_fixtures = true
+    self.use_instantiated_fixtures  = false
 end
 
-Minitest::Unit::TestCase.fixture_path = File.dirname(__FILE__) + "/fixtures/"
-$LOAD_PATH.unshift(Minitest::Unit::TestCase.fixture_path)
 
 class ActsLikeAnInteger
   def to_i

@@ -4,6 +4,5 @@ gemspec :path=>"../"
 
 gem "activerecord", "~> 4.0.6"
 gem "protected_attributes"
-gem "minitest", "~> 4.7.5", group: :test
 
 eval(File.read('gemfiles/common.rb'))
