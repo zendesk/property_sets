@@ -41,16 +41,8 @@ class Minitest::Spec
   self.fixture_path = File.dirname(__FILE__) + "/fixtures/"
   $LOAD_PATH.unshift(self.fixture_path)
 
-    def create_fixtures(*table_names)
-      if block_given?
-        Fixtures.create_fixtures(self.fixture_path, table_names) { yield }
-      else
-        Fixtures.create_fixtures(self.fixture_path, table_names)
-      end
-    end
-
-    self.use_transactional_fixtures = true
-    self.use_instantiated_fixtures  = false
+  self.use_transactional_fixtures = true
+  self.use_instantiated_fixtures  = false
 end
 
 
