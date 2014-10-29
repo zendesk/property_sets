@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 gemspec :path=>"../"
 
-gem "activerecord", "~> 3.2.19"
-gem "minitest", "~> 4.7.5"
+gem "activerecord", "~> 4.1.0"
+gem "protected_attributes"
 
 eval(File.read('gemfiles/common.rb'))

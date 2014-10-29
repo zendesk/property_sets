@@ -9,3 +9,9 @@ script: "bundle exec rake test"
 gemfile:
   - gemfiles/rails3.2.gemfile
   - gemfiles/rails4.0.gemfile
+  - gemfiles/rails4.1.gemfile
+  - gemfiles/rails4.2.gemfile
+matrix:
+  allow_failures:
+    - rvm: jruby
+      gemfile: gemfiles/rails4.2.gemfile
