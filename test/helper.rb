@@ -68,6 +68,9 @@ class Account < ActiveRecord::Base
     property :bool_true, :type => :boolean, :default => true
     property :bool_false, :type => :boolean, :default => false
     property :bool_nil, :type => :boolean, :default => nil
+  end
+
+  property_set :settings do
     property :bool_nil2, :type => :boolean
   end
 
