@@ -10,6 +10,7 @@ describe PropertySets do
   it "construct the container class" do
     assert defined?(AccountSetting)
     assert defined?(AccountText)
+    assert defined?(AccountTypedDatum)
   end
 
   it "register the property sets used on a class" do
