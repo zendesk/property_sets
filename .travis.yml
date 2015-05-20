@@ -1,10 +1,14 @@
 language: ruby
+sudo: false
 cache: bundler
+branches:
+  only: master
 rvm:
-  - 1.9.3
   - 2.0.0
-  - 2.1.2
+  - 2.1.6
+  - 2.2.2
   - jruby
+  - rbx-2
 script: "bundle exec rake test"
 gemfile:
   - gemfiles/rails3.2.gemfile
@@ -12,6 +16,11 @@ gemfile:
   - gemfiles/rails4.1.gemfile
   - gemfiles/rails4.2.gemfile
 matrix:
+  exclude:
+    - rvm: 2.2.2
+      gemfile: gemfiles/rails3.2.gemfile
+    - rvm: rbx-2
+      gemfile: gemfiles/rails3.2.gemfile
   allow_failures:
     - rvm: jruby
       gemfile: gemfiles/rails4.2.gemfile
