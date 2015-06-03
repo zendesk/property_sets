@@ -99,8 +99,8 @@ describe PropertySets do
     valids   = %w(hello hel_lo hell0)
     invalids = %w(_hello)
 
-    if ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR >= 2
-      valids += [:hello] # gets casted back to String with Rails 4.2
+    if ActiveRecord::VERSION::STRING >= '4.2.0'
+      valids += [:hello] # gets casted back to String with Rails 4.2/5.0
     else
       invalids += [:hello, 42, 3.14156]
     end

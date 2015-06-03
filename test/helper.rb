@@ -17,22 +17,22 @@ require 'property_sets'
 require 'property_sets/delegator'
 
 class Minitest::Spec
-  include ActiveSupport::Testing::SetupAndTeardown
   include ActiveRecord::TestFixtures
 
-  case
-  when ActiveRecord::VERSION::MAJOR == 3
+  if ActiveRecord::VERSION::STRING < '4.1.0'
     alias :method_name :__name__ if defined? :__name__
-  when ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR < 1
-    alias :method_name :__name__ if defined? :__name__
-  when ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR >= 1
+  else
     alias :method_name :name if defined? :name
   end
 
   self.fixture_path = File.dirname(__FILE__) + "/fixtures/"
   $LOAD_PATH.unshift(self.fixture_path)
 
-  self.use_transactional_fixtures = true
+  if self.respond_to?(:use_transactional_tests=)
+    self.use_transactional_tests = true
+  else
+    self.use_transactional_fixtures = true
+  end
   self.use_instantiated_fixtures  = false
 end
 

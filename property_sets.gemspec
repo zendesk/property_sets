@@ -8,7 +8,7 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
   s.homepage = 'http://github.com/zendesk/property_sets'
   s.license  = 'Apache License Version 2.0'
 
-  s.add_runtime_dependency("activerecord", ">= 3.2", "< 4.3")
+  s.add_runtime_dependency("activerecord", ">= 4.0", "< 5.1")
   s.add_runtime_dependency("json")
 
   s.add_development_dependency("bump")
@@ -17,7 +17,7 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
   s.add_development_dependency('actionpack')
   s.add_development_dependency('minitest')
   s.add_development_dependency('minitest-rg')
-  s.add_development_dependency('wwtd', '>= 0.5.3')
+  s.add_development_dependency('wwtd')
 
   s.files = `git ls-files lib`.split("\n")
   s.license = "MIT"
