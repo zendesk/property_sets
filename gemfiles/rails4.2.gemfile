@@ -4,6 +4,5 @@ gemspec :path=>"../"
 
 gem "activerecord", "~> 4.2.1"
 gem "actionview", "~> 4.2.1"
-gem "protected_attributes"
 
 eval(File.read('gemfiles/common.rb'))
