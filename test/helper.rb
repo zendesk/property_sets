@@ -8,15 +8,6 @@ require 'active_support/testing/setup_and_teardown'
 require 'active_record'
 require 'active_record/fixtures'
 
-if ActiveRecord::VERSION::MAJOR < 4
-  ActiveRecord::Base.mass_assignment_sanitizer = :strict
-end
-
-if ActiveRecord::VERSION::MAJOR == 4
-  require 'protected_attributes'
-end
-ActiveRecord::Base.attr_accessible
-
 I18n.enforce_available_locales = false
 
 require File.expand_path "../database", __FILE__
@@ -55,9 +46,6 @@ end
 class Account < ActiveRecord::Base
   include PropertySets::Delegator
   delegate_to_property_set :settings, :old => :hep
-
-  attr_accessible :name
-  attr_accessible :texts_attributes
 
   property_set :settings do
     property :foo
