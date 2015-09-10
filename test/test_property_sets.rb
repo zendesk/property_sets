@@ -73,6 +73,20 @@ describe PropertySets do
     assert_equal true, @account.settings.bool_true
   end
 
+  it 'respond with defaults using proc' do
+    @account.proc_value = false
+    assert_equal false, @account.settings.with_proc
+
+    @account.proc_value = true
+    assert_equal true, @account.settings.with_proc
+
+    @account.proc_value = '0'
+    assert_equal false, @account.settings.with_proc
+
+    @account.proc_value = '1'
+    assert_equal true, @account.settings.with_proc
+  end
+
   it "be flexible when fetching property data" do
     assert_equal 'skep', @account.settings.default(:hep)
     assert_equal 'skep', @account.settings.default('hep')
@@ -179,7 +193,7 @@ describe PropertySets do
 
     it "return all property pairs if no arguments are provided" do
       assert_equal(
-        ["bar", "baz", "bool_false", "bool_nil", "bool_nil2", "bool_true", "foo", "hep", "pro"].sort,
+        ["bar", "baz", "bool_false", "bool_nil", "bool_nil2", "bool_true", "foo", "hep", "pro", "with_proc"].sort,
         @account.settings.get.keys.sort
       )
     end

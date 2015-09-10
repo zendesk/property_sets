@@ -111,8 +111,8 @@ module PropertySets
         send("#{arg}=", "0")
       end
 
-      def build_default(arg)
-        build(:name => arg.to_s, :value => raw_default(arg))
+      def build_default(arg, owner=nil)
+        build(:name => arg.to_s, :value => raw_default(arg, owner))
       end
 
       def lookup_without_default(arg)
@@ -126,7 +126,7 @@ module PropertySets
           instance.value_serialized = serialized
           PropertySets::Casting.read(type, instance.value)
         else
-          value = default(key)
+          value = default(key, proxy_association.owner)
           if serialized
             PropertySets::Casting.deserialize(value)
           else
@@ -138,7 +138,7 @@ module PropertySets
       # The finder method which returns the property if present, otherwise a new instance with defaults
       def lookup(arg)
         instance   = lookup_without_default(arg)
-        instance ||= build_default(arg)
+        instance ||= build_default(arg, proxy_association.owner)
         instance.value_serialized = property_serialized?(arg)
 
         owner = proxy_association.owner
@@ -151,7 +151,7 @@ module PropertySets
       # It does not have the side effect of adding a new setting object.
       def lookup_or_default(arg)
         instance = lookup_without_default(arg)
-        instance ||= association_class.new(:value => raw_default(arg))
+        instance ||= association_class.new(:value => raw_default(arg, proxy_association.owner))
         instance.value_serialized = property_serialized?(arg)
         instance
       end

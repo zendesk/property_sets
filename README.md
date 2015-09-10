@@ -12,6 +12,7 @@ class Account < ActiveRecord::Base
     property :version, :default => "v1.0"
     property :featured, :protected => true
     property :activated
+    property :new_api, :default => ->(account) { account.created_at > '2015-06-01' }
   end
 
   property_set :texts do

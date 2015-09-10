@@ -99,12 +99,16 @@ module PropertySets
         @properties.keys
       end
 
-      def default(key)
-        PropertySets::Casting.read(type(key), raw_default(key))
+      def default(key, owner=nil)
+        PropertySets::Casting.read(type(key), raw_default(key, owner))
       end
 
-      def raw_default(key)
-        @properties[key].try(:[], :default)
+      def raw_default(key, owner=nil)
+        default_value = @properties[key].try(:[], :default)
+        if default_value.is_a?(Proc)
+          default_value = default_value.call(owner)
+        end
+        default_value
       end
 
       def type(key)
