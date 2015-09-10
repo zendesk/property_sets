@@ -45,6 +45,7 @@ end
 
 class Account < ActiveRecord::Base
   include PropertySets::Delegator
+  attr_accessor :proc_value
   delegate_to_property_set :settings, :old => :hep
 
   property_set :settings do
@@ -56,6 +57,7 @@ class Account < ActiveRecord::Base
     property :bool_true, :type => :boolean, :default => true
     property :bool_false, :type => :boolean, :default => false
     property :bool_nil, :type => :boolean, :default => nil
+    property :with_proc, :type => :boolean, :default => ->(account) { account.proc_value }
   end
 
   property_set :settings do
