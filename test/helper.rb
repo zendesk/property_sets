@@ -20,12 +20,9 @@ class Minitest::Spec
   include ActiveSupport::Testing::SetupAndTeardown
   include ActiveRecord::TestFixtures
 
-  case
-  when ActiveRecord::VERSION::MAJOR == 3
+  if ActiveRecord::VERSION::STRING < '4.1.0'
     alias :method_name :__name__ if defined? :__name__
-  when ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR < 1
-    alias :method_name :__name__ if defined? :__name__
-  when ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR >= 1
+  else
     alias :method_name :name if defined? :name
   end
 
