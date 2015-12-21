@@ -162,19 +162,14 @@ module PropertySets
     end
 
     module InstanceMethods
-      def self.included(base)
-        base.alias_method_chain :update_attributes, :property_sets
-        base.alias_method_chain :update_attributes!, :property_sets
-      end
-
       def update_attributes(attributes)
         update_property_set_attributes(attributes)
-        super(attributes)
+        super
       end
 
       def update_attributes!(attributes)
         update_property_set_attributes(attributes)
-        super(attributes)
+        super
       end
 
       def update_property_set_attributes(attributes)
