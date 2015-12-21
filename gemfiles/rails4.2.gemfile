@@ -4,5 +4,6 @@ gemspec :path=>"../"
 
 gem "activerecord", "~> 4.2.1"
 gem "actionview", "~> 4.2.1"
+gem "mysql2", :platforms => :ruby
 
 eval(File.read('gemfiles/common.rb'))
