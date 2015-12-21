@@ -7,7 +7,7 @@ module PropertySets
 
       def property_set(association, options = {}, &block)
         unless include?(PropertySets::ActiveRecordExtension::InstanceMethods)
-          self.send(:include, PropertySets::ActiveRecordExtension::InstanceMethods)
+          self.send(:prepend, PropertySets::ActiveRecordExtension::InstanceMethods)
           cattr_accessor :property_set_index
           self.property_set_index = []
         end
@@ -157,30 +157,19 @@ module PropertySets
       end
 
       def association_class
-        @association_class ||= begin
-          if ActiveRecord::VERSION::STRING >= "3.1.0"
-            proxy_association.klass
-          else
-            @reflection.klass
-          end
-        end
+        @association_class ||= proxy_association.klass
       end
     end
 
     module InstanceMethods
-      def self.included(base)
-        base.alias_method_chain :update_attributes, :property_sets
-        base.alias_method_chain :update_attributes!, :property_sets
+      def update_attributes(attributes)
+        update_property_set_attributes(attributes)
+        super
       end
 
-      def update_attributes_with_property_sets(attributes)
+      def update_attributes!(attributes)
         update_property_set_attributes(attributes)
-        update_attributes_without_property_sets(attributes)
-      end
-
-      def update_attributes_with_property_sets!(attributes)
-        update_property_set_attributes(attributes)
-        update_attributes_without_property_sets!(attributes)
+        super
       end
 
       def update_property_set_attributes(attributes)
