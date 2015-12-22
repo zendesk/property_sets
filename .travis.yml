@@ -7,7 +7,6 @@ rvm:
   - 2.0.0
   - 2.1.6
   - 2.2.2
-  - jruby
   - rbx-2
 script: "bundle exec rake test"
 gemfile:
@@ -15,12 +14,16 @@ gemfile:
   - gemfiles/rails4.0.gemfile
   - gemfiles/rails4.1.gemfile
   - gemfiles/rails4.2.gemfile
+  - gemfiles/rails5.0.gemfile
 matrix:
   exclude:
     - rvm: 2.2.2
       gemfile: gemfiles/rails3.2.gemfile
     - rvm: rbx-2
       gemfile: gemfiles/rails3.2.gemfile
-  allow_failures:
-    - rvm: jruby
-      gemfile: gemfiles/rails4.2.gemfile
+    - rvm: 2.0.0
+      gemfile: gemfiles/rails5.0.gemfile
+    - rvm: 2.1.6
+      gemfile: gemfiles/rails5.0.gemfile
+    - rvm: rbx-2
+      gemfile: gemfiles/rails5.0.gemfile
