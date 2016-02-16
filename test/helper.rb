@@ -12,9 +12,9 @@ I18n.enforce_available_locales = false
 
 require File.expand_path "../database", __FILE__
 
-#$LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'property_sets'
 require 'property_sets/delegator'
+require_relative 'support/account'
 
 class Minitest::Spec
   include ActiveSupport::Testing::SetupAndTeardown
@@ -31,55 +31,4 @@ class Minitest::Spec
 
   self.use_transactional_fixtures = true
   self.use_instantiated_fixtures  = false
-end
-
-
-class ActsLikeAnInteger
-  def to_i
-    123
-  end
-end
-
-class Account < ActiveRecord::Base
-  include PropertySets::Delegator
-  delegate_to_property_set :settings, :old => :hep
-
-  property_set :settings do
-    property :foo
-    property :bar
-    property :baz
-    property :hep, :default   => 'skep'
-    property :pro, :protected => true
-    property :bool_true, :type => :boolean, :default => true
-    property :bool_false, :type => :boolean, :default => false
-    property :bool_nil, :type => :boolean, :default => nil
-  end
-
-  property_set :settings do
-    property :bool_nil2, :type => :boolean
-  end
-
-  property_set :texts do
-    property :foo
-    property :bar
-  end
-
-  accepts_nested_attributes_for :texts
-
-  property_set :validations do
-    property :validated
-    property :regular
-
-    validates_format_of :value, :with => /\d+/, :message => "BEEP", :if => lambda { |r| r.name.to_sym == :validated }
-  end
-
-  property_set :typed_data do
-    property :string_prop, :type => :string
-    property :datetime_prop, :type => :datetime
-    property :float_prop, :type => :float
-    property :int_prop, :type => :integer
-    property :serialized_prop, :type => :serialized
-    property :default_prop, :type => :integer, :default => ActsLikeAnInteger.new
-    property :serialized_prop_with_default, :type => :serialized, :default => "[]"
-  end
 end
