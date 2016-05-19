@@ -3,13 +3,15 @@ require 'active_record'
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 ActiveRecord::Base.logger.level = Logger::ERROR
 
+mysql = URI(ENV['MYSQL_URL'] || 'mysql://root@127.0.0.1:3306')
+
 config = {
   :adapter  => RUBY_PLATFORM == "java" ? 'mysql' : 'mysql2',
   :database => 'property_sets_test',
-  :username => 'root',
-  :password => nil,
-  :host     => '127.0.0.1',
-  :port     => 3306
+  :username => mysql.user,
+  :password => mysql.password,
+  :host     => mysql.host,
+  :port     => mysql.port
 }
 
 ActiveRecord::Base.establish_connection(config.merge(:database => nil))
