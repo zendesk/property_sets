@@ -416,6 +416,12 @@ describe PropertySets do
         expect(account.save).to be false
       end
 
+      it "not overflow on other text types" do
+        account.tiny_texts.serialized = (1..2**10).to_a # column size is 2^8 - 1
+        expect(account.tiny_texts.lookup(:serialized)).to_not be_valid
+        expect(account.save).to be false
+      end
+
       it "allow for destructive operators" do
         value = {:a => 1, :b => 2}
         account.typed_data.serialized_prop = value
