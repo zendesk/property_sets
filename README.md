@@ -130,7 +130,7 @@ add_index :account_settings, [ :account_id, :name ], :unique => true
 
 If you would like to serialize larger objects into your property sets, you can use a `TEXT` column type for value like this:
 
-```
+```ruby
 create_table :account_settings do |t|
   t.integer :account_id, :null => false
   t.string  :name, :null => false
