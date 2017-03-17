@@ -119,9 +119,22 @@ Also remember to create the storage table(s), if for example you are going to be
 
 ```ruby
 create_table :account_settings do |t|
-  t.integer  :account_id, :null => false
-  t.string   :name, :null => false
-  t.string   :value
+  t.integer :account_id, :null => false
+  t.string  :name, :null => false
+  t.string  :value
+  t.timestamps
+end
+
+add_index :account_settings, [ :account_id, :name ], :unique => true
+```
+
+If you would like to serialize larger objects into your property sets, you can use a `TEXT` column type for value like this:
+
+```
+create_table :account_settings do |t|
+  t.integer :account_id, :null => false
+  t.string  :name, :null => false
+  t.text    :value
   t.timestamps
 end
 
