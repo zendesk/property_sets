@@ -42,4 +42,8 @@ class Account < ActiveRecord::Base
     property :default_prop, :type => :integer, :default => ActsLikeAnInteger.new
     property :serialized_prop_with_default, :type => :serialized, :default => "[]"
   end
+
+  property_set :tiny_texts do
+    property :serialized, :type => :serialized
+  end
 end
