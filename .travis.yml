@@ -4,26 +4,18 @@ cache: bundler
 branches:
   only: master
 rvm:
-  - 2.0.0
-  - 2.1.6
-  - 2.2.2
+  - 2.2.7
+  - 2.3.4
+  - 2.4.1
 script: "bundle exec rake spec"
 gemfile:
   - gemfiles/rails3.2.gemfile
-  - gemfiles/rails4.0.gemfile
-  - gemfiles/rails4.1.gemfile
   - gemfiles/rails4.2.gemfile
   - gemfiles/rails5.0.gemfile
   - gemfiles/rails5.1.gemfile
 matrix:
   exclude:
-    - rvm: 2.0.0
-      gemfile: gemfiles/rails4.2.gemfile # causes a weird nokogiri install problem
-    - rvm: 2.0.0
-      gemfile: gemfiles/rails5.0.gemfile
-    - rvm: 2.1.6
-      gemfile: gemfiles/rails5.0.gemfile
-    - rvm: 2.0.0
-      gemfile: gemfiles/rails5.1.gemfile
-    - rvm: 2.1.6
-      gemfile: gemfiles/rails5.1.gemfile
+    - rvm: 2.4.1
+      gemfile: gemfiles/rails3.2.gemfile
+    - rvm: 2.4.1
+      gemfile: gemfiles/rails4.2.gemfile
