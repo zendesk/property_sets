@@ -1,8 +1,0 @@
-source "https://rubygems.org"
-
-gemspec :path=>"../"
-
-gem "activerecord", "~> 4.1.0"
-gem "mysql2", '~> 0.3.0', :platforms => :ruby
-
-eval(File.read('gemfiles/common.rb'))
