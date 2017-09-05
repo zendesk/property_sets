@@ -62,6 +62,13 @@ describe PropertySets::Delegator do
       account.old = default
       expect(account.old_changed?).to be false
     end
+
+    it "does not perform queries when association was never loaded and could not possibly be changed" do
+      account
+      assert_sql_queries 0 do
+        expect(account.old_changed?).to be false
+      end
+    end
   end
 
   describe "before_type_case" do
