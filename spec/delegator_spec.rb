@@ -34,23 +34,40 @@ describe PropertySets::Delegator do
   end
 
   describe "changed?" do
-    it "not add a property" do
+    it "does not add a property" do
       account.old_changed?
       expect(account.settings.size).to eq(0)
     end
 
-    it "not be changed" do
+    it "is not changed when unchanged" do
       expect(account.old_changed?).to be false
     end
 
-    it "be changed with new value" do
+    it "is changed with new value" do
       account.old = "new"
       expect(account.old_changed?).to be true
     end
 
-    it "not be changed with default value" do
+    it "is changed with new falsy value" do
+      account.old = false
+      expect(account.old_changed?).to be true
+    end
+
+    it "is changed with new nil value" do
+      account.old = nil
+      expect(account.old_changed?).to be true
+    end
+
+    it "is not changed with default value" do
       account.old = default
       expect(account.old_changed?).to be false
+    end
+
+    it "does not perform queries when association was never loaded and could not possibly be changed" do
+      account
+      assert_sql_queries 0 do
+        expect(account.old_changed?).to be false
+      end
     end
   end
 
