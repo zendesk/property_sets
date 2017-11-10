@@ -13,6 +13,7 @@ describe PropertySets do
     %i(settings texts validations typed_data).each do |name|
       expect(Account.property_set_index).to include(name)
     end
+    expect(Account.property_set_index.size).to eq(Account.property_set_index.uniq.size)
   end
 
   it "allow the owner class to be customized" do
