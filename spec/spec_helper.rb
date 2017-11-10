@@ -30,4 +30,14 @@ module QueryAssertions
   end
 end
 
+module ActiveRecord
+  module Associations
+    class CollectionProxy
+      def scoping
+        raise 'CollectionProxy delegates unknown methods to target (association_class) via method_missing, wrapping the call with `scoping`. Instead, call the method directly on the association_class!'
+      end
+    end
+  end
+end
+
 RSpec.configure { |c| c.include QueryAssertions }
