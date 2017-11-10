@@ -1,5 +1,6 @@
 require 'active_record'
 require 'property_sets/casting'
+require 'set'
 
 module PropertySets
   module ActiveRecordExtension
@@ -9,7 +10,7 @@ module PropertySets
         unless include?(PropertySets::ActiveRecordExtension::InstanceMethods)
           self.send(:prepend, PropertySets::ActiveRecordExtension::InstanceMethods)
           cattr_accessor :property_set_index
-          self.property_set_index = []
+          self.property_set_index = Set.new
         end
 
         raise "Invalid association name, letters only" unless association.to_s =~ /[a-z]+/
