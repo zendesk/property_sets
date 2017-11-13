@@ -72,8 +72,8 @@ describe PropertySets do
   end
 
   it "be flexible when fetching property data" do
-    expect(account.settings.default(:hep)) .to eq('skep')
-    expect(account.settings.default('hep')).to eq('skep')
+    expect(account.settings.association_class.default(:hep)) .to eq('skep')
+    expect(account.settings.association_class.default('hep')).to eq('skep')
   end
 
   describe 'querying for a setting that does not exist' do
@@ -348,7 +348,7 @@ describe PropertySets do
   describe "typed columns" do
 
     it "typecast the default value" do
-      expect(account.typed_data.default(:default_prop)).to eq(123)
+      expect(account.typed_data.association_class.default(:default_prop)).to eq(123)
     end
 
     describe "string data" do

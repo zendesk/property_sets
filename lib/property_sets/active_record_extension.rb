@@ -120,11 +120,6 @@ module PropertySets
         detect { |property| property.name.to_sym == arg.to_sym }
       end
 
-      # Tests call default on the collection proxy
-      def default(*args)
-        association_class.default(*args)
-      end
-
       def lookup_value(type, key)
         serialized = property_serialized?(key)
 
