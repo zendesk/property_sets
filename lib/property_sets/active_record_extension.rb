@@ -85,7 +85,7 @@ module PropertySets
         property_pairs.keys.each do |name|
           record = lookup(name)
           if with_protection && record.protected?
-            logger.warn("Someone tried to update the protected #{name} property to #{property_pairs[name]}")
+            association_class.logger.warn("Someone tried to update the protected #{name} property to #{property_pairs[name]}")
           else
             send("#{name}=", property_pairs[name])
           end
@@ -113,7 +113,7 @@ module PropertySets
       end
 
       def build_default(arg)
-        build(:name => arg.to_s, :value => raw_default(arg))
+        build(:name => arg.to_s, :value => association_class.raw_default(arg))
       end
 
       def lookup_without_default(arg)
@@ -127,7 +127,7 @@ module PropertySets
           instance.value_serialized = serialized
           PropertySets::Casting.read(type, instance.value)
         else
-          value = default(key)
+          value = association_class.default(key)
           if serialized
             PropertySets::Casting.deserialize(value)
           else
@@ -144,7 +144,7 @@ module PropertySets
 
         owner = proxy_association.owner
 
-        instance.send("#{owner_class_sym}=", owner) if owner.new_record?
+        instance.send("#{association_class.owner_class_sym}=", owner) if owner.new_record?
         instance
       end
 
@@ -152,7 +152,7 @@ module PropertySets
       # It does not have the side effect of adding a new setting object.
       def lookup_or_default(arg)
         instance = lookup_without_default(arg)
-        instance ||= association_class.new(:value => raw_default(arg))
+        instance ||= association_class.new(:value => association_class.raw_default(arg))
         instance.value_serialized = property_serialized?(arg)
         instance
       end

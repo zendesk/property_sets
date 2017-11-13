@@ -27,14 +27,14 @@ module PropertySets
           define_method("#{old_attr}=") { |value| send(setname).send("#{new_attr}=", value) }
 
           define_method("#{old_attr}_changed?") do
-            assoc = send(setname)
-            return false unless assoc.loaded?
-            setting = assoc.lookup_without_default(new_attr)
+            collection_proxy = send(setname)
+            return false unless collection_proxy.loaded?
+            setting = collection_proxy.lookup_without_default(new_attr)
 
             if !setting
               false # Nothing has been set which means that the attribute hasn't changed
             elsif setting.new_record?
-              assoc.default(new_attr) != setting.value
+              collection_proxy.association_class.default(new_attr) != setting.value
             else
               setting.value_changed?
             end
