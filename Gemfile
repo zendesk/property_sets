@@ -1,9 +1,9 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 gemspec
 
-gem "activerecord", "> 4.0.6", "< 4.2"
-gem "mysql2", '~> 0.3.0', :platforms => :ruby
-gem "protected_attributes"
+gem "activerecord", "~> 4.2.1"
+gem "actionview", "~> 4.2.1"
+gem "mysql2", ">= 0.3.13", "< 0.5", :platforms => :ruby
 
 eval(File.read('gemfiles/common.rb'))
