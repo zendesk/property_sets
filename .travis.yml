@@ -15,8 +15,6 @@ gemfile:
   - gemfiles/rails5.1.gemfile
   - gemfiles/rails5.2.gemfile
 matrix:
-  allow_failures:
-    - gemfile: gemfiles/rails5.2.gemfile
   exclude:
     - rvm: 2.4
       gemfile: gemfiles/rails3.2.gemfile
