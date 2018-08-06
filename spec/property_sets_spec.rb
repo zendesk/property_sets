@@ -94,14 +94,8 @@ describe PropertySets do
   it "reject settings with an invalid name" do
     s = AccountSetting.new(:account => account)
 
-    valids   = %w(hello hel_lo hell0)
+    valids   = %w(hello hel_lo hell0) + [:hello]
     invalids = %w(_hello)
-
-    if ActiveRecord::VERSION::STRING >= '4.2.0'
-      valids += [:hello] # gets casted back to String with Rails 4.2/5.0
-    else
-      invalids += [:hello, 42, 3.14156]
-    end
 
     valids.each do |valid|
       s.name = valid

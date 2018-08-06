@@ -1,9 +1,0 @@
-source "https://rubygems.org"
-
-gemspec :path=>"../"
-
-gem "activerecord", "~> 3.2.19"
-gem "mysql2", "~> 0.3.10", :platforms => :ruby
-gem "test-unit-minitest"
-
-eval(File.read('gemfiles/common.rb'))
