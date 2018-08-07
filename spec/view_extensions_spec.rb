@@ -9,13 +9,12 @@ describe "property set view extensions" do
     }
   end
 
-  let(:builder_args) { ActiveRecord::VERSION::MAJOR == 3 ? ['proc'] : [] }
   let(:property_set) { :settings }
   let(:property)     { :active }
   let(:object_name)  { 'object_name' }
   let(:object)       { double('View object') }
   let(:template)     { double('Template') }
-  let(:builder)      { ActionView::Helpers::FormBuilder.new(object_name, object, template, {}, *builder_args) }
+  let(:builder)      { ActionView::Helpers::FormBuilder.new(object_name, object, template, {}) }
   let(:proxy)        { builder.property_set(property_set) }
 
   it "provide a form builder proxy" do
@@ -24,7 +23,7 @@ describe "property set view extensions" do
   end
 
   describe 'object is not available' do
-    let(:builder) { ActionView::Helpers::FormBuilder.new(object_name, nil, template, {}, *builder_args) }
+    let(:builder) { ActionView::Helpers::FormBuilder.new(object_name, nil, template, {}) }
 
     it "fetch the target object when not available" do
       allow(object).to receive(property_set).and_return(double('Fake property', property => 'value'))

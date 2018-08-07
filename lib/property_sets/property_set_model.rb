@@ -105,7 +105,7 @@ module PropertySets
         base.validate        :validate_format_of_name
         base.validate        :validate_length_of_serialized_data
         base.before_create   :coerce_value
-        base.attr_accessible :name, :value if ActiveRecord::VERSION::MAJOR == 3 || defined?(ProtectedAttributes)
+        base.attr_accessible :name, :value if defined?(ProtectedAttributes)
       end
 
       def property(key, options = nil)
@@ -138,7 +138,7 @@ module PropertySets
         belongs_to              owner_class_sym
         validates_presence_of   owner_class_sym
         validates_uniqueness_of :name, :scope => owner_class_key_sym
-        attr_accessible         owner_class_key_sym, owner_class_sym if ActiveRecord::VERSION::MAJOR == 3 || defined?(ProtectedAttributes)
+        attr_accessible         owner_class_key_sym, owner_class_sym if defined?(ProtectedAttributes)
       end
 
       def owner_assoc=(association)

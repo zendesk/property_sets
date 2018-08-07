@@ -158,13 +158,7 @@ module PropertySets
       end
 
       def association_class
-        @association_class ||= begin
-          if ActiveRecord::VERSION::STRING >= "3.1.0"
-            proxy_association.klass
-          else
-            @reflection.klass
-          end
-        end
+        @association_class ||= proxy_association.klass
       end
     end
 
