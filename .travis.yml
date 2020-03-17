@@ -3,13 +3,23 @@ sudo: false
 cache: bundler
 branches:
   only: master
+services:
+  - mysql
 rvm:
-  - 2.2
-  - 2.3
   - 2.4
+  - 2.5
+  - 2.6
+  - ruby-head
 script: "bundle exec rake spec"
 gemfile:
   - gemfiles/rails4.2.gemfile
   - gemfiles/rails5.0.gemfile
   - gemfiles/rails5.1.gemfile
   - gemfiles/rails5.2.gemfile
+  - gemfiles/rails6.0.gemfile
+matrix:
+  exclude:
+    - rvm: 2.4
+      gemfile: gemfiles/rails6.0.gemfile
+  allow_failures:
+    - rvm: ruby-head

@@ -1,0 +1,9 @@
+source 'https://rubygems.org'
+
+gemspec path: '../'
+
+gem 'activerecord', '~> 6.0.0'
+gem 'actionpack', '~> 6.0.0'
+gem 'mysql2', '>= 0.4.4', platforms: :ruby
+
+eval(File.read('gemfiles/common.rb'))
