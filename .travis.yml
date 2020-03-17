@@ -23,12 +23,3 @@ matrix:
       gemfile: gemfiles/rails6.0.gemfile
   allow_failures:
     - rvm: ruby-head
-      gemfile: gemfiles/rails4.2.gemfile
-    - rvm: ruby-head
-      gemfile: gemfiles/rails5.0.gemfile
-    - rvm: ruby-head
-      gemfile: gemfiles/rails5.1.gemfile
-    - rvm: ruby-head
-      gemfile: gemfiles/rails5.2.gemfile
-    - rvm: ruby-head
-      gemfile: gemfiles/rails6.0.gemfile
