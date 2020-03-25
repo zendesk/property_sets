@@ -137,7 +137,7 @@ module PropertySets
         @owner_class_sym = owner_class_name.underscore.to_sym
         belongs_to              owner_class_sym
         validates_presence_of   owner_class_sym
-        validates_uniqueness_of :name, :scope => owner_class_key_sym
+        validates_uniqueness_of :name, :scope => owner_class_key_sym, :case_sensitive => false
         attr_accessible         owner_class_key_sym, owner_class_sym if defined?(ProtectedAttributes)
       end
 
