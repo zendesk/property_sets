@@ -339,6 +339,21 @@ describe PropertySets do
     end
   end
 
+  describe "update_attribute" do
+    it "updates changed attributes" do
+      account.update_attribute(:old, "it works!")
+      expect(account.old).to eq("it works!")
+      expect(Account.find(account.id).old).to eq("it works!")
+    end
+
+    it "updates changed attributes through association" do
+      account.settings.hep = "it works!"
+      account.save
+      expect(account.settings.hep).to eq("it works!")
+      expect(Account.find(account.id).old).to eq("it works!")
+    end
+  end
+
   describe "typed columns" do
 
     it "typecast the default value" do

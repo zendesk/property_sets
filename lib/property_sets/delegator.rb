@@ -24,7 +24,11 @@ module PropertySets
           define_method(old_attr) { send(setname).send(new_attr) }
           alias_method "#{old_attr}_before_type_cast", old_attr
           define_method("#{old_attr}?") { send(setname).send("#{new_attr}?") }
-          define_method("#{old_attr}=") { |value| send(setname).send("#{new_attr}=", value) }
+          define_method("#{old_attr}_will_change!"){ attribute_will_change!(old_attr) }
+          define_method("#{old_attr}=") do |value|
+            send("#{old_attr}_will_change!")
+            send(setname).send("#{new_attr}=", value)
+          end
 
           define_method("#{old_attr}_changed?") do
             collection_proxy = send(setname)
