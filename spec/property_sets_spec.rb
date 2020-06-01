@@ -339,17 +339,10 @@ describe PropertySets do
     end
   end
 
-  describe "update_attribute" do
+  describe "update_attribute for forwarded method" do
     it "updates changed attributes" do
       account.update_attribute(:old, "it works!")
-      expect(account.old).to eq("it works!")
-      expect(Account.find(account.id).old).to eq("it works!")
-    end
-
-    it "updates changed attributes through association" do
-      account.settings.hep = "it works!"
-      account.save
-      expect(account.settings.hep).to eq("it works!")
+      expect(account.previous_changes["old"].last).to eq("it works!")
       expect(Account.find(account.id).old).to eq("it works!")
     end
   end
