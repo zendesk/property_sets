@@ -21,10 +21,18 @@ module PropertySets
         raise "Second argument must be a Hash" unless mappings.is_a?(Hash)
 
         mappings.each do |old_attr, new_attr|
+          if ActiveRecord.version < Gem::Version.new("5.0")
+            attribute old_attr, ActiveRecord::Type::Value.new
+          else
+            attribute old_attr, ActiveModel::Type::Value.new
+          end
           define_method(old_attr) { send(setname).send(new_attr) }
           alias_method "#{old_attr}_before_type_cast", old_attr
           define_method("#{old_attr}?") { send(setname).send("#{new_attr}?") }
-          define_method("#{old_attr}=") { |value| send(setname).send("#{new_attr}=", value) }
+          define_method("#{old_attr}=") do |value|
+            send(setname).send("#{new_attr}=", value)
+            super(value)
+          end
 
           define_method("#{old_attr}_changed?") do
             collection_proxy = send(setname)

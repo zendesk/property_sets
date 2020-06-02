@@ -163,15 +163,17 @@ module PropertySets
     end
 
     module InstanceMethods
-      def update_attributes(attributes)
+      def update(attributes)
         update_property_set_attributes(attributes)
         super
       end
+      alias update_attributes update
 
-      def update_attributes!(attributes)
+      def update!(attributes)
         update_property_set_attributes(attributes)
         super
       end
+      alias update_attributes! update!
 
       def update_property_set_attributes(attributes)
         if attributes && self.class.property_set_index.any?
