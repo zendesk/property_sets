@@ -337,6 +337,12 @@ describe PropertySets do
       expect(account.settings.foo).to eq("1")
       expect(account.settings.bar).to eq("2")
     end
+
+    it "sets forwarded attributes" do
+      other_account = Other::Account.new(name: "creating", old: "forwarded value")
+      other_account.save
+      expect(other_account.old).to eq("forwarded value")
+    end
   end
 
   describe "update_attribute for forwarded method" do
