@@ -184,6 +184,38 @@ module PropertySets
           end
         end
       end
+
+      def update_columns(attributes)
+        attrs = if delegated_property_sets?
+          attributes.reject{|k,_| self.class.delegated_property_set_attributes.include?(k.to_s) }
+        else
+          attributes
+        end
+
+        raise ArgumentError, "Empty list of attributes to change" if attrs.empty?
+        super attrs
+      end
+
+      private
+
+      def delegated_property_sets?
+        self.class.respond_to?(:delegated_property_set_attributes)
+      end
+
+      def attributes_for_create(attribute_names)
+        super filter_delegated_property_set_attributes(attribute_names)
+      end
+
+      def attributes_for_update(attribute_names)
+        super filter_delegated_property_set_attributes(attribute_names)
+      end
+
+      def filter_delegated_property_set_attributes(attribute_names)
+        if delegated_property_sets?
+          return attribute_names.map(&:to_s) - self.class.delegated_property_set_attributes.to_a
+        end
+        attribute_names
+      end
     end
 
   end

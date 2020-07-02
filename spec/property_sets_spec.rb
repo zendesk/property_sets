@@ -345,6 +345,30 @@ describe PropertySets do
       expect(account.previous_changes["old"].last).to eq("it works!")
       expect(Account.find(account.id).old).to eq("it works!")
     end
+
+    it "updates changed attributes" do
+      account.update_attributes!(old: "it works!", name: 'update_attributes!')
+      expect(account.previous_changes["old"].last).to eq("it works!")
+      expect(Account.find(account.id).old).to eq("it works!")
+    end
+  end
+
+  describe "update_columns for forwarded method" do
+    it "does not write to a missing column" do
+      account.update_columns(name: 'test', old: "it works!")
+      expect(account.previous_changes).to_not include("old")
+    end
+
+    it "errors when updating only delegated column names" do
+      expect {
+        account.update_column(:old, "it works!")
+      }.to raise_error(ArgumentError, "Empty list of attributes to change")
+    end
+
+    it "does not prevent other non-delegated property set models from updating" do
+      thing = Thing.create(name: 'test')
+      expect(thing.update_columns(name: 'it works')).to be
+    end
   end
 
   describe "typed columns" do
