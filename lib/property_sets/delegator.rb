@@ -31,7 +31,7 @@ module PropertySets
           end
           define_method(old_attr) {
             association = send(setname)
-            type = association.klass.type(new_attr)
+            type = association.association_class.type(new_attr)
             association.lookup_value(type, new_attr)
           }
           alias_method "#{old_attr}_before_type_cast", old_attr
