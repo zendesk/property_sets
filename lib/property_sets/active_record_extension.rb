@@ -209,7 +209,7 @@ module PropertySets
 
       def filter_delegated_property_set_attributes(attribute_names)
         if delegated_property_sets?
-          return attribute_names.map(&:to_s) - self.class.delegated_property_set_attributes.to_a
+          return attribute_names - self.class.delegated_property_set_attributes.to_a
         end
         attribute_names
       end
