@@ -365,10 +365,12 @@ describe PropertySets do
       expect(account.previous_changes).to_not include("old")
     end
 
-    it "errors when updating only delegated column names" do
-      expect {
-        account.update_column(:old, "it works!")
-      }.to raise_error(ArgumentError, "Empty list of attributes to change")
+    if ActiveRecord.version < Gem::Version.new("5.2")
+      it "errors when updating only delegated column names" do
+        expect {
+          account.update_column(:old, "it works!")
+        }.to raise_error(ArgumentError, "Empty list of attributes to change")
+      end
     end
 
     it "does not prevent other non-delegated property set models from updating" do

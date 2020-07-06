@@ -190,7 +190,6 @@ module PropertySets
           attributes = attributes.reject{|k,_| self.class.delegated_property_set_attributes.include?(k.to_s) }
         end
 
-        raise ArgumentError, "Empty list of attributes to change" if attributes.empty?
         super attributes
       end
 
