@@ -47,3 +47,11 @@ class Account < ActiveRecord::Base
     property :serialized, :type => :serialized
   end
 end
+
+module Other
+  class Account < ::Account
+    def self.delegated_property_set_attributes
+      ::Account.delegated_property_set_attributes
+    end
+  end
+end

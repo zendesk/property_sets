@@ -8,6 +8,7 @@ require 'property_sets'
 require 'property_sets/delegator'
 require 'support/database'
 require 'support/account'
+require 'support/thing'
 
 I18n.enforce_available_locales = false
 
