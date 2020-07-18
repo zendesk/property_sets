@@ -39,6 +39,19 @@ account.settings.set(:version => "v1.2", :activated => true)
 account.settings.get([:version, :activated])
 ```
 
+You can also forward read, write and query methods to the properties with `PropertySets::Delegator`.
+
+```
+class Account < ActiveRecord::Base
+  include PropertySets::Delegator
+  delegate_to_property_set :settings, :is_open => :open, :same => :same
+end
+
+account.open #=> account.settings.is_open
+```
+
+These classes and their subclasses will inherit specified properties.
+
 ### Validations
 
 Property sets supports standard AR validations, although in a somewhat manual fashion.
