@@ -123,7 +123,7 @@ module PropertySets
       end
 
       def lookup_without_default(arg)
-        detect { |property| property.name.to_sym == arg.to_sym }
+        find_by(name: arg)
       end
 
       def lookup_value(type, key)
