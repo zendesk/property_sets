@@ -346,16 +346,39 @@ describe PropertySets do
   end
 
   describe "update_attribute for forwarded method" do
-    it "updates changed attributes" do
+    it "creates changed attributes" do
       account.update_attribute(:old, "it works!")
       expect(account.previous_changes["old"].last).to eq("it works!")
       expect(Account.find(account.id).old).to eq("it works!")
     end
 
-    it "updates changed attributes" do
-      account.update_attributes!(old: "it works!", name: 'update_attributes!')
+    it "updates changed attributes for existing property_set data" do
+      account.settings.hep = "saved previously"
+      account.save
+      account.update_attribute(:old, "it works!")
       expect(account.previous_changes["old"].last).to eq("it works!")
       expect(Account.find(account.id).old).to eq("it works!")
+    end
+
+    it "updates changed attributes for existing property_set data after set through forwarded method" do
+      account.old = "saved previously"
+      account.save
+      account.update_attribute(:old, "it works!")
+      expect(account.previous_changes["old"].last).to eq("it works!")
+      expect(Account.find(account.id).old).to eq("it works!")
+    end
+  end
+
+  describe "assign_attributes for forwarded method" do
+    it "sets the attribute value" do
+      account.assign_attributes(old: "assigned!")
+      expect(account.old).to eq("assigned!")
+    end
+
+    it "sets the object's changed attributes" do
+      account.assign_attributes(old: "assigned!")
+      expect(account).to be_changed
+      expect(account.changed_attributes).to include(:old)
     end
   end
 

@@ -40,9 +40,15 @@ module PropertySets
           alias_method "#{old_attr}_before_type_cast", old_attr
           define_method("#{old_attr}?") { send(setname).send("#{new_attr}?") }
           define_method("#{old_attr}=") do |value|
-            attribute_will_change!(old_attr) if old_attr != value && !defined?(super)
+            if send(old_attr) != value
+              send("#{old_attr}_will_change!")
+            end
             send(setname).send("#{new_attr}=", value)
-            super(value) if defined?(super)
+            super(value) if defined?(super) # Rails 4 does not define this
+          end
+
+          define_method("#{old_attr}_will_change!") do
+            attribute_will_change!(old_attr)
           end
 
           define_method("#{old_attr}_changed?") do
