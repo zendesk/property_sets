@@ -31,9 +31,12 @@ jobs:
           - rails5.1
           - rails5.2
           - rails6.0
+          - rails6.1
         exclude:
           - ruby-version: 2.4
             gemfile: rails6.0
+          - ruby-version: 2.4
+            gemfile: rails6.1
           - ruby-version: 2.7
             gemfile: rails4.2
     env:
