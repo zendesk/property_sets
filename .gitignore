@@ -7,4 +7,3 @@ doc
 .yardoc
 .bundle
 pkg
-gemfiles/*.gemfile.lock
