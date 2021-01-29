@@ -24,6 +24,9 @@ module PropertySets
         # eg property :is_awesome
         property_class.instance_eval(&block) if block
 
+        tb_name = options.delete :table_name
+        property_class.table_name = tb_name if tb_name
+
         hash_opts = {
           :class_name => property_class.name,
           :autosave => true,
