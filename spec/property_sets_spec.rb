@@ -8,6 +8,7 @@ $-w = old
 
 describe PropertySets do
   let(:account) { Account.create(:name => "Name") }
+  let(:relation) { Account.reflections["settings"] }
 
   it "construct the container class" do
     expect(defined?(AccountSetting)).to be_truthy
@@ -19,6 +20,10 @@ describe PropertySets do
     %i(settings texts validations typed_data).each do |name|
       expect(Account.property_set_index).to include(name)
     end
+  end
+
+  it "sets inverse_of" do
+    expect(relation.inverse_of.klass).to eq Account
   end
 
   it "allow the owner class to be customized" do

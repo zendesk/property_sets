@@ -31,6 +31,7 @@ module PropertySets
           :class_name => property_class.name,
           :autosave => true,
           :dependent => :destroy,
+          :inverse_of => self.name.underscore.to_sym,
         }.merge(options)
 
         silence_warnings do
