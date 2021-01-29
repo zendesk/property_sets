@@ -22,7 +22,11 @@ module PropertySets
         )
         property_class.instance_eval(&block)
 
-        hash_opts = {:class_name => property_class.name, :autosave => true, :dependent => :destroy}.merge(options)
+        hash_opts = {
+          :class_name => property_class.name,
+          :autosave => true,
+          :dependent => :destroy,
+        }.merge(options)
 
         silence_warnings do
           has_many association, hash_opts do
