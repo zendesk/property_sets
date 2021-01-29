@@ -26,6 +26,11 @@ describe PropertySets do
     expect(relation.inverse_of.klass).to eq Account
   end
 
+  it "reopening property_set is idempotent, first one wins on options etc" do
+    expect(Array(relation.options[:extend])).to include Account::Woot
+    expect(account.settings.extensions).to include Account::Woot
+  end
+
   it "allow the owner class to be customized" do
     (Flux = Class.new(ActiveRecord::Base)).property_set(:blot, {
       :owner_class_name => 'Foobar'

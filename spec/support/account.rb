@@ -4,7 +4,11 @@ class Account < ActiveRecord::Base
   include PropertySets::Delegator
   delegate_to_property_set :settings, :old => :hep
 
-  property_set :settings do
+  # nonsense module to use in options below, only used as a marker
+  module Woot # doesn't actually seem to be used in AR4 ?
+  end
+
+  property_set :settings, extend: Woot do
     property :foo
     property :bar
     property :baz
@@ -15,7 +19,7 @@ class Account < ActiveRecord::Base
     property :bool_nil, :type => :boolean, :default => nil
   end
 
-  property_set :settings do
+  property_set :settings do # reopening should maintain `extend` above
     property :bool_nil2, :type => :boolean
   end
 
