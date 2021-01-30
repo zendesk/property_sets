@@ -35,11 +35,14 @@ describe PropertySets do
   end
 
   it "pass-through any options from the second parameter" do
-    expect(Account).to receive(:has_many) { |association, h|
-      expect(association).to eq(:foo)
-      expect(h[:conditions]).to eq("bar")
-    }
-    Account.property_set(:foo, :conditions => "bar") {}
+    class AnotherThing < ActiveRecord::Base
+      self.table_name = "things" # cheat and reuse things table
+    end
+
+    AnotherThing.property_set(:settings, :extend => Account::Woot,
+                              :table_name => "thing_settings")
+
+    expect(AnotherThing.new.settings.extensions).to include(::Account::Woot)
   end
 
   it "support protecting attributes" do
