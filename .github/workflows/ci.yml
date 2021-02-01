@@ -19,6 +19,7 @@ jobs:
           --health-timeout 3s
 
     strategy:
+      fail-fast: false
       matrix:
         ruby-version:
           - 2.4
