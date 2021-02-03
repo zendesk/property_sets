@@ -1,5 +1,11 @@
 require 'spec_helper'
 
+old, $-w = $-w, nil
+# sqlite type differences:
+PropertySets::PropertySetModel::COLUMN_TYPE_LIMITS =
+  PropertySets::PropertySetModel::COLUMN_TYPE_LIMITS.merge('varchar' => 65535)
+$-w = old
+
 describe PropertySets do
   let(:account) { Account.create(:name => "Name") }
 

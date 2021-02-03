@@ -20,9 +20,15 @@ module PropertySets
           association,
           options.delete(:owner_class_name) || self.name
         )
-        property_class.instance_eval(&block)
 
-        hash_opts = {:class_name => property_class.name, :autosave => true, :dependent => :destroy}.merge(options)
+        # eg property :is_awesome
+        property_class.instance_eval(&block) if block
+
+        hash_opts = {
+          :class_name => property_class.name,
+          :autosave => true,
+          :dependent => :destroy,
+        }.merge(options)
 
         silence_warnings do
           has_many association, hash_opts do

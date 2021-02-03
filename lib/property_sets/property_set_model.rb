@@ -108,13 +108,16 @@ module PropertySets
         base.attr_accessible :name, :value if defined?(ProtectedAttributes)
       end
 
-      def property(key, options = nil)
+      def properties
         @properties ||= HashWithIndifferentAccess.new
-        @properties[key] = options
+      end
+
+      def property(key, options = nil)
+        properties[key] = options
       end
 
       def keys
-        @properties.keys
+        properties.keys
       end
 
       def default(key)
@@ -122,15 +125,15 @@ module PropertySets
       end
 
       def raw_default(key)
-        @properties[key].try(:[], :default)
+        properties[key].try(:[], :default)
       end
 
       def type(key)
-        @properties[key].try(:[], :type) || :string
+        properties[key].try(:[], :type) || :string
       end
 
       def protected?(key)
-        @properties[key].try(:[], :protected) || false
+        properties[key].try(:[], :protected) || false
       end
 
       def owner_class=(owner_class_name)

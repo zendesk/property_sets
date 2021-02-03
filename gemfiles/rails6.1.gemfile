@@ -4,6 +4,6 @@ gemspec path: '../'
 
 gem 'activerecord', '~> 6.1.0'
 gem 'actionpack', '~> 6.1.0'
-gem 'mysql2', '~> 0.5', platforms: :ruby
+gem "sqlite3", "~> 1.4"
 
 eval(File.read('gemfiles/common.rb'))
