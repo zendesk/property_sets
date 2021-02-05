@@ -8,6 +8,7 @@ $-w = old
 
 describe PropertySets do
   let(:account) { Account.create(:name => "Name") }
+  let(:relation) { Account.reflections["settings"] }
 
   it "construct the container class" do
     expect(defined?(AccountSetting)).to be_truthy
@@ -21,6 +22,15 @@ describe PropertySets do
     end
   end
 
+  it "sets inverse_of" do
+    expect(relation.inverse_of.klass).to eq Account
+  end
+
+  it "reopening property_set is idempotent, first one wins on options etc" do
+    expect(Array(relation.options[:extend])).to include Account::Woot
+    expect(account.settings.extensions).to include Account::Woot
+  end
+
   it "allow the owner class to be customized" do
     (Flux = Class.new(ActiveRecord::Base)).property_set(:blot, {
       :owner_class_name => 'Foobar'
@@ -30,11 +40,14 @@ describe PropertySets do
   end
 
   it "pass-through any options from the second parameter" do
-    expect(Account).to receive(:has_many) { |association, h|
-      expect(association).to eq(:foo)
-      expect(h[:conditions]).to eq("bar")
-    }
-    Account.property_set(:foo, :conditions => "bar") {}
+    class AnotherThing < ActiveRecord::Base
+      self.table_name = "things" # cheat and reuse things table
+    end
+
+    AnotherThing.property_set(:settings, :extend => Account::Woot,
+                              :table_name => "thing_settings")
+
+    expect(AnotherThing.new.settings.extensions).to include(::Account::Woot)
   end
 
   it "support protecting attributes" do

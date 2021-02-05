@@ -6,6 +6,8 @@ module PropertySets
   module ActiveRecordExtension
     module ClassMethods
 
+      RAILS6 = ActiveRecord::VERSION::MAJOR >= 6
+
       def property_set(association, options = {}, &block)
         unless include?(PropertySets::ActiveRecordExtension::InstanceMethods)
           self.send(:prepend, PropertySets::ActiveRecordExtension::InstanceMethods)
@@ -14,8 +16,11 @@ module PropertySets
         end
 
         raise "Invalid association name, letters only" unless association.to_s =~ /[a-z]+/
+        exists = property_set_index.include?(association)
+
         self.property_set_index << association
 
+        # eg AccountSetting - this IS idempotent
         property_class = PropertySets.ensure_property_set_class(
           association,
           options.delete(:owner_class_name) || self.name
@@ -24,47 +29,70 @@ module PropertySets
         # eg property :is_awesome
         property_class.instance_eval(&block) if block
 
+        tb_name = options.delete :table_name
+        property_class.table_name = tb_name if tb_name
+
         hash_opts = {
           :class_name => property_class.name,
           :autosave => true,
           :dependent => :destroy,
+          :inverse_of => self.name.underscore.to_sym,
         }.merge(options)
 
-        silence_warnings do
+        # TODO: should check options are compatible? warn? raise?
+        reflection = self.reflections[association.to_s] # => ActiveRecord::Reflection::HasManyReflection
+        reflection.options.merge! options if reflection && !options.empty?
+
+        unless exists then # makes has_many idempotent...
           has_many association, hash_opts do
-            include PropertySets::ActiveRecordExtension::AssociationExtensions
+            # keep this damn block! -- creates association_module below
+          end
+        end
 
-            property_class.keys.each do |key|
-              raise "Invalid property key #{key}" if self.respond_to?(key)
+        # eg 5: AccountSettingsAssociationExtension
+        # eg 6: Account::SettingsAssociationExtension
 
-              # Reports the coerced truth value of the property
-              define_method "#{key}?" do
-                type  = property_class.type(key)
-                value = lookup_value(type, key)
-                ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
-              end
+        # stolen/adapted from AR's collection_association.rb #define_extensions
 
-              # Returns the value of the property
-              define_method "#{key}" do
-                type = property_class.type(key)
-                lookup_value(type, key)
-              end
+        module_name = "#{association.to_s.camelize}AssociationExtension"
+        module_name = name.demodulize + module_name unless RAILS6
 
-              # Assigns a new value to the property
-              define_method "#{key}=" do |value|
-                instance = lookup(key)
-                instance.value = PropertySets::Casting.write(property_class.type(key), value)
-                instance.value
-              end
+        target = RAILS6 ? self : self.parent
+        association_module = target.const_get module_name
 
-              define_method "#{key}_record" do
-                lookup(key)
-              end
+        association_module.module_eval do
+          include PropertySets::ActiveRecordExtension::AssociationExtensions
+
+          property_class.keys.each do |key|
+            raise "Invalid property key #{key}" if self.respond_to?(key)
+
+            # Reports the coerced truth value of the property
+            define_method "#{key}?" do
+              type  = property_class.type(key)
+              value = lookup_value(type, key)
+              ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
             end
 
-            define_method :property_serialized? do |key|
-              property_class.type(key) == :serialized
+            # Returns the value of the property
+            define_method "#{key}" do
+              type = property_class.type(key)
+              lookup_value(type, key)
             end
+
+            # Assigns a new value to the property
+            define_method "#{key}=" do |value|
+              instance = lookup(key)
+              instance.value = PropertySets::Casting.write(property_class.type(key), value)
+              instance.value
+            end
+
+            define_method "#{key}_record" do
+              lookup(key)
+            end
+          end
+
+          define_method :property_serialized? do |key|
+            property_class.type(key) == :serialized
           end
         end
       end
