@@ -31,11 +31,6 @@ jobs:
             gemfile: rails5.1
           - ruby-version: 3.0
             gemfile: rails5.2
-          # These fail due to a legit bug:
-          - ruby-version: 3.0
-            gemfile: rails6.0
-          - ruby-version: 3.0
-            gemfile: rails6.1
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:

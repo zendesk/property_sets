@@ -44,7 +44,7 @@ module PropertySets
         reflection.options.merge! options if reflection && !options.empty?
 
         unless exists then # makes has_many idempotent...
-          has_many association, hash_opts do
+          has_many association, **hash_opts do
             # keep this damn block! -- creates association_module below
           end
         end
