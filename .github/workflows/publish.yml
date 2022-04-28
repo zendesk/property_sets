@@ -1,0 +1,24 @@
+name: publish
+
+on:
+  push:
+    tags: v*
+
+jobs:
+  build:
+    name: Build + Publish
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: zendesk/checkout@v2
+    - uses: zendesk/setup-ruby@v1
+    - name: gem push
+      run: |
+        mkdir -p $HOME/.gem
+        printf -- "---\n:rubygems_api_key: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
+        chmod 0600 $HOME/.gem/credentials
+        echo "TOKEN='$TOKEN'"
+        # gem build *.gemspec
+        # gem push *.gem
+      env:
+        GEM_HOST_API_KEY: ${{secrets.RUBYGEMS_AUTH_TOKEN}}
