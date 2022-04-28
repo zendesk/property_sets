@@ -4,8 +4,8 @@ source "https://rubygems.org"
 
 gemspec
 
-gem "activerecord", "~> 4.2.1"
-gem "actionview", "~> 4.2.1"
+gem "activerecord", "~> 5.0.0"
+gem "actionview", "~> 5.0.0"
 gem "sqlite3", "~> 1.3.6"
 
 eval(File.read('gemfiles/common.rb'))
