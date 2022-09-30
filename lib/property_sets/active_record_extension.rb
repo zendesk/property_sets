@@ -1,5 +1,6 @@
 require 'active_record'
 require 'property_sets/casting'
+require 'property_sets/value_reader'
 require 'set'
 
 module PropertySets
@@ -155,19 +156,10 @@ module PropertySets
       end
 
       def lookup_value(type, key)
-        serialized = property_serialized?(key)
-
-        if instance = lookup_without_default(key)
-          instance.value_serialized = serialized
-          PropertySets::Casting.read(type, instance.value)
-        else
-          value = association_class.default(key)
-          if serialized
-            PropertySets::Casting.deserialize(value)
-          else
-            PropertySets::Casting.read(type, value)
-          end
-        end
+        instance = lookup_without_default(key)
+        PropertySets::ValueReader.new(
+          property_name: key, assoc_instance: instance, assoc_class: association_class
+        ).read
       end
 
       # The finder method which returns the property if present, otherwise a new instance with defaults
