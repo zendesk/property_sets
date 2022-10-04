@@ -245,12 +245,14 @@ module PropertySets
       return nil unless md
 
       prop_name, suffix = md[1], md[2]
-      return nil unless is_property?(prop_name)
+      return nil if prop_name.nil?
 
       if suffix.nil? && PROPERTY_RECORD_REGEX === prop_name
         suffix = "record"
         prop_name.sub!(PROPERTY_RECORD_REGEX, "")
       end
+
+      return nil unless is_property?(prop_name)
 
       [prop_name, suffix]
     end
