@@ -10,9 +10,9 @@ jobs:
       fail-fast: false
       matrix:
         ruby-version:
-          - 2.6
-          - 2.7
-          - 3.0
+          - '2.6'
+          - '2.7'
+          - '3.0'
         gemfile:
           - rails4.2
           - rails5.0
@@ -21,16 +21,11 @@ jobs:
           - rails6.0
           - rails6.1
         exclude:
-          - ruby-version: 2.7
-            gemfile: rails4.2
-          - ruby-version: 3.0
-            gemfile: rails4.2
-          - ruby-version: 3.0
-            gemfile: rails5.0
-          - ruby-version: 3.0
-            gemfile: rails5.1
-          - ruby-version: 3.0
-            gemfile: rails5.2
+          - {ruby-version: '2.7', gemfile: rails4.2}
+          - {ruby-version: '3.0', gemfile: rails4.2}
+          - {ruby-version: '3.0', gemfile: rails5.0}
+          - {ruby-version: '3.0', gemfile: rails5.1}
+          - {ruby-version: '3.0', gemfile: rails5.2}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
@@ -42,3 +37,18 @@ jobs:
           bundler-cache: true
       - name: RSpec
         run: bundle exec rspec
+
+  specs_successful:
+    name: Specs passing?
+    needs: specs
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if ${{ needs.specs.result == 'success' }}
+          then
+            echo "All specs pass"
+          else
+            echo "Some specs failed"
+            false
+          fi
