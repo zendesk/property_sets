@@ -8,9 +8,9 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
   s.homepage = 'http://github.com/zendesk/property_sets'
   s.license  = 'Apache License Version 2.0'
 
-  s.required_ruby_version = ">= 2.4"
+  s.required_ruby_version = ">= 2.7"
 
-  s.add_runtime_dependency("activerecord", ">= 4.2", "< 7.1")
+  s.add_runtime_dependency("activerecord", ">= 5.0", "< 7.1")
   s.add_runtime_dependency("json")
 
   s.add_development_dependency("bump")
