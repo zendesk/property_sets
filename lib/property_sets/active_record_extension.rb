@@ -126,12 +126,12 @@ module PropertySets
         end
       end
 
-      def save(*args)
-        each { |p| p.save(*args) }
+      def save(...)
+        each { |p| p.save(...) }
       end
 
-      def save!(*args)
-        each { |p| p.save!(*args) }
+      def save!(...)
+        each { |p| p.save!(...) }
       end
 
       def protected?(arg)
