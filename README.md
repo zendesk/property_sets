@@ -41,7 +41,7 @@ account.settings.get([:version, :activated])
 
 You can also forward read, write and query methods to the properties with `PropertySets::Delegator`.
 
-```
+```ruby
 class Account < ActiveRecord::Base
   include PropertySets::Delegator
   delegate_to_property_set :settings, :is_open => :open, :same => :same
