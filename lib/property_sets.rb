@@ -9,20 +9,21 @@ end
 
 module PropertySets
   def self.ensure_property_set_class(association, owner_class_name)
-    const_name = "#{owner_class_name}#{association.to_s.singularize.camelcase}".to_sym
+    const_name = "#{owner_class_name.demodulize}#{association.to_s.singularize.camelcase}"
+    namespace = owner_class_name.deconstantize.safe_constantize || Object
 
-    unless Object.const_defined?(const_name)
+    unless namespace.const_defined?(const_name, false)
       property_class = Class.new(ActiveRecord::Base) do
         include PropertySets::PropertySetModel::InstanceMethods
         extend  PropertySets::PropertySetModel::ClassMethods
       end
 
-      Object.const_set(const_name, property_class)
+      namespace.const_set(const_name, property_class)
 
       property_class.owner_class = owner_class_name
       property_class.owner_assoc = association
     end
 
-    Object.const_get(const_name)
+    namespace.const_get(const_name.to_s)
   end
 end

@@ -36,7 +36,7 @@ module PropertySets
           :class_name => property_class.name,
           :autosave => true,
           :dependent => :destroy,
-          :inverse_of => self.name.underscore.to_sym,
+          :inverse_of => self.name.demodulize.underscore.to_sym,
         }.merge(options)
 
         # TODO: should check options are compatible? warn? raise?
