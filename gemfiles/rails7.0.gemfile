@@ -6,4 +6,4 @@ gem 'activerecord', '~> 7.0.0'
 gem 'actionpack', '~> 7.0.0'
 gem "sqlite3", "~> 1.4"
 
-eval(File.read('gemfiles/common.rb'))
+eval_gemfile "common.rb"
