@@ -7,28 +7,28 @@ PropertySets::PropertySetModel::COLUMN_TYPE_LIMITS =
 $-w = old
 
 describe PropertySets do
-  let(:account) { Account.create(:name => "Name") }
-  let(:relation) { Account.reflections["settings"] }
+  let(:account) { Parent::Account.create(:name => "Name") }
+  let(:relation) { Parent::Account.reflections["settings"] }
 
   it "construct the container class" do
-    expect(defined?(AccountSetting)).to be_truthy
-    expect(defined?(AccountText)).to be_truthy
-    expect(defined?(AccountTypedDatum)).to be_truthy
+    expect(defined?(Parent::AccountSetting)).to be_truthy
+    expect(defined?(Parent::AccountText)).to be_truthy
+    expect(defined?(Parent::AccountTypedDatum)).to be_truthy
   end
 
   it "register the property sets used on a class" do
     %i(settings texts validations typed_data).each do |name|
-      expect(Account.property_set_index).to include(name)
+      expect(Parent::Account.property_set_index).to include(name)
     end
   end
 
   it "sets inverse_of" do
-    expect(relation.inverse_of.klass).to eq Account
+    expect(relation.inverse_of.klass).to eq Parent::Account
   end
 
   it "reopening property_set is idempotent, first one wins on options etc" do
-    expect(Array(relation.options[:extend])).to include Account::Woot
-    expect(account.settings.extensions).to include Account::Woot
+    expect(Array(relation.options[:extend])).to include Parent::Account::Woot
+    expect(account.settings.extensions).to include Parent::Account::Woot
   end
 
   it "allow the owner class to be customized" do
@@ -44,10 +44,10 @@ describe PropertySets do
       self.table_name = "things" # cheat and reuse things table
     end
 
-    AnotherThing.property_set(:settings, :extend => Account::Woot,
+    AnotherThing.property_set(:settings, :extend => Parent::Account::Woot,
                               :table_name => "thing_settings")
 
-    expect(AnotherThing.new.settings.extensions).to include(::Account::Woot)
+    expect(AnotherThing.new.settings.extensions).to include(::Parent::Account::Woot)
   end
 
   it "support protecting attributes" do
@@ -62,7 +62,7 @@ describe PropertySets do
     account.settings.enable(:hep)
     expect(account.settings.hep?).to be true
 
-    account = Account.new
+    account = Parent::Account.new
     expect(account.settings.foo?).to be false
     account.settings.enable(:foo)
     expect(account.settings.foo?).to be true
@@ -111,7 +111,7 @@ describe PropertySets do
   end
 
   it "reject settings with an invalid name" do
-    s = AccountSetting.new(:account => account)
+    s = Parent::AccountSetting.new(:account => account)
 
     valids   = %w(hello hel_lo hell0) + [:hello]
     invalids = %w(_hello)
@@ -161,7 +161,7 @@ describe PropertySets do
   end
 
   it "reference the owner instance when constructing a new record ...on a new record" do
-    account = Account.new(:name => "New")
+    account = Parent::Account.new(:name => "New")
     record  = account.settings.lookup(:baz)
 
     expect(record).to be_new_record
@@ -232,7 +232,7 @@ describe PropertySets do
     end
 
     it "work identically for new and existing owner objects" do
-      [ account, Account.new(:name => "Mibble") ].each do |account|
+      [ account, Parent::Account.new(:name => "Mibble") ].each do |account|
         account.settings.set(:foo => "123", :bar => "456")
 
         expect(account.settings.size).to eq(2)
@@ -368,7 +368,7 @@ describe PropertySets do
     it "creates changed attributes" do
       account.update_attribute(:old, "it works!")
       expect(account.previous_changes["old"].last).to eq("it works!")
-      expect(Account.find(account.id).old).to eq("it works!")
+      expect(Parent::Account.find(account.id).old).to eq("it works!")
     end
 
     it "updates changed attributes for existing property_set data" do
@@ -376,7 +376,7 @@ describe PropertySets do
       account.save
       account.update_attribute(:old, "it works!")
       expect(account.previous_changes["old"].last).to eq("it works!")
-      expect(Account.find(account.id).old).to eq("it works!")
+      expect(Parent::Account.find(account.id).old).to eq("it works!")
     end
 
     it "updates changed attributes for existing property_set data after set through forwarded method" do
@@ -384,7 +384,7 @@ describe PropertySets do
       account.save
       account.update_attribute(:old, "it works!")
       expect(account.previous_changes["old"].last).to eq("it works!")
-      expect(Account.find(account.id).old).to eq("it works!")
+      expect(Parent::Account.find(account.id).old).to eq("it works!")
     end
   end
 
