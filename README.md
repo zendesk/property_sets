@@ -159,6 +159,14 @@ add_index :account_settings, [ :account_id, :name ], :unique => true
 * ActiveRecord
 * ActiveSupport
 
+## Running the tests locally
+
+```shell
+export BUNDLE_GEMFILE="gemfiles/rails5.1.gemfile"
+bundle -j 6
+bundle exec rspec
+```
+
 ## License and copyright
 
 Copyright 2013 Zendesk

@@ -1,5 +1,7 @@
 require 'active_record'
+require 'property_sets/association_wrapper'
 require 'property_sets/casting'
+require 'property_sets/value_reader'
 require 'set'
 
 module PropertySets
@@ -47,7 +49,47 @@ module PropertySets
           has_many association, **hash_opts do
             # keep this damn block! -- creates association_module below
           end
+
+          # Inject our association wrapper so that we can control how the association
+          # is accessed and loaded from the DB. This allows us to not load the entire
+          # dataset from the DB when we only care about a single property set entry.
+          #
+          # Alias the normal has_many association method.
+          #
+          alias_method "#{association}_without_wrapper", association
+          #
+          # An ivar to cache the association wrapper. This has to be scoped with the
+          # association name in order to support multiple uses of property sets
+          # within the same AR model.
+          #
+          association_wrapper_memo_name = prop_set_assoc_wrapper_memo_name(association)
+          #
+          # Redefine the association method.
+          # The AssociationProxy will use the original (aliased) association
+          # method when required.
+          #
+          define_method association do |**opts|
+            memo = instance_variable_get(association_wrapper_memo_name) and return memo
+
+            wrapper = PropertySets::AssociationWrapper.new(
+              owner_instance: self,
+              assoc_name: association,
+              assoc_class: property_class,
+              opts: opts
+            )
+            instance_variable_set(association_wrapper_memo_name, wrapper)
+
+            wrapper
+          end
+
+          # To replicate ":autosave => true" on the has_many association.
+          before_save -> do
+            public_send(association).save
+          end
         end
+
+        # Open the association module defined with the has_many declaration (above)
+        # and define custom accessors.
 
         # eg 5: AccountSettingsAssociationExtension
         # eg 6: Account::SettingsAssociationExtension
@@ -95,6 +137,11 @@ module PropertySets
             property_class.type(key) == :serialized
           end
         end
+      end
+
+
+      def prop_set_assoc_wrapper_memo_name(association)
+        "@prop_set_assoc_wrapper_#{association}"
       end
     end
 
@@ -154,20 +201,11 @@ module PropertySets
         detect { |property| property.name.to_sym == arg.to_sym }
       end
 
-      def lookup_value(type, key)
-        serialized = property_serialized?(key)
-
-        if instance = lookup_without_default(key)
-          instance.value_serialized = serialized
-          PropertySets::Casting.read(type, instance.value)
-        else
-          value = association_class.default(key)
-          if serialized
-            PropertySets::Casting.deserialize(value)
-          else
-            PropertySets::Casting.read(type, value)
-          end
-        end
+      def lookup_value(_type, key)
+        instance = lookup_without_default(key)
+        PropertySets::ValueReader.new(
+          property_name: key, assoc_instance: instance, assoc_class: association_class
+        ).read
       end
 
       # The finder method which returns the property if present, otherwise a new instance with defaults
@@ -184,6 +222,13 @@ module PropertySets
 
       # This finder method returns the property if present, otherwise a new instance with the default value.
       # It does not have the side effect of adding a new setting object.
+      #
+      # Among the "lookup" methods, this alone is not used internally in the gem.
+      # It's part on the undocumented public API, and application code can make
+      # use of it to try to fetch a property record or an unpersisted default
+      # record, _without adding it to the association collection_, which means
+      # that the returned default will not risk to be saved.
+      #
       def lookup_or_default(arg)
         instance = lookup_without_default(arg)
         instance ||= association_class.new(:value => association_class.raw_default(arg))
@@ -227,7 +272,21 @@ module PropertySets
         super attributes
       end
 
+      # Remove all the memoized Association Proxies
+      def reload(*args)
+        clear_all_property_set_caches
+        super(*args)
+      end
+
       private
+
+      def clear_all_property_set_caches
+        self.class.property_set_index.each do |association|
+          memo_ivar = self.class.prop_set_assoc_wrapper_memo_name(association)
+          next unless instance_variable_defined?(memo_ivar)
+          remove_instance_variable(memo_ivar)
+        end
+      end
 
       def delegated_property_sets?
         self.class.respond_to?(:delegated_property_set_attributes)

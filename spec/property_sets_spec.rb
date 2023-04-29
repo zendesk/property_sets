@@ -97,12 +97,12 @@ describe PropertySets do
 
   describe 'querying for a setting that does not exist' do
     before do
-      expect(account.settings).to eq([])
+      expect(account.settings.to_a).to eq([])
       expect(account.settings.hep?).to be true
     end
 
     it 'not add a new setting' do
-      expect(account.settings).to eq([])
+      expect(account.settings.to_a).to eq([])
     end
 
     it 'give back the default value' do
@@ -262,6 +262,8 @@ describe PropertySets do
         { :id => account.texts.lookup(:foo).id, :name => "foo", :value => "0"  },
         { :id => account.texts.lookup(:bar).id, :name => "bar", :value => "1" }
       ])
+
+      account.reload
 
       expect(account.texts.foo).to eq("0")
       expect(account.texts.bar).to eq("1")

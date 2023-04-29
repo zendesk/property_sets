@@ -13,6 +13,7 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
   s.add_runtime_dependency("activerecord", ">= 5.0", "< 7.1")
   s.add_runtime_dependency("json")
 
+  s.add_development_dependency("pry")
   s.add_development_dependency("bump")
   s.add_development_dependency("rake")
   s.add_development_dependency('actionpack')

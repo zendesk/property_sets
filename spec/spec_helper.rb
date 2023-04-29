@@ -10,6 +10,8 @@ require 'support/database'
 require 'support/account'
 require 'support/thing'
 
+require 'pry'
+
 I18n.enforce_available_locales = false
 
 # http://stackoverflow.com/questions/5490411/counting-the-number-of-queries-performed/43810063#43810063
