@@ -1,13 +1,13 @@
 default_env:
   unsharded_database:
-    adapter: mysql2
+    adapter: sqlite3
     encoding: utf8
     database: unsharded_database
     port: '13306'
     reconnect: true
 
   unsharded_database_replica:
-    adapter: mysql2
+    adapter: sqlite3
     encoding: utf8
     database: unsharded_database_replica
     reconnect: true
