@@ -1,4 +1,4 @@
-test:
+default_env:
   unsharded_database:
     adapter: mysql2
     encoding: utf8
