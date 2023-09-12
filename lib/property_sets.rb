@@ -7,6 +7,10 @@ begin
 rescue LoadError
 end
 
+if "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}" == "6.1"
+  ActiveRecord::Base.singleton_class.alias_method :connection_class_for_self, :connection_classes
+end
+
 module PropertySets
   def self.ensure_property_set_class(association, owner_class_name)
     const_name = "#{owner_class_name.demodulize}#{association.to_s.singularize.camelcase}"

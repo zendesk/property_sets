@@ -252,5 +252,4 @@ module PropertySets
   end
 end
 
-ActiveRecord::Base.singleton_class.alias_method :connection_class_for_self, :connection_classes
 ActiveRecord::Base.extend PropertySets::ActiveRecordExtension::ClassMethods
