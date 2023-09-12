@@ -13,7 +13,7 @@ module PropertySets
     namespace = owner_class_name.deconstantize.safe_constantize || Object
 
     unless namespace.const_defined?(const_name, false)
-      property_class = Class.new(parent_for_property_class(owner_class_name)) do
+      property_class = Class.new(parent_for_property_class(namespace, owner_class_name)) do
         include PropertySets::PropertySetModel::InstanceMethods
         extend  PropertySets::PropertySetModel::ClassMethods
       end
@@ -27,7 +27,7 @@ module PropertySets
     namespace.const_get(const_name.to_s)
   end
 
-  def self.parent_for_property_class(owner_class_name)
+  def self.parent_for_property_class(namespace, owner_class_name)
     namespace.const_get(owner_class_name).connection_class_for_self
   rescue NameError
     ::ActiveRecord::Base
