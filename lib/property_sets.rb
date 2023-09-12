@@ -26,9 +26,9 @@ module PropertySets
 
     namespace.const_get(const_name.to_s)
   end
-  
+
   def self.parent_for_property_class(owner_class_name)
-    namespace.const_get(owner_class_name).superclass
+    namespace.const_get(owner_class_name).connection_class_for_self
   rescue NameError
     ::ActiveRecord::Base
   end
