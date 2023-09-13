@@ -27,11 +27,7 @@ module PropertySets
 
         mappings.each do |old_attr, new_attr|
           self.delegated_property_set_attributes << old_attr.to_s
-          if ActiveRecord.version < Gem::Version.new("5.0")
-            attribute old_attr, ActiveRecord::Type::Value.new
-          else
-            attribute old_attr, ActiveModel::Type::Value.new
-          end
+          attribute old_attr, ActiveModel::Type::Value.new
           define_method(old_attr) {
             association = send(setname)
             type = association.association_class.type(new_attr)
