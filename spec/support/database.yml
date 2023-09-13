@@ -1,4 +1,4 @@
-default_env:
+test:
   unsharded_database:
     adapter: sqlite3
     encoding: utf8
