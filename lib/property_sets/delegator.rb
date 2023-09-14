@@ -40,7 +40,7 @@ module PropertySets
               send("#{old_attr}_will_change!")
             end
             send(setname).send("#{new_attr}=", value)
-            super(value) if defined?(super) # Rails 4 does not define this
+            super(value)
           end
 
           define_method("#{old_attr}_will_change!") do
