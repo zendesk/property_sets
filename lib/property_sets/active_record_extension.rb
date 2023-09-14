@@ -5,9 +5,6 @@ require 'set'
 module PropertySets
   module ActiveRecordExtension
     module ClassMethods
-
-      RAILS6 = ActiveRecord::VERSION::MAJOR >= 6
-
       def property_set(association, options = {}, &block)
         unless include?(PropertySets::ActiveRecordExtension::InstanceMethods)
           self.send(:prepend, PropertySets::ActiveRecordExtension::InstanceMethods)
@@ -49,16 +46,10 @@ module PropertySets
           end
         end
 
-        # eg 5: AccountSettingsAssociationExtension
-        # eg 6: Account::SettingsAssociationExtension
-
         # stolen/adapted from AR's collection_association.rb #define_extensions
 
         module_name = "#{association.to_s.camelize}AssociationExtension"
-        module_name = name.demodulize + module_name unless RAILS6
-
-        target = RAILS6 ? self : self.parent
-        association_module = target.const_get module_name
+        association_module = self.const_get module_name
 
         association_module.module_eval do
           include PropertySets::ActiveRecordExtension::AssociationExtensions
