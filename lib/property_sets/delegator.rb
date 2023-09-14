@@ -27,11 +27,7 @@ module PropertySets
 
         mappings.each do |old_attr, new_attr|
           self.delegated_property_set_attributes << old_attr.to_s
-          if ActiveRecord.version < Gem::Version.new("5.0")
-            attribute old_attr, ActiveRecord::Type::Value.new
-          else
-            attribute old_attr, ActiveModel::Type::Value.new
-          end
+          attribute old_attr, ActiveModel::Type::Value.new
           define_method(old_attr) {
             association = send(setname)
             type = association.association_class.type(new_attr)
@@ -44,7 +40,7 @@ module PropertySets
               send("#{old_attr}_will_change!")
             end
             send(setname).send("#{new_attr}=", value)
-            super(value) if defined?(super) # Rails 4 does not define this
+            super(value)
           end
 
           define_method("#{old_attr}_will_change!") do
