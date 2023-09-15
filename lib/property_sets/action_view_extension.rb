@@ -8,9 +8,9 @@ module ActionView
 
         def initialize(property_set, template, object_name, object)
           @property_set = property_set
-          @template     = template
-          @object_name  = object_name
-          @object       = object
+          @template = template
+          @object_name = object_name
+          @object = object
         end
 
         def check_box(property, options = {}, checked_value = "1", unchecked_value = "0")
@@ -43,7 +43,7 @@ module ActionView
         def select(property, choices, options = {}, html_options = {})
           options = prepare_id_name(property, options)
           current_value = options[:object].send(property_set).send(property)
-          template.select("#{object_name}[#{property_set}]", property, choices, { :selected => current_value }, html_options )
+          template.select("#{object_name}[#{property_set}]", property, choices, {:selected => current_value}, html_options)
         end
 
         private
@@ -52,9 +52,9 @@ module ActionView
           throw "Invalid options type #{options.inspect}" unless options.is_a?(Hash)
 
           options.clone.tap do |prepared_options|
-            prepared_options[:object]   = object || fetch_target_object
-            prepared_options[:id]     ||= "#{object_name}_#{property_set}_#{property}"
-            prepared_options[:name]     = "#{object_name}[#{property_set}][#{property}]"
+            prepared_options[:object] = object || fetch_target_object
+            prepared_options[:id] ||= "#{object_name}_#{property_set}_#{property}"
+            prepared_options[:name] = "#{object_name}[#{property_set}][#{property}]"
           end
         end
 
@@ -75,18 +75,16 @@ module ActionView
 
         def cast_boolean(value)
           case value
-          when TrueClass  then "1"
+          when TrueClass then "1"
           when FalseClass then "0"
           else value
           end
         end
-
       end
 
       def property_set(identifier)
         PropertySetFormBuilderProxy.new(identifier, @template, object_name, object)
       end
-
     end
   end
 end

@@ -45,7 +45,7 @@ describe PropertySets do
     end
 
     AnotherThing.property_set(:settings, :extend => Parent::Account::Woot,
-                              :table_name => "thing_settings")
+      :table_name => "thing_settings")
 
     expect(AnotherThing.new.settings.extensions).to include(::Parent::Account::Woot)
   end
@@ -75,7 +75,7 @@ RSpec.shared_examples "different account models" do |account_klass|
 
   it "be empty on a new account" do
     expect(account.settings).to be_empty
-    expect(account.texts)   .to be_empty
+    expect(account.texts).to be_empty
 
     expect(account.texts.foo?).to be false
     expect(account.texts.bar?).to be false
@@ -85,18 +85,18 @@ RSpec.shared_examples "different account models" do |account_klass|
   end
 
   it "respond with defaults" do
-    expect(account.settings.bar?)      .to be false
-    expect(account.settings.bar)       .to be_nil
-    expect(account.settings.hep?)      .to be true
-    expect(account.settings.hep)       .to eq("skep")
-    expect(account.settings.bool_nil)  .to be_nil
-    expect(account.settings.bool_nil2) .to be_nil
+    expect(account.settings.bar?).to be false
+    expect(account.settings.bar).to be_nil
+    expect(account.settings.hep?).to be true
+    expect(account.settings.hep).to eq("skep")
+    expect(account.settings.bool_nil).to be_nil
+    expect(account.settings.bool_nil2).to be_nil
     expect(account.settings.bool_false).to be false
-    expect(account.settings.bool_true) .to be true
+    expect(account.settings.bool_true).to be true
   end
 
   it "be flexible when fetching property data" do
-    expect(account.settings.association_class.default(:hep)) .to eq("skep")
+    expect(account.settings.association_class.default(:hep)).to eq("skep")
     expect(account.settings.association_class.default("hep")).to eq("skep")
   end
 
@@ -122,7 +122,7 @@ RSpec.shared_examples "different account models" do |account_klass|
     settings_klass = Object.const_get("#{account_klass}Setting")
     s = settings_klass.new(account.model_name.element.to_sym => account)
 
-    valids   = %w(hello hel_lo hell0) + [:hello]
+    valids = %w(hello hel_lo hell0) + [:hello]
     invalids = %w(_hello)
 
     valids.each do |valid|
@@ -145,9 +145,9 @@ RSpec.shared_examples "different account models" do |account_klass|
 
   it "be creatable using the = operator" do
     expect(account.settings.foo?).to be false
-    [ "1", "2" ].each do |value|
+    ["1", "2"].each do |value|
       expect(account.settings.foo = value).to be_truthy
-      expect(account.settings.foo?)       .to be true
+      expect(account.settings.foo?).to be true
       expect(account.settings.size).to eq(1)
     end
 
@@ -174,7 +174,7 @@ RSpec.shared_examples "different account models" do |account_klass|
 
   it "reference the owner instance when constructing a new record ...on a new record" do
     account = Parent::Account.new(:name => "New")
-    record  = account.settings.lookup(:baz)
+    record = account.settings.lookup(:baz)
 
     expect(record).to be_new_record
     expect(record.account).to eq(account)
@@ -244,25 +244,25 @@ RSpec.shared_examples "different account models" do |account_klass|
     end
 
     it "work identically for new and existing owner objects" do
-      [ account, Parent::Account.new(:name => "Mibble") ].each do |account|
+      [account, Parent::Account.new(:name => "Mibble")].each do |account|
         account.settings.set(:foo => "123", :bar => "456")
 
         expect(account.settings.size).to eq(2)
-        expect(account.settings.foo) .to eq("123")
-        expect(account.settings.bar) .to eq("456")
+        expect(account.settings.foo).to eq("123")
+        expect(account.settings.bar).to eq("456")
 
         account.settings.set(:bar => "789", :baz => "012")
 
         expect(account.settings.size).to eq(3)
-        expect(account.settings.foo) .to eq("123")
-        expect(account.settings.bar) .to eq("789")
-        expect(account.settings.baz) .to eq("012")
+        expect(account.settings.foo).to eq("123")
+        expect(account.settings.bar).to eq("789")
+        expect(account.settings.baz).to eq("012")
       end
     end
 
     it "be updateable as AR nested attributes" do
       expect(
-        account.texts_attributes = [{ :name => "foo", :value => "1"  }, { :name => "bar", :value => "0"  }]
+        account.texts_attributes = [{:name => "foo", :value => "1"}, {:name => "bar", :value => "0"}]
       ).to be_truthy
 
       account.save!
@@ -271,8 +271,8 @@ RSpec.shared_examples "different account models" do |account_klass|
       expect(account.texts.bar).to eq("0")
 
       account.update_attributes!(:texts_attributes => [
-        { :id => account.texts.lookup(:foo).id, :name => "foo", :value => "0"  },
-        { :id => account.texts.lookup(:bar).id, :name => "bar", :value => "1" }
+        {:id => account.texts.lookup(:foo).id, :name => "foo", :value => "0"},
+        {:id => account.texts.lookup(:bar).id, :name => "bar", :value => "1"}
       ])
 
       expect(account.texts.foo).to eq("0")
@@ -290,7 +290,7 @@ RSpec.shared_examples "different account models" do |account_klass|
 
       account.update_attributes!(
         :name => "Kim",
-        :settings => { :foo => "1", :baz => "0", :pro => "1" }
+        :settings => {:foo => "1", :baz => "0", :pro => "1"}
       )
 
       account.reload
@@ -426,7 +426,6 @@ RSpec.shared_examples "different account models" do |account_klass|
   end
 
   describe "typed columns" do
-
     it "typecast the default value" do
       expect(account.typed_data.association_class.default(:default_prop)).to eq(123)
     end

@@ -4,10 +4,10 @@ require "property_sets"
 
 yaml_config = "spec/support/database.yml"
 ActiveRecord::Base.configurations = begin
-                                      YAML.safe_load(IO.read(yaml_config), aliases: true)
-                                    rescue ArgumentError
-                                      YAML.safe_load(IO.read(yaml_config))
-                                    end
+  YAML.safe_load(IO.read(yaml_config), aliases: true)
+rescue ArgumentError
+  YAML.safe_load(IO.read(yaml_config))
+end
 
 class AbstractUnshardedModel < ActiveRecord::Base
   self.abstract_class = true

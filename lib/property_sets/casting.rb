@@ -2,7 +2,7 @@ require "json"
 
 module PropertySets
   module Casting
-    FALSE = [ "false", "0", "", "off", "n" ]
+    FALSE = ["false", "0", "", "off", "n"]
 
     class << self
       def read(type, value)

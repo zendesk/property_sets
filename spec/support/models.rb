@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "acts_like_an_integer"
 
 if LEGACY_CONNECTION_HANDLING

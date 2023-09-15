@@ -19,7 +19,7 @@ module PropertySets
     unless namespace.const_defined?(const_name, false)
       property_class = Class.new(parent_for_property_class(namespace, owner_class_name)) do
         include PropertySets::PropertySetModel::InstanceMethods
-        extend  PropertySets::PropertySetModel::ClassMethods
+        extend PropertySets::PropertySetModel::ClassMethods
       end
 
       namespace.const_set(const_name, property_class)

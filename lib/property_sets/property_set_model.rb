@@ -4,19 +4,19 @@ module PropertySets
   module PropertySetModel
     # https://dev.mysql.com/doc/refman/5.6/en/storage-requirements.html
     COLUMN_TYPE_LIMITS = {
-      "tinyblob"   => 255,        # 2^8 - 1
-      "tinytext"   => 255,
-      "blob"       => 65535,      # 2^16 - 1
-      "text"       => 65535,
+      "tinyblob" => 255,        # 2^8 - 1
+      "tinytext" => 255,
+      "blob" => 65535,      # 2^16 - 1
+      "text" => 65535,
       "mediumblob" => 16777215,   # 2^24 - 1
       "mediumtext" => 16777215,
-      "longblob"   => 4294967295, # 2^32 - 1
-      "longtext"   => 4294967295,
+      "longblob" => 4294967295, # 2^32 - 1
+      "longtext" => 4294967295,
     }.freeze
 
     module InstanceMethods
       def false?
-        [ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
+        ["false", "0", "", "off", "n"].member?(value.to_s.downcase)
       end
 
       def true?
@@ -102,9 +102,9 @@ module PropertySets
 
     module ClassMethods
       def self.extended(base)
-        base.validate        :validate_format_of_name
-        base.validate        :validate_length_of_serialized_data
-        base.before_create   :coerce_value
+        base.validate :validate_format_of_name
+        base.validate :validate_length_of_serialized_data
+        base.before_create :coerce_value
         base.attr_accessible :name, :value if defined?(ProtectedAttributes)
       end
 
@@ -139,10 +139,10 @@ module PropertySets
       def owner_class=(owner_class_name)
         @owner_class_sym = owner_class_name.to_s.demodulize.underscore.to_sym
 
-        belongs_to              owner_class_sym, class_name: owner_class_name
-        validates_presence_of   owner_class_sym, class_name: owner_class_name
+        belongs_to owner_class_sym, class_name: owner_class_name
+        validates_presence_of owner_class_sym, class_name: owner_class_name
         validates_uniqueness_of :name, :scope => owner_class_key_sym, :case_sensitive => false
-        attr_accessible         owner_class_key_sym, owner_class_sym if defined?(ProtectedAttributes)
+        attr_accessible owner_class_key_sym, owner_class_sym if defined?(ProtectedAttributes)
       end
 
       def owner_assoc=(association)
@@ -161,6 +161,5 @@ module PropertySets
         "#{owner_class_sym}_id".to_sym
       end
     end
-
   end
 end

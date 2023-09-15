@@ -61,9 +61,9 @@ module PropertySets
 
             # Reports the coerced truth value of the property
             define_method "#{key}?" do
-              type  = property_class.type(key)
+              type = property_class.type(key)
               value = lookup_value(type, key)
-              ![ "false", "0", "", "off", "n" ].member?(value.to_s.downcase)
+              !["false", "0", "", "off", "n"].member?(value.to_s.downcase)
             end
 
             # Returns the value of the property
@@ -165,7 +165,7 @@ module PropertySets
 
       # The finder method which returns the property if present, otherwise a new instance with defaults
       def lookup(arg)
-        instance   = lookup_without_default(arg)
+        instance = lookup_without_default(arg)
         instance ||= build_default(arg)
         instance.value_serialized = property_serialized?(arg)
 
@@ -214,7 +214,7 @@ module PropertySets
 
       def update_columns(attributes)
         if delegated_property_sets?
-          attributes = attributes.reject{|k,_| self.class.delegated_property_set_attributes.include?(k.to_s) }
+          attributes = attributes.reject { |k, _| self.class.delegated_property_set_attributes.include?(k.to_s) }
         end
 
         super attributes
@@ -241,7 +241,6 @@ module PropertySets
         attribute_names
       end
     end
-
   end
 end
 

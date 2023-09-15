@@ -3,19 +3,19 @@ require "spec_helper"
 describe "property set view extensions" do
   def base_options
     {
-      :name   => "#{object_name}[#{property_set}][#{property}]",
-      :id     => "#{object_name}_#{property_set}_#{property}",
+      :name => "#{object_name}[#{property_set}][#{property}]",
+      :id => "#{object_name}_#{property_set}_#{property}",
       :object => object
     }
   end
 
   let(:property_set) { :settings }
-  let(:property)     { :active }
-  let(:object_name)  { "object_name" }
-  let(:object)       { double("View object") }
-  let(:template)     { double("Template") }
-  let(:builder)      { ActionView::Helpers::FormBuilder.new(object_name, object, template, {}) }
-  let(:proxy)        { builder.property_set(property_set) }
+  let(:property) { :active }
+  let(:object_name) { "object_name" }
+  let(:object) { double("View object") }
+  let(:template) { double("Template") }
+  let(:builder) { ActionView::Helpers::FormBuilder.new(object_name, object, template, {}) }
+  let(:proxy) { builder.property_set(property_set) }
 
   it "provide a form builder proxy" do
     expect(proxy).to be_a(ActionView::Helpers::FormBuilder::PropertySetFormBuilderProxy)
@@ -123,7 +123,7 @@ describe "property set view extensions" do
   describe "#radio_button" do
     let(:expected_options) {
       base_options.merge(
-        id:      "#{object_name}_#{property_set}_#{property}_hello",
+        id: "#{object_name}_#{property_set}_#{property}_hello",
         checked: false
       )
     }
@@ -135,11 +135,11 @@ describe "property set view extensions" do
     end
 
     it "generate a unique id when one is not provided" do
-        expected_options.merge!(
-          :id => "#{object_name}_#{property_set}_#{property}_pancake"
-        )
-        expect(template).to receive(:radio_button).with(object_name, property, "pancake", expected_options)
-        proxy.radio_button(property, "pancake")
+      expected_options.merge!(
+        :id => "#{object_name}_#{property_set}_#{property}_pancake"
+      )
+      expect(template).to receive(:radio_button).with(object_name, property, "pancake", expected_options)
+      proxy.radio_button(property, "pancake")
     end
 
     describe "when called with checked true for a truth value" do
@@ -170,7 +170,7 @@ describe "property set view extensions" do
     end
 
     it "render a <select> with <option>s" do
-      select_options = { :selected => "2" }
+      select_options = {:selected => "2"}
       select_choices = [["One", 1], ["Two", 2], ["Three", 3]]
 
       expect(template).to receive(:select).with("object_name[settings]", :count, select_choices, select_options, {})
@@ -178,9 +178,9 @@ describe "property set view extensions" do
     end
 
     it "merge :html_options" do
-      select_options = { :selected => "2" }
+      select_options = {:selected => "2"}
       select_choices = [["One", 1], ["Two", 2], ["Three", 3]]
-      html_options   = { :id => "foo", :name => "bar", :disabled => true }
+      html_options = {:id => "foo", :name => "bar", :disabled => true}
 
       expect(template).to receive(:select).with("object_name[settings]", :count, select_choices, select_options, html_options)
       proxy.select(:count, select_choices, select_options, html_options)

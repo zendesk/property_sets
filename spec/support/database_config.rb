@@ -3,7 +3,7 @@
 config = {
   :test => {
     :test_database => {
-      :adapter  => "sqlite3",
+      :adapter => "sqlite3",
       :database => ":memory:",
     },
     :test_alt_database => {

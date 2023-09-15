@@ -1,12 +1,12 @@
 require "./lib/property_sets/version"
 
 Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
-  s.summary     = "Property sets for ActiveRecord."
+  s.summary = "Property sets for ActiveRecord."
   s.description = "This gem is an ActiveRecord extension which provides a convenient interface for managing per row properties."
-  s.authors  = ["Morten Primdahl"]
-  s.email    = "primdahl@me.com"
+  s.authors = ["Morten Primdahl"]
+  s.email = "primdahl@me.com"
   s.homepage = "http://github.com/zendesk/property_sets"
-  s.license  = "Apache License Version 2.0"
+  s.license = "Apache License Version 2.0"
 
   s.required_ruby_version = ">= 2.7"
 

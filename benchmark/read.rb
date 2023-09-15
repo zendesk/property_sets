@@ -9,15 +9,15 @@ class Account < ActiveRecord::Base
   property_set :benchmark_settings do
     # 30 simple objects
     10.times do |i|
-      property "float_prop_#{i}", :type => :float,   :default => 3.1415
-      property "int_prop_#{i}",   :type => :integer, :default => 22
-      property "string_prop_#{i}", :type => :string,  :default => "Sausalito, CA"
+      property "float_prop_#{i}", :type => :float, :default => 3.1415
+      property "int_prop_#{i}", :type => :integer, :default => 22
+      property "string_prop_#{i}", :type => :string, :default => "Sausalito, CA"
     end
 
     # 10 complex
     5.times do |i|
-      property "datetime_prop_#{i}",   :type => :datetime,   :default => Time.now.to_s
-      property "serialized_prop_#{i}", :type => :serialized, :default => { "Hello" => "There" }
+      property "datetime_prop_#{i}", :type => :datetime, :default => Time.now.to_s
+      property "serialized_prop_#{i}", :type => :serialized, :default => {"Hello" => "There"}
     end
 
     # 60 booleans
@@ -25,13 +25,10 @@ class Account < ActiveRecord::Base
       property "boolean_prop_#{i}", :type => :boolean, :default => true
     end
   end
-
 end
 
 class BenchmarkRead < ActiveSupport::TestCase
-
   context "property sets" do
-
     setup do
       @account = Account.create(:name => "Name")
     end
@@ -65,7 +62,6 @@ class BenchmarkRead < ActiveSupport::TestCase
       end
       puts "Reading empty settings: #{empty_timing}ms"
     end
-
   end
 
   def read_settings(account)
@@ -78,5 +74,4 @@ class BenchmarkRead < ActiveSupport::TestCase
     account.benchmark_settings.boolean_prop_40?
     account.benchmark_settings.boolean_prop_50?
   end
-
 end
