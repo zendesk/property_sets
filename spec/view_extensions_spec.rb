@@ -3,9 +3,9 @@ require "spec_helper"
 describe "property set view extensions" do
   def base_options
     {
-      :name => "#{object_name}[#{property_set}][#{property}]",
-      :id => "#{object_name}_#{property_set}_#{property}",
-      :object => object
+      name: "#{object_name}[#{property_set}][#{property}]",
+      id: "#{object_name}_#{property_set}_#{property}",
+      object: object
     }
   end
 
@@ -42,7 +42,7 @@ describe "property set view extensions" do
       end
 
       it "build a checkbox with the proper parameters" do
-        expected_options = base_options.merge(:checked => true)
+        expected_options = base_options.merge(checked: true)
         expect(template).to receive(:check_box).with(object_name, property, expected_options, "1", "0")
         proxy.check_box(property)
       end
@@ -55,7 +55,7 @@ describe "property set view extensions" do
       end
 
       it "build a checkbox with the proper parameters" do
-        expected_options = base_options.merge(:checked => false)
+        expected_options = base_options.merge(checked: false)
         expect(template).to receive(:check_box).with(object_name, property, expected_options, "1", "0")
         proxy.check_box(property)
       end
@@ -70,16 +70,16 @@ describe "property set view extensions" do
       end
 
       it "build a hidden field with the persisted value" do
-        expected_options = base_options.merge(:value => "persisted value")
+        expected_options = base_options.merge(value: "persisted value")
         expect(template).to receive(:hidden_field).with(object_name, property, expected_options)
         proxy.hidden_field(property)
       end
 
       describe "and a value is provided" do
         it "build a hidden field with the provided value" do
-          expected_options = base_options.merge(:value => "provided value")
+          expected_options = base_options.merge(value: "provided value")
           expect(template).to receive(:hidden_field).with(object_name, property, expected_options)
-          proxy.hidden_field(property, {:value => "provided value"})
+          proxy.hidden_field(property, {value: "provided value"})
         end
       end
     end
@@ -89,7 +89,7 @@ describe "property set view extensions" do
         settings = double("Fake property", property => true)
         allow(object).to receive(property_set).and_return(settings)
 
-        expected_options = base_options.merge(:value => "1")
+        expected_options = base_options.merge(value: "1")
         expect(template).to receive(:hidden_field).with(object_name, property, expected_options)
         proxy.hidden_field(property)
       end
@@ -98,7 +98,7 @@ describe "property set view extensions" do
         settings = double("Fake property", property => false)
         allow(object).to receive(property_set).and_return(settings)
 
-        expected_options = base_options.merge(:value => "0")
+        expected_options = base_options.merge(value: "0")
         expect(template).to receive(:hidden_field).with(object_name, property, expected_options)
         proxy.hidden_field(property)
       end
@@ -113,9 +113,9 @@ describe "property set view extensions" do
       end
 
       it "build a text field with the provided value" do
-        expected_options = base_options.merge(:value => "provided value")
+        expected_options = base_options.merge(value: "provided value")
         expect(template).to receive(:text_field).with(object_name, property, expected_options)
-        proxy.text_field(property, {:value => "provided value"})
+        proxy.text_field(property, {value: "provided value"})
       end
     end
   end
@@ -135,16 +135,14 @@ describe "property set view extensions" do
     end
 
     it "generate a unique id when one is not provided" do
-      expected_options.merge!(
-        :id => "#{object_name}_#{property_set}_#{property}_pancake"
-      )
+      expected_options[:id] = "#{object_name}_#{property_set}_#{property}_pancake"
       expect(template).to receive(:radio_button).with(object_name, property, "pancake", expected_options)
       proxy.radio_button(property, "pancake")
     end
 
     describe "when called with checked true for a truth value" do
       it "call with checked true for a truth value" do
-        expected_options.merge!(:checked => true)
+        expected_options[:checked] = true
         expect(template).to receive(:radio_button).with(object_name, property, "hello", expected_options)
         proxy.radio_button(property, "hello")
       end
@@ -154,9 +152,7 @@ describe "property set view extensions" do
       let(:faked_property) { double("Fake property", property => "1") }
 
       it "call with checked false" do
-        expected_options.merge!(
-          :id => "#{object_name}_#{property_set}_#{property}_1"
-        )
+        expected_options[:id] = "#{object_name}_#{property_set}_#{property}_1"
         expect(template).to receive(:radio_button).with(object_name, property, 1, expected_options)
         proxy.radio_button(property, 1)
       end
@@ -165,12 +161,12 @@ describe "property set view extensions" do
 
   describe "#select" do
     before do
-      settings = double("Fake property", :count => "2")
+      settings = double("Fake property", count: "2")
       allow(object).to receive(property_set).and_return(settings)
     end
 
     it "render a <select> with <option>s" do
-      select_options = {:selected => "2"}
+      select_options = {selected: "2"}
       select_choices = [["One", 1], ["Two", 2], ["Three", 3]]
 
       expect(template).to receive(:select).with("object_name[settings]", :count, select_choices, select_options, {})
@@ -178,9 +174,9 @@ describe "property set view extensions" do
     end
 
     it "merge :html_options" do
-      select_options = {:selected => "2"}
+      select_options = {selected: "2"}
       select_choices = [["One", 1], ["Two", 2], ["Three", 3]]
-      html_options = {:id => "foo", :name => "bar", :disabled => true}
+      html_options = {id: "foo", name: "bar", disabled: true}
 
       expect(template).to receive(:select).with("object_name[settings]", :count, select_choices, select_options, html_options)
       proxy.select(:count, select_choices, select_options, html_options)

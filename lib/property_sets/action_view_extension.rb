@@ -23,7 +23,7 @@ module ActionView
         def radio_button(property, checked_value = "1", options = {})
           options[:id] ||= "#{object_name}_#{property_set}_#{property}_#{checked_value}"
           options = prepare_options(property, options) do |properties|
-            properties.send("#{property}") == checked_value
+            properties.send(property.to_s) == checked_value
           end
           template.radio_button(object_name, property, checked_value, options)
         end
@@ -34,7 +34,7 @@ module ActionView
 
         def hidden_field(property, options = {})
           options = prepare_id_name(property, options)
-          unless options.keys.include?(:value)
+          unless options.key?(:value)
             options[:value] = cast_boolean(options[:object].send(property_set).send(property))
           end
           template.hidden_field(object_name, property, options)
@@ -43,7 +43,7 @@ module ActionView
         def select(property, choices, options = {}, html_options = {})
           options = prepare_id_name(property, options)
           current_value = options[:object].send(property_set).send(property)
-          template.select("#{object_name}[#{property_set}]", property, choices, {:selected => current_value}, html_options)
+          template.select("#{object_name}[#{property_set}]", property, choices, {selected: current_value}, html_options)
         end
 
         private

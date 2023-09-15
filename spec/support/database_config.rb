@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 config = {
-  :test => {
-    :test_database => {
-      :adapter => "sqlite3",
-      :database => ":memory:",
+  test: {
+    test_database: {
+      adapter: "sqlite3",
+      database: ":memory:"
     },
-    :test_alt_database => {
-      :adapter => "sqlite3",
-      :database => ":memory:"
+    test_alt_database: {
+      adapter: "sqlite3",
+      database: ":memory:"
     }
   }
 }

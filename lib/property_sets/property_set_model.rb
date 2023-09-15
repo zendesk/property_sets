@@ -11,7 +11,7 @@ module PropertySets
       "mediumblob" => 16777215,   # 2^24 - 1
       "mediumtext" => 16777215,
       "longblob" => 4294967295, # 2^32 - 1
-      "longtext" => 4294967295,
+      "longtext" => 4294967295
     }.freeze
 
     module InstanceMethods
@@ -141,7 +141,7 @@ module PropertySets
 
         belongs_to owner_class_sym, class_name: owner_class_name
         validates_presence_of owner_class_sym, class_name: owner_class_name
-        validates_uniqueness_of :name, :scope => owner_class_key_sym, :case_sensitive => false
+        validates_uniqueness_of :name, scope: owner_class_key_sym, case_sensitive: false
         attr_accessible owner_class_key_sym, owner_class_sym if defined?(ProtectedAttributes)
       end
 

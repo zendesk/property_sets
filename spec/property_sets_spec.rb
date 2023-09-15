@@ -7,7 +7,7 @@ PropertySets::PropertySetModel::COLUMN_TYPE_LIMITS =
 $-w = old
 
 describe PropertySets do
-  let(:account) { Parent::Account.create(:name => "Name") }
+  let(:account) { Parent::Account.create(name: "Name") }
   let(:relation) { Parent::Account.reflections["settings"] }
 
   it "construct the container class" do
@@ -17,7 +17,7 @@ describe PropertySets do
   end
 
   it "register the property sets used on a class" do
-    %i(settings texts validations typed_data).each do |name|
+    %i[settings texts validations typed_data].each do |name|
       expect(Parent::Account.property_set_index).to include(name)
     end
   end
@@ -33,26 +33,26 @@ describe PropertySets do
 
   it "allow the owner class to be customized" do
     (Flux = Class.new(ActiveRecord::Base)).property_set(:blot, {
-      :owner_class_name => "Foobar"
+      owner_class_name: "Foobar"
     }) { property :test }
 
     expect(defined?(FoobarBlot)).to be_truthy
   end
 
   it "pass-through any options from the second parameter" do
-    class AnotherThing < MainDatabase
+    class AnotherThing < MainDatabase # standard:disable Lint/ConstantDefinitionInBlock:
       self.table_name = "things" # cheat and reuse things table
     end
 
-    AnotherThing.property_set(:settings, :extend => Parent::Account::Woot,
-      :table_name => "thing_settings")
+    AnotherThing.property_set(:settings, extend: Parent::Account::Woot,
+      table_name: "thing_settings")
 
     expect(AnotherThing.new.settings.extensions).to include(::Parent::Account::Woot)
   end
 end
 
 RSpec.shared_examples "different account models" do |account_klass|
-  let(:account) { account_klass.create(:name => "Name") }
+  let(:account) { account_klass.create(name: "Name") }
   let(:relation) { account_klass.reflections["settings"] }
 
   it "support protecting attributes" do
@@ -122,8 +122,8 @@ RSpec.shared_examples "different account models" do |account_klass|
     settings_klass = Object.const_get("#{account_klass}Setting")
     s = settings_klass.new(account.model_name.element.to_sym => account)
 
-    valids = %w(hello hel_lo hell0) + [:hello]
-    invalids = %w(_hello)
+    valids = %w[hello hel_lo hell0] + [:hello]
+    invalids = %w[_hello]
 
     valids.each do |valid|
       s.name = valid
@@ -137,9 +137,9 @@ RSpec.shared_examples "different account models" do |account_klass|
   end
 
   it "validate uniqueness of settings" do
-    account.settings.create!(:name => "unique")
+    account.settings.create!(name: "unique")
     expect {
-      account.settings.create!(:name => "unique")
+      account.settings.create!(name: "unique")
     }.to raise_error(ActiveRecord::RecordInvalid, /Name has already been taken/)
   end
 
@@ -173,7 +173,7 @@ RSpec.shared_examples "different account models" do |account_klass|
   end
 
   it "reference the owner instance when constructing a new record ...on a new record" do
-    account = Parent::Account.new(:name => "New")
+    account = Parent::Account.new(name: "New")
     record = account.settings.lookup(:baz)
 
     expect(record).to be_new_record
@@ -189,7 +189,7 @@ RSpec.shared_examples "different account models" do |account_klass|
   end
 
   describe "#get" do
-    before { account.settings.set(:baz => "456") }
+    before { account.settings.set(baz: "456") }
 
     it "fetch property pairs with string arguments" do
       expect(account.settings.lookup_without_default(:baz)).to be_truthy
@@ -202,7 +202,7 @@ RSpec.shared_examples "different account models" do |account_klass|
 
     it "return all property pairs if no arguments are provided" do
       expect(account.settings.get.keys.sort).to eq(
-        %w(bar baz bool_false bool_nil bool_nil2 bool_true foo hep pro).sort
+        %w[bar baz bool_false bool_nil bool_nil2 bool_true foo hep pro].sort
       )
     end
 
@@ -220,7 +220,7 @@ RSpec.shared_examples "different account models" do |account_klass|
     end
 
     it "return serialized values" do
-      account.typed_data.set(:serialized_prop => [1, 2])
+      account.typed_data.set(serialized_prop: [1, 2])
       expect(account.typed_data.lookup_without_default(:serialized_prop)).to be_truthy
       expect(account.typed_data.get([:serialized_prop])).to eq("serialized_prop" => [1, 2])
     end
@@ -231,27 +231,27 @@ RSpec.shared_examples "different account models" do |account_klass|
       expect(account.settings.foo?).to be_falsy
       expect(account.settings.bar?).to be_falsy
 
-      account.settings.set(:foo => "123", :bar => "456")
+      account.settings.set(foo: "123", bar: "456")
 
       expect(account.settings.foo?).to be_truthy
       expect(account.settings.bar?).to be_truthy
     end
 
     it "convert string keys to symbols to ensure consistent lookup" do
-      account.settings.set(:foo => "123")
+      account.settings.set(foo: "123")
       account.settings.set("foo" => "456")
       expect(account.save!).to be true
     end
 
     it "work identically for new and existing owner objects" do
-      [account, Parent::Account.new(:name => "Mibble")].each do |account|
-        account.settings.set(:foo => "123", :bar => "456")
+      [account, Parent::Account.new(name: "Mibble")].each do |account|
+        account.settings.set(foo: "123", bar: "456")
 
         expect(account.settings.size).to eq(2)
         expect(account.settings.foo).to eq("123")
         expect(account.settings.bar).to eq("456")
 
-        account.settings.set(:bar => "789", :baz => "012")
+        account.settings.set(bar: "789", baz: "012")
 
         expect(account.settings.size).to eq(3)
         expect(account.settings.foo).to eq("123")
@@ -262,7 +262,7 @@ RSpec.shared_examples "different account models" do |account_klass|
 
     it "be updateable as AR nested attributes" do
       expect(
-        account.texts_attributes = [{:name => "foo", :value => "1"}, {:name => "bar", :value => "0"}]
+        account.texts_attributes = [{name: "foo", value: "1"}, {name: "bar", value: "0"}]
       ).to be_truthy
 
       account.save!
@@ -270,9 +270,9 @@ RSpec.shared_examples "different account models" do |account_klass|
       expect(account.texts.foo).to eq("1")
       expect(account.texts.bar).to eq("0")
 
-      account.update_attributes!(:texts_attributes => [
-        {:id => account.texts.lookup(:foo).id, :name => "foo", :value => "0"},
-        {:id => account.texts.lookup(:bar).id, :name => "bar", :value => "1"}
+      account.update_attributes!(texts_attributes: [
+        {id: account.texts.lookup(:foo).id, name: "foo", value: "0"},
+        {id: account.texts.lookup(:bar).id, name: "bar", value: "1"}
       ])
 
       expect(account.texts.foo).to eq("0")
@@ -289,8 +289,8 @@ RSpec.shared_examples "different account models" do |account_klass|
       expect(account.settings.pro?).to be false
 
       account.update_attributes!(
-        :name => "Kim",
-        :settings => {:foo => "1", :baz => "0", :pro => "1"}
+        name: "Kim",
+        settings: {foo: "1", baz: "0", pro: "1"}
       )
 
       account.reload
@@ -478,7 +478,7 @@ RSpec.shared_examples "different account models" do |account_klass|
 
     describe "serialized data" do
       it "store data in json" do
-        value = {:a => 1, :b => 2}
+        value = {a: 1, b: 2}
         account.typed_data.serialized_prop = value
         account.save!
         account.reload
@@ -502,7 +502,7 @@ RSpec.shared_examples "different account models" do |account_klass|
       end
 
       it "allow for destructive operators" do
-        value = {:a => 1, :b => 2}
+        value = {a: 1, b: 2}
         account.typed_data.serialized_prop = value
         account.typed_data.serialized_prop[:c] = 3
         expect(account.typed_data.serialized_prop[:c]).to eq(3)

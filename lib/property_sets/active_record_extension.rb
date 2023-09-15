@@ -1,6 +1,5 @@
 require "active_record"
 require "property_sets/casting"
-require "set"
 
 module PropertySets
   module ActiveRecordExtension
@@ -9,20 +8,20 @@ module PropertySets
 
       def property_set(association, options = {}, &block)
         unless include?(PropertySets::ActiveRecordExtension::InstanceMethods)
-          self.send(:prepend, PropertySets::ActiveRecordExtension::InstanceMethods)
+          send(:prepend, PropertySets::ActiveRecordExtension::InstanceMethods)
           cattr_accessor :property_set_index
           self.property_set_index = Set.new
         end
 
-        raise "Invalid association name, letters only" unless association.to_s =~ /[a-z]+/
+        raise "Invalid association name, letters only" unless /[a-z]+/.match?(association.to_s)
         exists = property_set_index.include?(association)
 
-        self.property_set_index << association
+        property_set_index << association
 
         # eg AccountSetting - this IS idempotent
         property_class = PropertySets.ensure_property_set_class(
           association,
-          options.delete(:owner_class_name) || self.name
+          options.delete(:owner_class_name) || name
         )
 
         # eg property :is_awesome
@@ -32,17 +31,17 @@ module PropertySets
         property_class.table_name = tb_name if tb_name
 
         hash_opts = {
-          :class_name => property_class.name,
-          :autosave => true,
-          :dependent => :destroy,
-          :inverse_of => self.name.demodulize.underscore.to_sym,
+          class_name: property_class.name,
+          autosave: true,
+          dependent: :destroy,
+          inverse_of: name.demodulize.underscore.to_sym
         }.merge(options)
 
         # TODO: should check options are compatible? warn? raise?
-        reflection = self.reflections[association.to_s] # => ActiveRecord::Reflection::HasManyReflection
+        reflection = reflections[association.to_s] # => ActiveRecord::Reflection::HasManyReflection
         reflection.options.merge! options if reflection && !options.empty?
 
-        unless exists then # makes has_many idempotent...
+        unless exists # makes has_many idempotent...
           has_many association, **hash_opts do
             # keep this damn block! -- creates association_module below
           end
@@ -51,13 +50,13 @@ module PropertySets
         # stolen/adapted from AR's collection_association.rb #define_extensions
 
         module_name = "#{association.to_s.camelize}AssociationExtension"
-        association_module = self.const_get module_name
+        association_module = const_get module_name
 
         association_module.module_eval do
           include PropertySets::ActiveRecordExtension::AssociationExtensions
 
           property_class.keys.each do |key|
-            raise "Invalid property key #{key}" if self.respond_to?(key)
+            raise "Invalid property key #{key}" if respond_to?(key)
 
             # Reports the coerced truth value of the property
             define_method "#{key}?" do
@@ -67,7 +66,7 @@ module PropertySets
             end
 
             # Returns the value of the property
-            define_method "#{key}" do
+            define_method key.to_s do
               type = property_class.type(key)
               lookup_value(type, key)
             end
@@ -100,10 +99,10 @@ module PropertySets
           association_class.keys & keys.map(&:to_s)
         end
 
-        property_pairs = property_keys.map do |name|
+        property_pairs = property_keys.flat_map do |name|
           value = lookup_value(association_class.type(name), name)
           [name, value]
-        end.flatten(1)
+        end
         HashWithIndifferentAccess[*property_pairs]
       end
 
@@ -140,7 +139,7 @@ module PropertySets
       end
 
       def build_default(arg)
-        build(:name => arg.to_s, :value => association_class.raw_default(arg))
+        build(name: arg.to_s, value: association_class.raw_default(arg))
       end
 
       def lookup_without_default(arg)
@@ -150,7 +149,7 @@ module PropertySets
       def lookup_value(type, key)
         serialized = property_serialized?(key)
 
-        if instance = lookup_without_default(key)
+        if (instance = lookup_without_default(key))
           instance.value_serialized = serialized
           PropertySets::Casting.read(type, instance.value)
         else
@@ -179,7 +178,7 @@ module PropertySets
       # It does not have the side effect of adding a new setting object.
       def lookup_or_default(arg)
         instance = lookup_without_default(arg)
-        instance ||= association_class.new(:value => association_class.raw_default(arg))
+        instance ||= association_class.new(value: association_class.raw_default(arg))
         instance.value_serialized = property_serialized?(arg)
         instance
       end
@@ -194,18 +193,18 @@ module PropertySets
         update_property_set_attributes(attributes)
         super
       end
-      alias update_attributes update
+      alias_method :update_attributes, :update
 
       def update!(attributes)
         update_property_set_attributes(attributes)
         super
       end
-      alias update_attributes! update!
+      alias_method :update_attributes!, :update!
 
       def update_property_set_attributes(attributes)
         if attributes && self.class.property_set_index.any?
           self.class.property_set_index.each do |property_set|
-            if property_set_hash = attributes.delete(property_set)
+            if (property_set_hash = attributes.delete(property_set))
               send(property_set).set(property_set_hash, true)
             end
           end

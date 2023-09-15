@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe PropertySets::Delegator do
-  let(:account) { Parent::Account.create(:name => "Name") }
+  let(:account) { Parent::Account.create(name: "Name") }
   let(:default) { "skep" }
 
   describe "read" do
