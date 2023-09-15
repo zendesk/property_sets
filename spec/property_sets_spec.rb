@@ -1,9 +1,9 @@
-require 'spec_helper'
+require "spec_helper"
 
 old, $-w = $-w, nil
 # sqlite type differences:
 PropertySets::PropertySetModel::COLUMN_TYPE_LIMITS =
-  PropertySets::PropertySetModel::COLUMN_TYPE_LIMITS.merge('varchar' => 65535)
+  PropertySets::PropertySetModel::COLUMN_TYPE_LIMITS.merge("varchar" => 65535)
 $-w = old
 
 describe PropertySets do
@@ -33,7 +33,7 @@ describe PropertySets do
 
   it "allow the owner class to be customized" do
     (Flux = Class.new(ActiveRecord::Base)).property_set(:blot, {
-      :owner_class_name => 'Foobar'
+      :owner_class_name => "Foobar"
     }) { property :test }
 
     expect(defined?(FoobarBlot)).to be_truthy
@@ -88,7 +88,7 @@ RSpec.shared_examples "different account models" do |account_klass|
     expect(account.settings.bar?)      .to be false
     expect(account.settings.bar)       .to be_nil
     expect(account.settings.hep?)      .to be true
-    expect(account.settings.hep)       .to eq('skep')
+    expect(account.settings.hep)       .to eq("skep")
     expect(account.settings.bool_nil)  .to be_nil
     expect(account.settings.bool_nil2) .to be_nil
     expect(account.settings.bool_false).to be false
@@ -96,22 +96,22 @@ RSpec.shared_examples "different account models" do |account_klass|
   end
 
   it "be flexible when fetching property data" do
-    expect(account.settings.association_class.default(:hep)) .to eq('skep')
-    expect(account.settings.association_class.default('hep')).to eq('skep')
+    expect(account.settings.association_class.default(:hep)) .to eq("skep")
+    expect(account.settings.association_class.default("hep")).to eq("skep")
   end
 
-  describe 'querying for a setting that does not exist' do
+  describe "querying for a setting that does not exist" do
     before do
       expect(account.settings).to eq([])
       expect(account.settings.hep?).to be true
     end
 
-    it 'not add a new setting' do
+    it "not add a new setting" do
       expect(account.settings).to eq([])
     end
 
-    it 'give back the default value' do
-      expect(account.settings.hep).to eq('skep')
+    it "give back the default value" do
+      expect(account.settings.hep).to eq("skep")
     end
   end
 
@@ -415,13 +415,13 @@ RSpec.shared_examples "different account models" do |account_klass|
 
   describe "update_columns for forwarded method" do
     it "does not write to a missing column" do
-      account.update_columns(name: 'test', old: "it works!")
+      account.update_columns(name: "test", old: "it works!")
       expect(account.previous_changes).to_not include("old")
     end
 
     it "does not prevent other non-delegated property set models from updating" do
-      thing = Thing.create(name: 'test')
-      expect(thing.update_columns(name: 'it works')).to be
+      thing = Thing.create(name: "test")
+      expect(thing.update_columns(name: "it works")).to be
     end
   end
 
@@ -483,7 +483,7 @@ RSpec.shared_examples "different account models" do |account_klass|
         account.typed_data.serialized_prop = value
         account.save!
         account.reload
-        expect(account.typed_data.serialized_prop).to eq('a' => 1, 'b' => 2)
+        expect(account.typed_data.serialized_prop).to eq("a" => 1, "b" => 2)
       end
 
       it "retrieve default values from JSON" do

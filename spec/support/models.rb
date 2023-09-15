@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require_relative 'acts_like_an_integer'
+require_relative "acts_like_an_integer"
 
 if LEGACY_CONNECTION_HANDLING
   class MainDatabase < ActiveRecord::Base
@@ -38,7 +38,7 @@ module Parent
       property :foo
       property :bar
       property :baz
-      property :hep, :default => 'skep'
+      property :hep, :default => "skep"
       property :pro, :protected => true
       property :bool_true, :type => :boolean, :default => true
       property :bool_false, :type => :boolean, :default => false
@@ -101,7 +101,7 @@ module Parent
       property :foo
       property :bar
       property :baz
-      property :hep, :default => 'skep'
+      property :hep, :default => "skep"
       property :pro, :protected => true
       property :bool_true, :type => :boolean, :default => true
       property :bool_false, :type => :boolean, :default => false

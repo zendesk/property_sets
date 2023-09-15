@@ -1,6 +1,6 @@
-require 'active_support'
-require 'active_record'
-require 'property_sets'
+require "active_support"
+require "active_record"
+require "property_sets"
 
 yaml_config = "spec/support/database.yml"
 ActiveRecord::Base.configurations = begin

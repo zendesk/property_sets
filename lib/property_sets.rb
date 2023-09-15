@@ -1,9 +1,9 @@
-require 'property_sets/property_set_model'
-require 'property_sets/active_record_extension'
-require 'property_sets/version'
+require "property_sets/property_set_model"
+require "property_sets/active_record_extension"
+require "property_sets/version"
 
 begin
-  require 'property_sets/action_view_extension'
+  require "property_sets/action_view_extension"
 rescue LoadError
 end
 

@@ -1,4 +1,4 @@
-require 'action_view'
+require "action_view"
 
 module ActionView
   module Helpers
@@ -75,8 +75,8 @@ module ActionView
 
         def cast_boolean(value)
           case value
-          when TrueClass  then '1'
-          when FalseClass then '0'
+          when TrueClass  then "1"
+          when FalseClass then "0"
           else value
           end
         end

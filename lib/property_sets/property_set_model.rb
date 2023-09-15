@@ -1,17 +1,17 @@
-require 'active_support'
+require "active_support"
 
 module PropertySets
   module PropertySetModel
     # https://dev.mysql.com/doc/refman/5.6/en/storage-requirements.html
     COLUMN_TYPE_LIMITS = {
-      'tinyblob'   => 255,        # 2^8 - 1
-      'tinytext'   => 255,
-      'blob'       => 65535,      # 2^16 - 1
-      'text'       => 65535,
-      'mediumblob' => 16777215,   # 2^24 - 1
-      'mediumtext' => 16777215,
-      'longblob'   => 4294967295, # 2^32 - 1
-      'longtext'   => 4294967295,
+      "tinyblob"   => 255,        # 2^8 - 1
+      "tinytext"   => 255,
+      "blob"       => 65535,      # 2^16 - 1
+      "text"       => 65535,
+      "mediumblob" => 16777215,   # 2^24 - 1
+      "mediumtext" => 16777215,
+      "longblob"   => 4294967295, # 2^32 - 1
+      "longtext"   => 4294967295,
     }.freeze
 
     module InstanceMethods
@@ -93,7 +93,7 @@ module PropertySets
       end
 
       def value_column_limit
-        column = self.class.columns_hash.fetch('value')
+        column = self.class.columns_hash.fetch("value")
 
         # use sql_type because type returns :text for all text types regardless of length
         column.limit || COLUMN_TYPE_LIMITS.fetch(column.sql_type)

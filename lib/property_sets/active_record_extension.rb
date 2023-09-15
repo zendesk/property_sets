@@ -1,6 +1,6 @@
-require 'active_record'
-require 'property_sets/casting'
-require 'set'
+require "active_record"
+require "property_sets/casting"
+require "set"
 
 module PropertySets
   module ActiveRecordExtension

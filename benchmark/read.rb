@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test/helper')
+require File.expand_path(File.dirname(__FILE__) + "/../test/helper")
 
 class Account < ActiveRecord::Base
   # Benchmark reading from an object with many settings when:

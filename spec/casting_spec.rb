@@ -1,5 +1,5 @@
-require 'spec_helper'
-require 'property_sets/casting'
+require "spec_helper"
+require "property_sets/casting"
 
 describe PropertySets::Casting do
   describe "#read" do

@@ -1,10 +1,10 @@
 # setup database
-require 'active_record'
+require "active_record"
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 ActiveRecord::Base.logger.level = Logger::ERROR
 
 ActiveRecord::Base.establish_connection(:test_database)
-ActiveRecord::Base.connection.execute('select 1')
+ActiveRecord::Base.connection.execute("select 1")
 
 ActiveRecord::Migration.verbose = false
 
