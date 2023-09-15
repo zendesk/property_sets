@@ -17,6 +17,7 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
   s.add_development_dependency("rake")
   s.add_development_dependency('actionpack')
   s.add_development_dependency('rspec')
+  s.add_development_dependency('standard')
   s.add_development_dependency('byebug')
 
   s.files = `git ls-files lib`.split("\n")

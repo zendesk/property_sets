@@ -52,3 +52,14 @@ jobs:
             echo "Some specs failed"
             false
           fi
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: zendesk/checkout@v4
+      - name: Set up Ruby
+        uses: zendesk/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+          bundler-cache: true
+      - run: bundle exec rake standard
