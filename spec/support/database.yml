@@ -1,0 +1,11 @@
+test:
+  unsharded_database:
+    adapter: sqlite3
+    encoding: utf8
+    database: unsharded_database
+
+  unsharded_database_replica:
+    adapter: sqlite3
+    encoding: utf8
+    database: unsharded_database_replica
+    replica: true
