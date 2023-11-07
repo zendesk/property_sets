@@ -1,6 +1,11 @@
 name: CI
 
-on: [pull_request, push, workflow_dispatch]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
 
 jobs:
   specs:
@@ -29,7 +34,7 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       LEGACY_CONNECTION_HANDLING: ${{ matrix.legacy_connection_handling }}
     steps:
-      - uses: zendesk/checkout@v2
+      - uses: zendesk/checkout@v4
       - name: Set up Ruby
         uses: zendesk/setup-ruby@v1
         with:
