@@ -6,6 +6,8 @@ jobs:
   specs:
     runs-on: ubuntu-latest
 
+    name: Ruby ${{ matrix.ruby-version }}, Rails ${{ matrix.ruby-version }}, LCH ${{ matrix.legacy_connection_handling }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -17,11 +19,15 @@ jobs:
         gemfile:
           - rails6.1
           - rails7.0
+        legacy_connection_handling:
+          - 'true'
+          - 'false'
         include:
-          - {ruby-version: '2.7', gemfile: rails6.0}
-          - {ruby-version: '3.0', gemfile: rails6.0}
+          - {ruby-version: '2.7', gemfile: rails6.0, legacy_connection_handling: 'true'}
+          - {ruby-version: '3.0', gemfile: rails6.0, legacy_connection_handling: 'true'}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      LEGACY_CONNECTION_HANDLING: ${{ matrix.legacy_connection_handling }}
     steps:
       - uses: zendesk/checkout@v2
       - name: Set up Ruby

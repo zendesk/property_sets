@@ -1,13 +1,27 @@
 # frozen_string_literal: true
 require_relative 'acts_like_an_integer'
 
-class MainDatabase < ActiveRecord::Base
-  self.abstract_class = true
-end
+if LEGACY_CONNECTION_HANDLING
+  class MainDatabase < ActiveRecord::Base
+    self.abstract_class = true
+  end
 
-class AltDatabase < ActiveRecord::Base
-  self.abstract_class = true
-  establish_connection(:test_alt_database)
+  class AltDatabase < ActiveRecord::Base
+    self.abstract_class = true
+    establish_connection(:test_alt_database)
+  end
+else
+  class MainDatabase < ActiveRecord::Base
+    self.abstract_class = true
+
+    connects_to(database: {writing: :test_database, reading: :test_database})
+  end
+
+  class AltDatabase < ActiveRecord::Base
+    self.abstract_class = true
+
+    connects_to(database: {writing: :test_alt_database, reading: :test_alt_database})
+  end
 end
 
 module Parent

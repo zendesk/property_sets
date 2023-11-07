@@ -6,6 +6,15 @@ require 'active_record/fixtures'
 
 ENV["RAILS_ENV"] = "test"
 
+LEGACY_CONNECTION_HANDLING = (ENV["LEGACY_CONNECTION_HANDLING"] == "true")
+
+case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+when '7.0'
+  ActiveRecord.legacy_connection_handling = LEGACY_CONNECTION_HANDLING
+when '6.1'
+  ActiveRecord::Base.legacy_connection_handling = LEGACY_CONNECTION_HANDLING
+end
+
 require 'property_sets'
 require 'property_sets/delegator'
 
