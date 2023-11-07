@@ -154,6 +154,35 @@ end
 add_index :account_settings, [ :account_id, :name ], :unique => true
 ```
 
+### Storage table(s) on separate databases
+
+By default, `property_sets` looks for the storage table(s) on the same database as the model. If you need the storage tables to live on a different database you can configure a custom connection class on a per-model basis:
+
+``` ruby
+class MainConnectionClass < ActiveRecord::Base
+  self.abstract_class = true
+
+  connects_to(database: { writing: foo })
+end
+
+class SeparateDatabase < ActiveRecord::Base
+  self.abstract_class = true
+
+  connects_to(database: { writing: bar })
+end
+
+class Account < MainConnectionClass
+  # Ensure you set this _before_ configuring the property sets.
+  self.property_sets_connection_class = SeparateDatabase
+
+  property_set :settings do
+    property :foo
+  end
+end
+```
+
+In the above example, the `Accounts` table would live on the `foo` database and the storage table(s) will be written to the `bar` database.
+
 ## Requirements
 
 * ActiveRecord

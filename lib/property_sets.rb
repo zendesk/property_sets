@@ -32,7 +32,9 @@ module PropertySets
   end
 
   def self.parent_for_property_class(namespace, owner_class_name)
-    namespace.const_get(owner_class_name).connection_class_for_self
+    owner_class = namespace.const_get(owner_class_name)
+
+    owner_class.property_sets_connection_class || owner_class.connection_class_for_self
   rescue NameError
     ::ActiveRecord::Base
   end
