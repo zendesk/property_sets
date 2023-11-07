@@ -2,8 +2,6 @@ require 'active_support'
 require 'active_record'
 require 'property_sets'
 
-ENV["RAILS_ENV"] = "test"
-
 yaml_config = "spec/support/database.yml"
 ActiveRecord::Base.configurations = begin
                                       YAML.safe_load(IO.read(yaml_config), aliases: true)

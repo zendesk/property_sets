@@ -4,11 +4,14 @@ require 'active_support'
 require 'active_record'
 require 'active_record/fixtures'
 
+ENV["RAILS_ENV"] = "test"
+
 require 'property_sets'
 require 'property_sets/delegator'
-require 'support/database'
-require 'support/account'
-require 'support/thing'
+
+require 'support/database_config'
+require 'support/models'
+require 'support/database_migrations'
 
 I18n.enforce_available_locales = false
 

@@ -1,8 +1,14 @@
+# frozen_string_literal: true
 require_relative 'acts_like_an_integer'
 
+class MainDatabase < ActiveRecord::Base
+  self.abstract_class = true
+end
+
 module Parent
-  class Account < ActiveRecord::Base
+  class Account < MainDatabase
     include PropertySets::Delegator
+
     delegate_to_property_set :settings, :old => :hep
 
     # nonsense module to use in options below, only used as a marker
@@ -57,5 +63,12 @@ end
 
 module Other
   class Account < ::Parent::Account
+  end
+end
+
+# No delegated property_set
+class Thing < MainDatabase
+  property_set :settings do
+    property :foo
   end
 end
