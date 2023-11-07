@@ -40,7 +40,7 @@ describe PropertySets do
   end
 
   it "pass-through any options from the second parameter" do
-    class AnotherThing < ActiveRecord::Base
+    class AnotherThing < MainDatabase
       self.table_name = "things" # cheat and reuse things table
     end
 
@@ -49,6 +49,11 @@ describe PropertySets do
 
     expect(AnotherThing.new.settings.extensions).to include(::Parent::Account::Woot)
   end
+end
+
+RSpec.shared_examples "different account models" do |account_klass|
+  let(:account) { account_klass.create(:name => "Name") }
+  let(:relation) { account_klass.reflections["settings"] }
 
   it "support protecting attributes" do
     expect(account.settings.protected?(:pro)).to be true
@@ -111,7 +116,11 @@ describe PropertySets do
   end
 
   it "reject settings with an invalid name" do
-    s = Parent::AccountSetting.new(:account => account)
+    # Because we are running these specs with two separate classes
+    # (Parent::Account & Parent::AccountAltDb), we need to build the
+    # settings class class name manually.
+    settings_klass = Object.const_get("#{account_klass}Setting")
+    s = settings_klass.new(account.model_name.element.to_sym => account)
 
     valids   = %w(hello hel_lo hell0) + [:hello]
     invalids = %w(_hello)
@@ -157,7 +166,10 @@ describe PropertySets do
   it "reference the owner instance when constructing a new record" do
     record = account.settings.lookup(:baz)
     expect(record).to be_new_record
-    expect(record.account.id).to eq(account.id)
+    # Because we are running these specs with two separate classes
+    # (Parent::Account & Parent::AccountAltDb), we need to build the
+    # method name manually (:account vs :account_alt_db).
+    expect(record.send(account.model_name.element.to_sym).id).to eq(account.id)
   end
 
   it "reference the owner instance when constructing a new record ...on a new record" do
@@ -368,7 +380,7 @@ describe PropertySets do
     it "creates changed attributes" do
       account.update_attribute(:old, "it works!")
       expect(account.previous_changes["old"].last).to eq("it works!")
-      expect(Parent::Account.find(account.id).old).to eq("it works!")
+      expect(account_klass.find(account.id).old).to eq("it works!")
     end
 
     it "updates changed attributes for existing property_set data" do
@@ -376,7 +388,7 @@ describe PropertySets do
       account.save
       account.update_attribute(:old, "it works!")
       expect(account.previous_changes["old"].last).to eq("it works!")
-      expect(Parent::Account.find(account.id).old).to eq("it works!")
+      expect(account_klass.find(account.id).old).to eq("it works!")
     end
 
     it "updates changed attributes for existing property_set data after set through forwarded method" do
@@ -384,7 +396,7 @@ describe PropertySets do
       account.save
       account.update_attribute(:old, "it works!")
       expect(account.previous_changes["old"].last).to eq("it works!")
-      expect(Parent::Account.find(account.id).old).to eq("it works!")
+      expect(account_klass.find(account.id).old).to eq("it works!")
     end
   end
 
@@ -509,4 +521,12 @@ describe PropertySets do
       end
     end
   end
+end
+
+describe Parent::Account do
+  it_behaves_like "different account models", Parent::Account
+end
+
+describe Parent::AccountAltDb do
+  it_behaves_like "different account models", Parent::AccountAltDb
 end

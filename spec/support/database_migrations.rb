@@ -105,3 +105,63 @@ class CreatePrimaryTables < ActiveRecord::Migration[6.0]
 end
 
 CreatePrimaryTables.migrate(:up)
+
+class CreateAccountAltDatabase < ActiveRecord::Migration[6.0]
+  def connection
+    AltDatabase.connection
+  end
+
+  def change
+    create_table "account_alt_db_settings", :force => true do |t|
+      t.integer  "account_alt_db_id"
+      t.string   "name"
+      t.string   "value"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
+    add_index :account_alt_db_settings, [ :account_alt_db_id, :name ], :unique => true
+
+    create_table "account_alt_db_texts", :force => true do |t|
+      t.integer  "account_alt_db_id"
+      t.string   "name"
+      t.string   "value"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
+    add_index :account_alt_db_texts, [ :account_alt_db_id, :name ], :unique => true
+
+    create_table "account_alt_db_typed_data", :force => true do |t|
+      t.integer  "account_alt_db_id"
+      t.string   "name"
+      t.string   "value"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
+    add_index :account_alt_db_typed_data, [ :account_alt_db_id, :name ], :unique => true
+
+    create_table "account_alt_db_validations", :force => true do |t|
+      t.integer  "account_alt_db_id"
+      t.string   "name"
+      t.string   "value"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
+    add_index :account_alt_db_validations, [ :account_alt_db_id, :name ], :unique => true
+
+    create_table "account_alt_db_tiny_texts", :force => true do |t|
+      t.integer  "account_alt_db_id"
+      t.string   "name"
+      t.text     "value",      :limit => (2**8 - 1)
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
+    add_index :account_alt_db_tiny_texts, [ :account_alt_db_id, :name ], :unique => true
+  end
+end
+
+CreateAccountAltDatabase.migrate(:up)
