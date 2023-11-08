@@ -5,6 +5,8 @@ require 'set'
 module PropertySets
   module ActiveRecordExtension
     module ClassMethods
+      attr_accessor :property_sets_connection_class
+
       def property_set(association, options = {}, &block)
         unless include?(PropertySets::ActiveRecordExtension::InstanceMethods)
           self.send(:prepend, PropertySets::ActiveRecordExtension::InstanceMethods)
