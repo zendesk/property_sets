@@ -65,7 +65,7 @@ module PropertySets
         # These are not database columns and should not be included in queries but
         # using the attributes API is the only way to track changes in the main model
         if respond_to?(:user_provided_columns)
-          self.user_provided_columns.reject!{|k,_| delegated_property_set_attributes.include?(k.to_s) }
+          user_provided_columns.reject! { |k, _| delegated_property_set_attributes.include?(k.to_s) }
         end
       end
     end

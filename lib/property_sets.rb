@@ -1,9 +1,9 @@
-require 'property_sets/property_set_model'
-require 'property_sets/active_record_extension'
-require 'property_sets/version'
+require "property_sets/property_set_model"
+require "property_sets/active_record_extension"
+require "property_sets/version"
 
 begin
-  require 'property_sets/action_view_extension'
+  require "property_sets/action_view_extension"
 rescue LoadError
 end
 
@@ -19,7 +19,7 @@ module PropertySets
     unless namespace.const_defined?(const_name, false)
       property_class = Class.new(parent_for_property_class(namespace, owner_class_name)) do
         include PropertySets::PropertySetModel::InstanceMethods
-        extend  PropertySets::PropertySetModel::ClassMethods
+        extend PropertySets::PropertySetModel::ClassMethods
       end
 
       namespace.const_set(const_name, property_class)

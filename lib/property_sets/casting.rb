@@ -1,8 +1,8 @@
-require 'json'
+require "json"
 
 module PropertySets
   module Casting
-    FALSE = [ "false", "0", "", "off", "n" ]
+    FALSE_VALUES = ["false", "0", "", "off", "n"]
 
     class << self
       def read(type, value)
@@ -53,7 +53,7 @@ module PropertySets
       private
 
       def false?(value)
-        FALSE.include?(value.to_s.downcase)
+        FALSE_VALUES.include?(value.to_s.downcase)
       end
     end
   end

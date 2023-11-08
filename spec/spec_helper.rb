@@ -1,26 +1,26 @@
-require 'bundler/setup'
+require "bundler/setup"
 
-require 'active_support'
-require 'active_record'
-require 'active_record/fixtures'
+require "active_support"
+require "active_record"
+require "active_record/fixtures"
 
 ENV["RAILS_ENV"] = "test"
 
 LEGACY_CONNECTION_HANDLING = (ENV["LEGACY_CONNECTION_HANDLING"] == "true")
 
 case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-when '7.0'
+when "7.0"
   ActiveRecord.legacy_connection_handling = LEGACY_CONNECTION_HANDLING
-when '6.1'
+when "6.1"
   ActiveRecord::Base.legacy_connection_handling = LEGACY_CONNECTION_HANDLING
 end
 
-require 'property_sets'
-require 'property_sets/delegator'
+require "property_sets"
+require "property_sets/delegator"
 
-require 'support/database_config'
-require 'support/models'
-require 'support/database_migrations'
+require "support/database_config"
+require "support/models"
+require "support/database_migrations"
 
 I18n.enforce_available_locales = false
 
@@ -47,7 +47,7 @@ module ActiveRecord
   module Associations
     class CollectionProxy
       def scoping
-        raise 'CollectionProxy delegates unknown methods to target (association_class) via method_missing, wrapping the call with `scoping`. Instead, call the method directly on the association_class!'
+        raise "CollectionProxy delegates unknown methods to target (association_class) via method_missing, wrapping the call with `scoping`. Instead, call the method directly on the association_class!"
       end
     end
   end

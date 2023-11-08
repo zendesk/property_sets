@@ -1,12 +1,12 @@
-require './lib/property_sets/version'
+require "./lib/property_sets/version"
 
 Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
-  s.summary     = "Property sets for ActiveRecord."
+  s.summary = "Property sets for ActiveRecord."
   s.description = "This gem is an ActiveRecord extension which provides a convenient interface for managing per row properties."
-  s.authors  = ["Morten Primdahl"]
-  s.email    = 'primdahl@me.com'
-  s.homepage = 'http://github.com/zendesk/property_sets'
-  s.license  = 'Apache License Version 2.0'
+  s.authors = ["Morten Primdahl"]
+  s.email = "primdahl@me.com"
+  s.homepage = "http://github.com/zendesk/property_sets"
+  s.license = "Apache License Version 2.0"
 
   s.required_ruby_version = ">= 2.7"
 
@@ -15,9 +15,10 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
 
   s.add_development_dependency("bump")
   s.add_development_dependency("rake")
-  s.add_development_dependency('actionpack')
-  s.add_development_dependency('rspec')
-  s.add_development_dependency('byebug')
+  s.add_development_dependency("actionpack")
+  s.add_development_dependency("rspec")
+  s.add_development_dependency("standard")
+  s.add_development_dependency("byebug")
 
   s.files = `git ls-files lib`.split("\n")
   s.license = "MIT"

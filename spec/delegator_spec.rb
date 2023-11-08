@@ -1,8 +1,8 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe PropertySets::Delegator do
-  let(:account) { Parent::Account.create(:name => "Name") }
-  let(:default) { 'skep' }
+  let(:account) { Parent::Account.create(name: "Name") }
+  let(:default) { "skep" }
 
   describe "read" do
     it "not add a property" do
@@ -15,21 +15,21 @@ describe PropertySets::Delegator do
     end
 
     it "delegate read to property value" do
-      account.settings.hep = 'new'
-      expect(account.old).to eq('new')
+      account.settings.hep = "new"
+      expect(account.old).to eq("new")
     end
   end
 
   describe "write" do
     it "add a property" do
-      account.old = 'new'
+      account.old = "new"
       expect(account.settings.size).to eq(1)
     end
 
     it "delegate write" do
-      account.old = 'new'
-      expect(account.settings.hep).to eq('new')
-      expect(account.old).to eq('new')
+      account.old = "new"
+      expect(account.settings.hep).to eq("new")
+      expect(account.old).to eq("new")
     end
   end
 
