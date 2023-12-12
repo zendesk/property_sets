@@ -11,7 +11,7 @@ jobs:
   specs:
     runs-on: ubuntu-latest
 
-    name: Ruby ${{ matrix.ruby-version }}, Rails ${{ matrix.ruby-version }}, LCH ${{ matrix.legacy_connection_handling }}
+    name: Ruby ${{ matrix.ruby-version }}, ${{ matrix.gemfile }}, LCH ${{ matrix.legacy_connection_handling }}
 
     strategy:
       fail-fast: false
@@ -24,6 +24,7 @@ jobs:
         gemfile:
           - rails6.1
           - rails7.0
+          - rails7.1
         legacy_connection_handling:
           - 'true'
           - 'false'
