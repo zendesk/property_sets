@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.10.0] - 2023-11-08
+## [3.12.0] - 2023-12-12
+
+* Added support for Rails 7.1
+
+## [3.11.0] - 2023-11-08
 
 * Property tables can now live on a separate database to their parent models. This is achieved, on a per-model basis, by configuring the connection class that will be used by property sets. e.g. set `self.property_sets_connection_class = Foo` on the model to instruct `property_sets` to use `Foo`'s database connection when looking for the property sets tables.
 
