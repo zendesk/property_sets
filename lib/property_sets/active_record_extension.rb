@@ -59,7 +59,7 @@ module PropertySets
             raise "Invalid property key #{key}" if respond_to?(key)
 
             # Reports the coerced truth value of the property
-            define_method "#{key}?" do
+            define_method :"#{key}?" do
               type = property_class.type(key)
               value = lookup_value(type, key)
               !["false", "0", "", "off", "n"].member?(value.to_s.downcase)
@@ -72,13 +72,13 @@ module PropertySets
             end
 
             # Assigns a new value to the property
-            define_method "#{key}=" do |value|
+            define_method :"#{key}=" do |value|
               instance = lookup(key)
               instance.value = PropertySets::Casting.write(property_class.type(key), value)
               instance.value
             end
 
-            define_method "#{key}_record" do
+            define_method :"#{key}_record" do
               lookup(key)
             end
           end
@@ -113,7 +113,7 @@ module PropertySets
           if with_protection && record.protected?
             association_class.logger.warn("Someone tried to update the protected #{name} property to #{property_pairs[name]}")
           else
-            send("#{name}=", property_pairs[name])
+            send(:"#{name}=", property_pairs[name])
           end
         end
       end
@@ -131,11 +131,11 @@ module PropertySets
       end
 
       def enable(arg)
-        send("#{arg}=", "1")
+        send(:"#{arg}=", "1")
       end
 
       def disable(arg)
-        send("#{arg}=", "0")
+        send(:"#{arg}=", "0")
       end
 
       def build_default(arg)
@@ -170,7 +170,7 @@ module PropertySets
 
         owner = proxy_association.owner
 
-        instance.send("#{association_class.owner_class_sym}=", owner) if owner.new_record?
+        instance.send(:"#{association_class.owner_class_sym}=", owner) if owner.new_record?
         instance
       end
 
@@ -216,7 +216,7 @@ module PropertySets
           attributes = attributes.reject { |k, _| self.class.delegated_property_set_attributes.include?(k.to_s) }
         end
 
-        super attributes
+        super(attributes)
       end
 
       private
@@ -226,11 +226,11 @@ module PropertySets
       end
 
       def attributes_for_create(attribute_names)
-        super filter_delegated_property_set_attributes(attribute_names)
+        super(filter_delegated_property_set_attributes(attribute_names))
       end
 
       def attributes_for_update(attribute_names)
-        super filter_delegated_property_set_attributes(attribute_names)
+        super(filter_delegated_property_set_attributes(attribute_names))
       end
 
       def filter_delegated_property_set_attributes(attribute_names)

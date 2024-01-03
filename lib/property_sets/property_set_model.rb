@@ -158,7 +158,7 @@ module PropertySets
       end
 
       def owner_class_key_sym
-        "#{owner_class_sym}_id".to_sym
+        :"#{owner_class_sym}_id"
       end
     end
   end
