@@ -29,7 +29,7 @@ describe "property set view extensions" do
       allow(object).to receive(property_set).and_return(double("Fake property", property => "value"))
       allow(template).to receive(:hidden_field)
 
-      expect(template).to receive(:instance_variable_get).with("@#{object_name}").and_return(object)
+      expect(template).to receive(:instance_variable_get).with(:"@#{object_name}").and_return(object)
       proxy.hidden_field(property)
     end
   end
@@ -37,7 +37,7 @@ describe "property set view extensions" do
   describe "#check_box" do
     describe "when called with checked true for a truth value" do
       before do
-        settings = double("Fake setting", property => "1", "#{property}?".to_sym => true)
+        settings = double("Fake setting", property => "1", :"#{property}?" => true)
         allow(object).to receive(property_set).and_return(settings)
       end
 
@@ -50,7 +50,7 @@ describe "property set view extensions" do
 
     describe "when called with checked false for a truth value" do
       before do
-        settings = double("Fake setting", property => "0", "#{property}?".to_sym => false)
+        settings = double("Fake setting", property => "0", :"#{property}?" => false)
         allow(object).to receive(property_set).and_return(settings)
       end
 

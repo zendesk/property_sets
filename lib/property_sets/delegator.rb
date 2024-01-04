@@ -33,21 +33,21 @@ module PropertySets
             type = association.association_class.type(new_attr)
             association.lookup_value(type, new_attr)
           }
-          alias_method "#{old_attr}_before_type_cast", old_attr
-          define_method("#{old_attr}?") { send(setname).send("#{new_attr}?") }
-          define_method("#{old_attr}=") do |value|
+          alias_method :"#{old_attr}_before_type_cast", old_attr
+          define_method(:"#{old_attr}?") { send(setname).send(:"#{new_attr}?") }
+          define_method(:"#{old_attr}=") do |value|
             if send(old_attr) != value
-              send("#{old_attr}_will_change!")
+              send(:"#{old_attr}_will_change!")
             end
-            send(setname).send("#{new_attr}=", value)
+            send(setname).send(:"#{new_attr}=", value)
             super(value)
           end
 
-          define_method("#{old_attr}_will_change!") do
+          define_method(:"#{old_attr}_will_change!") do
             attribute_will_change!(old_attr)
           end
 
-          define_method("#{old_attr}_changed?") do
+          define_method(:"#{old_attr}_changed?") do
             collection_proxy = send(setname)
             return false unless collection_proxy.loaded?
             setting = collection_proxy.lookup_without_default(new_attr)

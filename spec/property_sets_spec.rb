@@ -119,7 +119,7 @@ RSpec.shared_examples "different account models" do |account_klass|
     # Because we are running these specs with two separate classes
     # (Parent::Account & Parent::AccountAltDb), we need to build the
     # settings class class name manually.
-    settings_klass = Object.const_get("#{account_klass}Setting")
+    settings_klass = Object.const_get("#{account_klass}Setting") # standard:disable Performance/StringIdentifierArgument
     s = settings_klass.new(account.model_name.element.to_sym => account)
 
     valids = %w[hello hel_lo hell0] + [:hello]

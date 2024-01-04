@@ -15,7 +15,7 @@ module ActionView
 
         def check_box(property, options = {}, checked_value = "1", unchecked_value = "0")
           options = prepare_options(property, options) do |properties|
-            properties.send("#{property}?")
+            properties.send(:"#{property}?")
           end
           template.check_box(object_name, property, options, checked_value, unchecked_value)
         end
@@ -59,7 +59,7 @@ module ActionView
         end
 
         def fetch_target_object
-          instance = template.instance_variable_get("@#{object_name}")
+          instance = template.instance_variable_get(:"@#{object_name}")
 
           throw "No @#{object_name} in scope" if instance.nil?
           throw "The property_set_check_box only works on models with property set #{property_set}" unless instance.respond_to?(property_set)
