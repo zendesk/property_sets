@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Removed upper limit on Rails, added testing for Rails main.
 * Dropped support for Ruby < 3.1.
 * Dropped support for Rails < 6.1.
 

@@ -10,7 +10,7 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
 
   s.required_ruby_version = ">= 3.1"
 
-  s.add_runtime_dependency("activerecord", ">= 6.1", "< 7.2")
+  s.add_runtime_dependency("activerecord", ">= 6.1")
   s.add_runtime_dependency("json")
 
   s.add_development_dependency("bump")
