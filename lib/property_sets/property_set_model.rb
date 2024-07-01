@@ -51,7 +51,7 @@ module PropertySets
           @deserialized_value = v
           write_attribute(:value, v.to_json)
         else
-          super(v)
+          super
         end
       end
 

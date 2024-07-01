@@ -216,7 +216,7 @@ module PropertySets
           attributes = attributes.reject { |k, _| self.class.delegated_property_set_attributes.include?(k.to_s) }
         end
 
-        super(attributes)
+        super
       end
 
       private
