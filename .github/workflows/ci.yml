@@ -24,6 +24,7 @@ jobs:
           - rails6.1
           - rails7.0
           - rails7.1
+          - rails7.2
         legacy_connection_handling:
           - 'true'
           - 'false'
@@ -33,9 +34,9 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       LEGACY_CONNECTION_HANDLING: ${{ matrix.legacy_connection_handling }}
     steps:
-      - uses: zendesk/checkout@v4
+      - uses: actions/checkout@v4
       - name: Set up Ruby
-        uses: zendesk/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
@@ -60,9 +61,9 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: zendesk/checkout@v4
+      - uses: actions/checkout@v4
       - name: Set up Ruby
-        uses: zendesk/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
           bundler-cache: true
