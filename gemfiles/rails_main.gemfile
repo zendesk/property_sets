@@ -4,6 +4,6 @@ gemspec path: "../"
 
 gem "activerecord", github: "rails/rails", branch: "main"
 gem "actionpack", github: "rails/rails", branch: "main"
-gem "sqlite3", "~> 1.4"
+gem "sqlite3", "~> 2"
 
 eval_gemfile "common.rb"
