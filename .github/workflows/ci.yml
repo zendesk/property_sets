@@ -31,6 +31,7 @@ jobs:
         include:
           - {ruby-version: '3.3', gemfile: rails_main, legacy_connection_handling: 'false'}
     env:
+      RUBYOPT: --enable=frozen-string-literal
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       LEGACY_CONNECTION_HANDLING: ${{ matrix.legacy_connection_handling }}
     steps:
