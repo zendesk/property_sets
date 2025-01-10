@@ -7,3 +7,6 @@ gem "actionpack", "~> 6.1.0"
 gem "sqlite3", "~> 1.4"
 
 eval_gemfile "common.rb"
+gem "base64"
+gem "bigdecimal"
+gem "mutex_m"
