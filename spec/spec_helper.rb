@@ -1,5 +1,5 @@
 require "bundler/setup"
-
+require "logger"
 require "active_support"
 require "active_record"
 require "active_record/fixtures"
