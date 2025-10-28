@@ -10,7 +10,7 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
 
   s.required_ruby_version = ">= 3.1"
 
-  s.add_dependency("activerecord", ">= 7.0")
+  s.add_dependency("activerecord", ">= 7.1")
   s.add_dependency("json")
 
   s.files = `git ls-files lib`.split("\n")

@@ -2,27 +2,16 @@
 
 require_relative "acts_like_an_integer"
 
-if LEGACY_CONNECTION_HANDLING
-  class MainDatabase < ActiveRecord::Base
-    self.abstract_class = true
-  end
+class MainDatabase < ActiveRecord::Base
+  self.abstract_class = true
 
-  class AltDatabase < ActiveRecord::Base
-    self.abstract_class = true
-    establish_connection(:test_alt_database)
-  end
-else
-  class MainDatabase < ActiveRecord::Base
-    self.abstract_class = true
+  connects_to(database: {writing: :test_database, reading: :test_database})
+end
 
-    connects_to(database: {writing: :test_database, reading: :test_database})
-  end
+class AltDatabase < ActiveRecord::Base
+  self.abstract_class = true
 
-  class AltDatabase < ActiveRecord::Base
-    self.abstract_class = true
-
-    connects_to(database: {writing: :test_alt_database, reading: :test_alt_database})
-  end
+  connects_to(database: {writing: :test_alt_database, reading: :test_alt_database})
 end
 
 module Parent
