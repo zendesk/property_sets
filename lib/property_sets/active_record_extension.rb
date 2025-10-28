@@ -57,6 +57,7 @@ module PropertySets
 
           property_class.keys.each do |key|
             raise "Invalid property key #{key}" if respond_to?(key)
+            next if method_defined?(key) # Methods are already defined for this key
 
             # Reports the coerced truth value of the property
             define_method :"#{key}?" do
