@@ -27,10 +27,6 @@ describe PropertySets do
   end
 
   it "inherits from a correct class" do
-    if ActiveRecord.gem_version >= Gem::Version.new("6.1")
-      expect(VehicleSetting.superclass).to be(AbstractUnshardedModel)
-    else
-      expect(VehicleSetting.superclass).to be(ActiveRecord::Base)
-    end
+    expect(VehicleSetting.superclass).to be(AbstractUnshardedModel)
   end
 end

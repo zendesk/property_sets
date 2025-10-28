@@ -10,15 +10,8 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
 
   s.required_ruby_version = ">= 3.1"
 
-  s.add_runtime_dependency("activerecord", ">= 6.1")
-  s.add_runtime_dependency("json")
-
-  s.add_development_dependency("bump")
-  s.add_development_dependency("rake")
-  s.add_development_dependency("actionpack")
-  s.add_development_dependency("rspec")
-  s.add_development_dependency("standard")
-  s.add_development_dependency("byebug")
+  s.add_dependency("activerecord", ">= 7.0")
+  s.add_dependency("json")
 
   s.files = `git ls-files lib`.split("\n")
   s.license = "MIT"

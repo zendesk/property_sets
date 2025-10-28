@@ -8,24 +8,14 @@ on:
 jobs:
   specs:
     runs-on: ubuntu-latest
-
-    name: Ruby ${{ matrix.ruby-version }}, ${{ matrix.gemfile }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby-version:
-          - '3.4'
-        gemfile:
-          - rails_main
     env:
-      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      BUNDLE_GEMFILE: gemfiles/rails_main.gemfile
     steps:
-      - uses: zendesk/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Ruby
-        uses: zendesk/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby-version }}
+          ruby-version: ruby
           bundler-cache: true
       - name: RSpec
         run: bundle exec rspec
