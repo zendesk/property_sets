@@ -1,6 +1,7 @@
 name: Test against Rails main
 
 on:
+  pull_request:
   schedule:
     - cron: "0 0 * * *" # Run every day at 00:00 UTC
   workflow_dispatch:
@@ -11,11 +12,10 @@ jobs:
     env:
       BUNDLE_GEMFILE: gemfiles/rails_main.gemfile
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ruby
           bundler-cache: true
       - name: RSpec
         run: bundle exec rspec
