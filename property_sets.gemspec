@@ -8,9 +8,9 @@ Gem::Specification.new "property_sets", PropertySets::VERSION do |s|
   s.homepage = "http://github.com/zendesk/property_sets"
   s.license = "Apache License Version 2.0"
 
-  s.required_ruby_version = ">= 3.1"
+  s.required_ruby_version = ">= 3.2"
 
-  s.add_dependency("activerecord", ">= 7.1")
+  s.add_dependency("activerecord", ">= 7.2")
   s.add_dependency("json")
 
   s.files = `git ls-files lib`.split("\n")

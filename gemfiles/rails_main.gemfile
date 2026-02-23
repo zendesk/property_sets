@@ -1,9 +1,5 @@
-source "https://rubygems.org"
-
-gemspec path: "../"
+eval_gemfile "common.rb"
 
 gem "activerecord", github: "rails/rails", branch: "main"
 gem "actionpack", github: "rails/rails", branch: "main"
 gem "sqlite3", "~> 2"
-
-eval_gemfile "common.rb"

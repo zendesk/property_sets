@@ -1,9 +1,5 @@
-source "https://rubygems.org"
-
-gemspec path: "../"
+eval_gemfile "common.rb"
 
 gem "activerecord", "~> 8.0.0"
 gem "actionpack", "~> 8.0.0"
 gem "sqlite3", ">= 2.1"
-
-eval_gemfile "common.rb"
