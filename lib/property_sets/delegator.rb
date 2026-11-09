@@ -26,7 +26,7 @@ module PropertySets
         self.delegated_property_set_attributes ||= []
 
         mappings.each do |old_attr, new_attr|
-          self.delegated_property_set_attributes << old_attr.to_s
+          delegated_property_set_attributes << old_attr.to_s
           attribute old_attr, ActiveModel::Type::Value.new
           define_method(old_attr) {
             association = send(setname)

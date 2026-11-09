@@ -17,7 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         ruby-version:
-          - '3.2'
           - '3.3'
           - '3.4'
           - '4.0'
@@ -59,6 +58,5 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
           bundler-cache: true
       - run: bundle exec rake standard

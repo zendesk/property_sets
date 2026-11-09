@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 * Dropped support for Rails below 8.1
+* Dropped support for Ruby below 3.3
+
 ## [3.14.0] - 2025-10-28
 
 * Stopped in some cases defining the same methods twice (or more) on the association extension module.
