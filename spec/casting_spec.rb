@@ -29,8 +29,8 @@ describe PropertySets::Casting do
     end
 
     it "convert time instances to UTC" do
-      time = Time.now.in_time_zone("CET")
-      expect(PropertySets::Casting.write(:datetime, time)).to match(/UTC$/)
+      time = Time.new(2000, 1, 1, 12, 0, 0, "+01:00")
+      expect(PropertySets::Casting.write(:datetime, time)).to eq("2000-01-01 11:00:00 UTC")
     end
 
     it "convert integers to strings" do
